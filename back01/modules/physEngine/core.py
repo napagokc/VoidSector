@@ -1,6 +1,8 @@
 import math
 import math as m
 import copy
+from math import isnan
+
 from modules.utils import Command, PerformanceCollector
 import sys
 import traceback
@@ -964,9 +966,8 @@ class CalculationUtilites:
         return np.array([newx, newy])
 
     def get_cosangle_between(vector1, vector2):
-        cos_alpha = np.dot(vector1, vector2) / \
-            (np.linalg.norm(vector1)*np.linalg.norm(vector2))
-        return cos_alpha
+        dot = np.dot(vector1, vector2)
+        return 0 if dot == 0 else (dot / (np.linalg.norm(vector1) * np.linalg.norm(vector2)))
 
     def get_radangle_between(vector1, vector2):
         cos_alpha = CalculationUtilites.get_cosangle_between(vector1, vector2)
