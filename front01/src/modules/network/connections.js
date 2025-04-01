@@ -2,8 +2,8 @@
 
 import { ip } from "../configs/configs";
 
-let path2server_ws = "ws://" + ip + ":5000/"
-let path2server_http = "http://" + ip + ":1924/"
+let path2server_ws = "ws://" + ip + ":5000"
+let path2server_http = "http://" + ip + ":1924"
 
 
 let websocket = new WebSocket(path2server_ws);
