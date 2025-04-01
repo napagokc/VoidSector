@@ -45,8 +45,10 @@ export class AllianceManager extends React.Component {
 
   get_alliance_list = () => {
     let result = []
-    for(let tmp_i in this.state.data.alliance){
-      result.push(<button onClick={(e)=>{this.remove_from_alies(this.state.data.alliance[tmp_i])}}>{this.state.data.alliance[tmp_i]}[x]</button>)
+    if (this.state?.data?.alliance) {
+        for(let tmp_i in this.state.data.alliance){
+          result.push(<button onClick={(e)=>{this.remove_from_alies(this.state.data.alliance[tmp_i])}}>{this.state.data.alliance[tmp_i]}[x]</button>)
+        }
     }
     return <div>{result}</div>
   }
