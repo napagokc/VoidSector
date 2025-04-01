@@ -15,7 +15,7 @@
 	border: 1px solid black;
 	height: 30px;
 	align-items: center;
-	justify-content: end;
+	justify-content: flex-end;
 }
 
 .ProjectileBuilderWidget .components_selector .component_controller button {
