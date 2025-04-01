@@ -109,7 +109,7 @@ const locales = {
     "sharp":"Сжт.Шарп",
 
     //Alliance control
-    "Aliance_controller":"Панель свой/чужой",
+    "Alliance_controller":"Панель свой/чужой",
     "mark_as_allias":"Добавить",
 
     //Engineer 

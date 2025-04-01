@@ -9,7 +9,7 @@ from modules.ship.shipPool import ShipPool_Singleton
 from modules.ship.systems.sm_core import BasicShipSystem
 from modules.ship.systems.sm_core import GlobalShipSystemController
 from modules.utils import Command, CommandQueue, ConfigLoader
-from modules.physEngine.aliances_controller import AlianceController
+from modules.physEngine.alliances_controller import AllianceController
 
 # launch drones, increase launch shafts amount
 
@@ -26,7 +26,7 @@ class LauncherSystem(BasicShipSystem):
         self.auto_toggle = True
         self.auto_reload = False
         self.set_auto_reload(self.auto_reload)
-        AlianceController().register(mark_id)
+        AllianceController().register(mark_id)
 
     def set_auto_reload(self, value):
         self.auto_reload = value
@@ -66,7 +66,7 @@ class LauncherSystem(BasicShipSystem):
         status["shafts"] = shafts_status
         status["auto_toggle"] = self.auto_toggle
         status["auto_reload"] = self.auto_reload
-        status["aliance"] = AlianceController().get_aliance(self.mark_id)
+        status["alliance"] = AllianceController().get_alliance(self.mark_id)
         return status
 
     def proceed_command(self, command: Command):
@@ -95,11 +95,11 @@ class LauncherSystem(BasicShipSystem):
                 if succeed:
                     self.iterate_shaft()
 
-            case "add_to_aliance":
-                AlianceController().add(self.mark_id, params["mark_id"])
+            case "add_to_alliance":
+                AllianceController().add(self.mark_id, params["mark_id"])
             
-            case "remove_from_aliance":
-                AlianceController().remove(self.mark_id, params["mark_id"])
+            case "remove_from_alliance":
+                AllianceController().remove(self.mark_id, params["mark_id"])
 
     def iterate_shaft(self):
         if self.auto_toggle:

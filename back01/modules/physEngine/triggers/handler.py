@@ -7,7 +7,7 @@ from modules.ship.shipPool import ShipPool_Singleton
 from modules.physEngine.quests.quest_controller import QuestPointsController
 from modules.ship.ship import NPC_Ship
 from modules.ship.shipPool import ShipPool_Singleton
-from modules.physEngine.aliances_controller import AlianceController
+from modules.physEngine.alliances_controller import AllianceController
 
 
 def get_entity_from_Pools(mark_id, pool_list):
@@ -120,7 +120,7 @@ class TriggerHandler:
             position, velocity)
         self.lBodies[npc_defender.mark_id].stabilize_orbit()
         # self.cShips.ships[npc_defender.mark_id].set_level(defender_level)
-        AlianceController().add(defender, initiator)
+        AllianceController().add(defender, initiator)
 
     def proceed_interaction(self, initiator, params):
         pass

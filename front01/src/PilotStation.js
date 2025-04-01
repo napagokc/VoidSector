@@ -21,7 +21,7 @@ import { CapMarksControlWidget } from './modules/widgets/CapMarksControlWidget.j
 import { ShipOvervieweWidgetLayer } from './modules/widgets/ShipOverview.js';
 import { RoleManagerWidget } from './modules/widgets/RolesManager.js';
 import { get_medicine_state } from './modules/network/connections';
-import { AlianceManager } from './modules/widgets/AlianceManager.js';
+import { AllianceManager } from './modules/widgets/AllianceManager.js';
 import { take_control } from './modules/network/connections';
 export class PilotStation extends React.Component {
     constructor(props) {
@@ -166,7 +166,7 @@ export class PilotStation extends React.Component {
                     <RoleManagerWidget
                         username={this.props.username}
                     />
-                    <AlianceManager></AlianceManager>
+                    <AllianceManager></AllianceManager>
 
                 </div>
                 <CapMarksControlWidget />

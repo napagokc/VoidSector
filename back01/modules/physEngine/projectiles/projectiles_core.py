@@ -9,7 +9,7 @@ from modules.physEngine.world_constants import WorldPhysConstants
 import random
 from modules.utils import ConfigLoader
 from modules.physEngine.solar_flare.solar_flar_defendzone import SolarFlareDefendZone
-from modules.physEngine.aliances_controller import AlianceController
+from modules.physEngine.alliances_controller import AllianceController
 
 
 class ProjectileListController:
@@ -288,7 +288,7 @@ class pjtl_Constructed(pjtl_Basic):
 
             if self.ship_detection_radius:
                 potential_targets = [a for a in EntityIDGroupsController().get("radar_detectable")]
-                prevented_targets = AlianceController().get_aliance(self.master_id)
+                prevented_targets = AllianceController().get_alliance(self.master_id)
                 potential_targets = list(set(potential_targets)-set(prevented_targets))
                 potential_targets = self.get_entities_ids_from_list_in_range(potential_targets, self.ship_detection_radius, False)
 
@@ -303,7 +303,7 @@ class pjtl_Constructed(pjtl_Basic):
 
             if self.projectiles_detection_radius:
                 potential_targets = ProjectileListController().get(self.master_id)
-                prevented_targets = AlianceController().get_aliance(self.master_id)
+                prevented_targets = AllianceController().get_alliance(self.master_id)
                 potential_targets = list(set(potential_targets)-set(prevented_targets))
                 potential_targets = self.get_entities_ids_from_list_in_range(potential_targets, self.projectiles_detection_radius, False)
 
@@ -337,7 +337,7 @@ class pjtl_Constructed(pjtl_Basic):
             self.update_predictions()
 
             reachable_bodies = [a for a in self.get_entities_ids_list_in_range(self.lBodies.bodies, self.detonation_radius, False)]
-            prevented_targets = AlianceController().get_aliance(self.master_id)
+            prevented_targets = AllianceController().get_alliance(self.master_id)
             reachable_bodies = list(set(reachable_bodies)-set(prevented_targets))
             if reachable_bodies:
                 prevented_targets_in_damage_zone = self.get_entities_ids_from_list_in_range(prevented_targets, self.damage_zone_radius, False)

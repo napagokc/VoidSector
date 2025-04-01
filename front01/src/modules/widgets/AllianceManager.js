@@ -3,7 +3,7 @@ import { get_http_address, get_system_state, send_command } from '../network/con
 import { timerscounter } from '../utils/updatetimers'
 import { get_locales } from '../locales/locales'
 
-export class AlianceManager extends React.Component {
+export class AllianceManager extends React.Component {
   constructor() {
     super()
     this.state = {
@@ -36,17 +36,17 @@ export class AlianceManager extends React.Component {
   }
 
   add_to_allies = (mark_id) =>{
-    send_command("ship.launcher_sm", this.state.data.mark_id, "add_to_aliance", {"mark_id":mark_id})
+    send_command("ship.launcher_sm", this.state.data.mark_id, "add_to_alliance", {"mark_id":mark_id})
   }
 
   remove_from_alies = (mark_id) =>{
-    send_command("ship.launcher_sm", this.state.data.mark_id, "remove_from_aliance", {"mark_id":mark_id})
+    send_command("ship.launcher_sm", this.state.data.mark_id, "remove_from_alliance", {"mark_id":mark_id})
   }
 
-  get_aliance_list = () => {
+  get_alliance_list = () => {
     let result = []
-    for(let tmp_i in this.state.data.aliance){
-      result.push(<button onClick={(e)=>{this.remove_from_alies(this.state.data.aliance[tmp_i])}}>{this.state.data.aliance[tmp_i]}[x]</button>)
+    for(let tmp_i in this.state.data.alliance){
+      result.push(<button onClick={(e)=>{this.remove_from_alies(this.state.data.alliance[tmp_i])}}>{this.state.data.alliance[tmp_i]}[x]</button>)
     }
     return <div>{result}</div>
   }
@@ -64,8 +64,8 @@ export class AlianceManager extends React.Component {
 
   render() {
     return <div className='SystemControlWidget'>
-      <b>{get_locales("Aliance_controller")}</b>
-      {this.get_aliance_list()}
+      <b>{get_locales("Alliance_controller")}</b>
+      {this.get_alliance_list()}
       {this.get_input_panel()}
     </div>
   }
