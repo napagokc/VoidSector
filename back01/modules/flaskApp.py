@@ -17,6 +17,7 @@ UsersControler()
 
 from modules.utils import CommandLogger
 from gevent.pywsgi import WSGIServer
+from pathlib import Path
 import glob
 import time
 import random
@@ -40,7 +41,7 @@ def get_maps():
                 map_list = glob.glob("maps/*.json")
                 map_list_out = []
                 for map in map_list:
-                                map_list_out.append(map.split('\\')[-1])
+                                map_list_out.append(Path(map).name)
                 return make_response(jsonify(map_list_out), 200)
 
 @app.route('/admin/ship_screens', methods=["GET"])
@@ -48,7 +49,7 @@ def ship_screens():
                 map_list = glob.glob("ship_screens/*.json")
                 map_list_out = []
                 for map in map_list:
-                                map_list_out.append(map.split('\\')[-1])
+                                map_list_out.append(Path(map).name)
                 return make_response(jsonify(map_list_out), 200)
 
 
@@ -57,7 +58,7 @@ def get_config_list():
                 file_list = glob.glob("configs/*.ini")
                 file_list_out = []
                 for filename in file_list:
-                                file_list_out.append(filename.split('\\')[-1])
+                                file_list_out.append(Path(filename).name)
                 return make_response(jsonify(file_list_out), 200)
 
 import configparser
@@ -165,7 +166,7 @@ def get_med_states(shipname):
 
 @app.route('/medicine/plague_matrix', methods=["GET"])
 def get_plague_matrix():
-        matrix=  EngineSector_interactor().get_plague_matrix()
+        matrix = EngineSector_interactor().get_plague_matrix()
         return make_response(jsonify({"plague_matrix":matrix}), 200) 
 
 
