@@ -1,74 +1,64 @@
-
-html{
- width: 100%;
- height: 100%;
- box-sizing: border-box;
-}
-*, *:before, *:after {
- box-sizing: inherit;
-}
-body{
- width: 100%;
-
- margin: 0px;
+html {
+	width: 100%;
+	height: 100%;
+	box-sizing: border-box;
 }
 
-.App{
- display: flex;
- flex-direction: column;
- width: 100%;
-
- padding: 5px;
-
-
-
-  
+*,
+*:before,
+*:after {
+	box-sizing: inherit;
 }
 
-.Navigation{
- display: flex;
- flex-direction: row;
- padding: 10px;
- border: 1px solid black;
- margin-bottom: 10px;
+body {
+	width: 100%;
+	margin: 0px;
 }
 
-.Navigation_item{
- cursor: pointer;
- margin-left: 10px;
- margin-right: 10px;
+.App {
+	display: flex;
+	flex-direction: column;
+	width: 100%;
+	padding: 5px;
+}
+
+.Navigation {
+	display: flex;
+	flex-direction: row;
+	padding: 10px;
+	border: 1px solid black;
+	margin-bottom: 10px;
+}
+
+.Navigation_item {
+	cursor: pointer;
+	margin-left: 10px;
+	margin-right: 10px;
 }
 
 .Navigation_item:hover {
- color: red;
+	color: red;
 }
 
-
-
-
-
-
-.LoginWindow{
- display: flex;
-
- width: 100%;
- flex-direction: column;
- align-items: center;
+.LoginWindow {
+	display: flex;
+	width: 100%;
+	flex-direction: column;
+	align-items: center;
 }
 
-.LoginWindow>label{
- margin-top: 10px;
+.LoginWindow > label {
+	margin-top: 10px;
 }
 
-.LoginWindow>button{
- margin-top: 10px;
+.LoginWindow > button {
+	margin-top: 10px;
 }
 
-
-table td{
- text-align: center
+table td {
+	text-align: center;
 }
 
-table{
- border: 1px solid black;
+table {
+	border: 1px solid black;
 }

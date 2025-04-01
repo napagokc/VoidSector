@@ -1,39 +1,38 @@
-.AdminSystemViewer{
- display: flex;
- flex-direction: column;
- border: 1px solid black;
- margin: 5px;
- height: 300px;
- overflow: scroll
+.AdminSystemViewer {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid black;
+	margin: 5px;
+	height: 300px;
+	overflow: scroll;
 }
 
-.AdminShipStateWidget{
- display: flex;
- flex-direction: column;
- border: 1px solid black;
- margin: 5px;
+.AdminShipStateWidget {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid black;
+	margin: 5px;
 }
 
-.ShipStateViewer{
- display: flex;
- flex-direction: column;
- border: 1px solid black;
- margin: 5px;
- height: 300px;
- overflow: scroll;
- width: fit-content
+.ShipStateViewer {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid black;
+	margin: 5px;
+	height: 300px;
+	overflow: scroll;
+	width: fit-content;
 }
 
-.ShipsSection{
-
- height: 75vh;
- }
-
-.AdminShipStateWidget>button{
- width: fit-content
+.ShipsSection {
+	height: 75vh;
 }
 
-.SystemsSectionLevel{
- display: flex;
- flex-direction: row;
+.AdminShipStateWidget > button {
+	width: fit-content;
+}
+
+.SystemsSectionLevel {
+	display: flex;
+	flex-direction: row;
 }

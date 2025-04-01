@@ -1,49 +1,45 @@
 .AccelerationController_btnblock {
-    display: grid;
-    grid-template-columns: 50px 50px 50px;
-    margin-bottom: 10px;
+	display: grid;
+	grid-template-columns: 50px 50px 50px;
+	margin-bottom: 10px;
 }
 
-
-.AccelerationController_btnblock>button {
-    width: 40px;
-    height: 40px;
+.AccelerationController_btnblock > button {
+	width: 40px;
+	height: 40px;
 }
-
 
 .WASD_btnblock {
-    display: grid;
-    grid-template-columns: 50px 50px 50px;
-    margin-bottom: 10px;
+	display: grid;
+	grid-template-columns: 50px 50px 50px;
+	margin-bottom: 10px;
 }
 
-.WASD_btnblock>button {
-    width: 40px;
-    height: 40px;
+.WASD_btnblock > button {
+	width: 40px;
+	height: 40px;
 }
-
 
 .sf_low {
-    background: green;
-    color: black
+	background: green;
+	color: black;
 }
 
 .sf_high {
-    background: orange;
-    color: black
+	background: orange;
+	color: black;
 }
 
 .sf_active {
-    background: red;
-    color: black
+	background: red;
+	color: black;
 }
 
 .non_selectable_text {
-
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+	-webkit-touch-callout: none;
+	-webkit-user-select: none;
+	-khtml-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
 }
