@@ -1,5 +1,4 @@
-
-
+// prettier-ignore
 const locales = {
     //shafts
     "ProjectileLauncher Control": "Торпедный аппарат",
@@ -112,7 +111,7 @@ const locales = {
     "Alliance_controller":"Панель свой/чужой",
     "mark_as_allias":"Добавить",
 
-    //Engineer 
+    //Engineer
     "assign_team": "Назначить рем.команду",
     "hp": "Целостность",
     "upgrade_level": "Уровень апгрейда",
@@ -164,10 +163,8 @@ const locales = {
     "high":"Высокая"
 }
 
-
 export function get_locales(s) {
-    if (s in locales) {
-        return locales[s]
-    }
-    return s
+	if (s in locales) return locales[s];
+
+	return s;
 }
