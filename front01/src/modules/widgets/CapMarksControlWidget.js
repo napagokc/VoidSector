@@ -76,9 +76,11 @@ export class CapMarksControlWidget extends React.Component {
 		return (
 			<table>
 				<thead>
-					<th>{get_locales('MarkLetter')}</th>
-					<th>{get_locales('Position')}</th>
-					<th>{get_locales('Status')}</th>
+					<tr>
+						<th>{get_locales('MarkLetter')}</th>
+						<th>{get_locales('Position')}</th>
+						<th>{get_locales('Status')}</th>
+					</tr>
 				</thead>
 				<tbody>{result}</tbody>
 			</table>

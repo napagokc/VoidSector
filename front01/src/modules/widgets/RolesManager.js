@@ -74,16 +74,14 @@ export class RoleManagerWidget extends React.Component {
 			let modulename = available_modules[i];
 			result.push(
 				<td>
-					<td>
-						<input
-							type="checkbox"
-							disabled={modulename === username && this.props.username !== 'admin'}
-							onChange={(e) => {
-								this.onAssignRole(username, modulename, e.target.checked);
-							}}
-							checked={this.is_module_accesable(username, modulename)}
-						/>
-					</td>
+					<input
+						type="checkbox"
+						disabled={modulename === username && this.props.username !== 'admin'}
+						onChange={(e) => {
+							this.onAssignRole(username, modulename, e.target.checked);
+						}}
+						checked={this.is_module_accesable(username, modulename)}
+					/>
 				</td>
 			);
 		}
@@ -102,11 +100,13 @@ export class RoleManagerWidget extends React.Component {
 		return (
 			<table>
 				<thead>
-					<th>{get_locales('')}</th>
-					<th>{get_locales('captain')}</th>
-					<th>{get_locales('navigator')}</th>
-					<th>{get_locales('cannoneer')}</th>
-					<th>{get_locales('engineer')}</th>
+					<tr>
+						<th>{get_locales('')}</th>
+						<th>{get_locales('captain')}</th>
+						<th>{get_locales('navigator')}</th>
+						<th>{get_locales('cannoneer')}</th>
+						<th>{get_locales('engineer')}</th>
+					</tr>
 				</thead>
 				<tbody>{result}</tbody>
 			</table>
