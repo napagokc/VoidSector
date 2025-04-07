@@ -1,5 +1,10 @@
 // prettier-ignore
 const locales = {
+    //global
+    "LOGOUT": "ВЫЙТИ",
+    "Navigation": "Меню",
+    "Module not available": "Модуль недоступен",
+
     //shafts
     "ProjectileLauncher Control": "Торпедный аппарат",
     "load": "Загрузить",

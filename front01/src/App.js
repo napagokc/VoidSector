@@ -183,7 +183,7 @@ class Navigation extends React.Component {
 			);
 		}
 
-		list_nav.push(<button onClick={this.props.onLogout}>LOGOUT</button>);
+		list_nav.push(<button onClick={this.props.onLogout}>{get_locales('LOGOUT')}</button>);
 
 		/*list_nav.push(<button
          onClick={(e) => {
@@ -202,8 +202,7 @@ class Navigation extends React.Component {
 
 		return (
 			<div className="Navigation">
-				<b>Navigation:</b>
-
+				<b>{get_locales('Navigation')}:</b>
 				{list_nav}
 			</div>
 		);
@@ -263,7 +262,7 @@ class ModuleRenderer extends React.Component {
 				return <CommonRadarStation />;
 
 			default:
-				return <div>"Module not available"</div>;
+				return <div>{get_locales('Module not available')}</div>;
 		}
 	}
 }
