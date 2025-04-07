@@ -62,7 +62,7 @@ export class MapEditor extends React.Component {
 				<div
 					style={{
 						display: 'flex',
-						'flex-directin': 'row'
+						flexDirection: 'row'
 					}}
 				>
 					<MapLoader></MapLoader>

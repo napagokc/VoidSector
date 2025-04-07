@@ -187,8 +187,8 @@ export class AdminRadarWidget extends React.Component {
 					<div
 						style={{
 							display: 'flex',
-							'flex-direction': 'row',
-							'justify-content': 'space-between',
+							flexDirection: 'row',
+							justifyContent: 'space-between',
 							color: 'grey'
 						}}
 					>
@@ -199,7 +199,7 @@ export class AdminRadarWidget extends React.Component {
 								min={0.1}
 								max={2}
 								step={0.02}
-								class="slider"
+								className="slider"
 								id="valueForward"
 								value={this.state.scale_factor}
 								onChange={(e) => {

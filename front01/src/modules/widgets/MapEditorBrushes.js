@@ -88,7 +88,7 @@ export class MapEditorBrushesWidget extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column'
+					flexDirection: 'column'
 				}}
 			>
 				{inputs}
@@ -155,7 +155,7 @@ export class MapEditorBrushesWidget extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column'
+					flexDirection: 'column'
 				}}
 			>
 				{inputs}
@@ -186,7 +186,7 @@ export class MapEditorBrushesWidget extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column'
+					flexDirection: 'column'
 				}}
 			>
 				{inputs}
@@ -233,7 +233,7 @@ export class MapEditorBrushesWidget extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column'
+					flexDirection: 'column'
 				}}
 			>
 				<b>Brush Controller</b>

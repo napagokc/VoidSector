@@ -52,7 +52,7 @@ export class Administration extends React.Component {
 				<div
 					style={{
 						display: 'flex',
-						'flex-directin': 'row'
+						flexDirection: 'row'
 					}}
 				>
 					<AdminRadarWidget />

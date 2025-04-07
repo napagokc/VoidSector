@@ -80,7 +80,7 @@ export class GameMastering extends React.Component {
 				<div
 					style={{
 						display: 'flex',
-						'flex-directin': 'row'
+						flexDirection: 'row'
 					}}
 				>
 					<AdminRadarWidget />

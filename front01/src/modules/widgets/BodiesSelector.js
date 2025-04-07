@@ -128,7 +128,7 @@ export class HBodiesSelector extends React.Component {
 			<div
 				className="BodiesSelector_section"
 				style={{
-					'grid-template-columns': style_grid
+					gridTemplateColumns: style_grid
 				}}
 			>
 				{hbodies}
@@ -155,7 +155,7 @@ export class HBodiesSelector extends React.Component {
 			<div
 				className="BodiesSelector_section"
 				style={{
-					'grid-template-columns': style_grid
+					gridTemplateColumns: style_grid
 				}}
 			>
 				{lbodies}

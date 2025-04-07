@@ -78,7 +78,7 @@ export class RoleManagerWidget extends React.Component {
 						<input
 							type="checkbox"
 							disabled={modulename === username && this.props.username !== 'admin'}
-							onClick={(e) => {
+							onChange={(e) => {
 								this.onAssignRole(username, modulename, e.target.checked);
 							}}
 							checked={this.is_module_accesable(username, modulename)}

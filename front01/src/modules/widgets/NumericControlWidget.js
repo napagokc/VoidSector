@@ -27,7 +27,7 @@ export class NumericControlWidjet extends React.Component {
 					min={this.props.min}
 					max={this.props.max}
 					step={this.props.step}
-					class="slider"
+					className="slider"
 					value={this.state.value}
 					onChange={this.onChange}
 					//value={this.state.progradeAcc}

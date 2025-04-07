@@ -89,8 +89,8 @@ export class MedicStation extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column',
-					'padding-bottom': '5px'
+					flexDirection: 'column',
+					paddingBottom: '5px'
 				}}
 			>
 				<b>{get_locales('Hospital NPC Crew Control')}</b>
@@ -128,7 +128,7 @@ export class MedicStation extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'row'
+					flexDirection: 'row'
 				}}
 			>
 				<div className="SystemControlWidget">
@@ -243,7 +243,7 @@ class PlayerRoleHealthCard extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column'
+					flexDirection: 'column'
 				}}
 			>
 				<label>
@@ -304,7 +304,7 @@ class PlayerRoleHealthCard extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column'
+					flexDirection: 'column'
 				}}
 			>
 				<label>
@@ -333,7 +333,7 @@ class PlayerRoleHealthCard extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column'
+					flexDirection: 'column'
 				}}
 			>
 				<button
@@ -352,7 +352,7 @@ class PlayerRoleHealthCard extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'row'
+					flexDirection: 'row'
 				}}
 			>
 				<button

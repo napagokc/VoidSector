@@ -192,7 +192,7 @@ class StationCard extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column'
+					flexDirection: 'column'
 				}}
 			>
 				<label>hp: {this.props.data['hp']}</label>

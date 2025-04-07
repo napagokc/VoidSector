@@ -155,7 +155,7 @@ export class PilotStation extends React.Component {
 					<div
 						style={{
 							display: 'flex',
-							'flex-direction': 'row',
+							flexDirection: 'row',
 							height: 'fit-content'
 						}}
 					>

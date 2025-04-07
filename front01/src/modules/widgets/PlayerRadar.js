@@ -197,7 +197,7 @@ export class PlayersRadarWidget extends React.Component {
 									min={0.1}
 									max={2}
 									step={0.02}
-									class="slider"
+									className="slider"
 									id="valueForward"
 									value={this.state.scale_factor}
 									onChange={(e) => {

@@ -152,7 +152,7 @@ export class LauncherShaftController extends React.Component {
 					min={min_value}
 					max={max_value}
 					step={step_value}
-					class="slider"
+					className="slider"
 					onChange={(e) => {
 						this.set_launch_params(key, e.target.value);
 					}}

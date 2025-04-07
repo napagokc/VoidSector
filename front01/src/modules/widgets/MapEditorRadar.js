@@ -212,8 +212,8 @@ export class MapEditorRadarWidget extends React.Component {
 			<div
 				style={{
 					display: 'flex',
-					'flex-direction': 'column',
-					'align-items': 'center',
+					flexDirection: 'column',
+					alignItems: 'center',
 					width: '620px',
 					height: '700px',
 					border: 'solid 1px'
@@ -240,8 +240,8 @@ export class MapEditorRadarWidget extends React.Component {
 				<div
 					style={{
 						display: 'flex',
-						'flex-direction': 'row',
-						'justify-content': 'space-between'
+						flexDirection: 'row',
+						justifyContent: 'space-between'
 					}}
 				>
 					<label>
@@ -251,7 +251,7 @@ export class MapEditorRadarWidget extends React.Component {
 							min={0.05}
 							max={2}
 							step={0.02}
-							class="slider"
+							className="slider"
 							id="valueForward"
 							value={this.state.scale_factor}
 							onChange={(e) => {
