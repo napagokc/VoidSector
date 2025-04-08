@@ -109,7 +109,6 @@ class RadarRenderer {
 	};
 
 	get_damage_shades = (state) => {
-		//console.log("get_damage_shades", state)
 		if (!state) return [];
 
 		return [
@@ -348,6 +347,5 @@ export function getDistantScanArc(
 		)
 	);
 
-	// console.log(result);
 	return result;
 }

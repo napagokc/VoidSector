@@ -291,7 +291,6 @@ export class BodyEditor extends React.Component {
 					type="checkbox"
 					onChange={(e) => {
 						this.setState({ forced: e.target.value });
-						//console.log("e.target.value", e.target)
 					}}
 					value={this.state.forced}
 				></input>

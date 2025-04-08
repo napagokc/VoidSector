@@ -263,7 +263,6 @@ class MedicineStateWidget extends React.Component {
 
 export const Modal = ({ handleClose, show, children }) => {
 	const showHideClassName = show ? 'display-block' : 'display-none modal';
-	//////console.log("MODAL", show, children, typeof (children))
 
 	let child_elem = React.cloneElement(children, {
 		cancel_button: (

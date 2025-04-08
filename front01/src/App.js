@@ -162,9 +162,10 @@ class Navigation extends React.Component {
 
 	render() {
 		let list = loginController.get_available_roles();
+		//list.sort((a, b) => -get_locales(a).toLowerCase().localeCompare(get_locales(b).toLowerCase()));
 
-		if (!this.state.selected_module) this.onSelectModule(list[0]);
-		else if (!list.includes(this.state.selected_module)) this.onSelectModule(null);
+		// if (!this.state.selected_module) this.onSelectModule(list[0]);
+		// else if (!list.includes(this.state.selected_module)) this.onSelectModule(null);
 
 		let list_nav = [];
 		for (let i in list) {

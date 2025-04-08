@@ -48,7 +48,6 @@ export class MedicStation extends React.Component {
 				if (response.status === 200) return response.json();
 			})
 			.then((data) => {
-				//console.log('update_plague_matrix', data);
 				this.setState({ plague_matrix: data['plague_matrix'] });
 			})
 			.catch((data) => {});
