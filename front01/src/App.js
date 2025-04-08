@@ -130,7 +130,7 @@ class Navigation extends React.Component {
 		super(props);
 		this.state = {
 			available_modules: [],
-			selected_module: 'admin'
+			selected_module: null
 		};
 	}
 
@@ -148,7 +148,14 @@ class Navigation extends React.Component {
 
 	update_available_modules = () => {
 		loginController.update_available_roles();
-		this.forceUpdate();
+
+		let modules = loginController.get_available_roles();
+		this.setState({ available_modules: modules });
+
+		if (modules.length) {
+			if (!this.state.selected_module) this.onSelectModule(modules[0]);
+			else if (!modules.includes(this.state.selected_module)) this.onSelectModule(null);
+		}
 	};
 
 	run_simulation = () => {
@@ -160,14 +167,17 @@ class Navigation extends React.Component {
 		this.props.on_module_selection(module);
 	};
 
+	shouldComponentUpdate(nextProps, nextState) {
+		return (
+			this.state.selected_module !== nextState.selected_module ||
+			this.state.available_modules !== nextState.available_modules
+		);
+	}
+
 	render() {
-		let list = loginController.get_available_roles();
-		//list.sort((a, b) => -get_locales(a).toLowerCase().localeCompare(get_locales(b).toLowerCase()));
-
-		// if (!this.state.selected_module) this.onSelectModule(list[0]);
-		// else if (!list.includes(this.state.selected_module)) this.onSelectModule(null);
-
+		let list = this.state.available_modules;
 		let list_nav = [];
+
 		for (let i in list) {
 			let val = get_locales(list[i]);
 			let item_name = list[i];
@@ -257,7 +267,7 @@ class ModuleRenderer extends React.Component {
 				return <PilotStation username={loginController.get_username()} captain={true}></PilotStation>;
 
 			case 'config_editor':
-				return <ConfigEditor />;
+				return <ConfigEditor key="ConfigEditor" />;
 
 			case 'NPC_pilot':
 				return <PilotStation NPC_pilot={true}></PilotStation>;
@@ -278,7 +288,7 @@ class MainApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			module: 'config editor'
+			module: null
 		};
 	}
 
@@ -325,6 +335,7 @@ class App extends React.Component {
 		if (this.state.logged) {
 			return <MainApp onLogout={this.onLogout} />;
 		}
+
 		return (
 			<LoginWindow
 				onLogin={() => {
