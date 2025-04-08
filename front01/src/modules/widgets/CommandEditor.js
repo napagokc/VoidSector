@@ -172,7 +172,7 @@ export class CommandEditorWidget extends React.Component {
 	};
 
 	get_option_editor = (key, option_descr) => {
-		if (!key) return <span></span>;
+		if (!key) return null;
 
 		let input = (
 			<input
@@ -193,10 +193,12 @@ export class CommandEditorWidget extends React.Component {
 				></input>
 			);
 		} else if (typeof option_descr == typeof []) {
-			let option_lists = [<option></option>];
+			let option_lists = [<option key="default"></option>];
 			for (let i in option_descr) {
-				option_lists.push(<option>{option_descr[i]}</option>);
+				let option_name = option_descr[i];
+				option_lists.push(<option key={option_name}>{option_name}</option>);
 			}
+
 			input = (
 				<select
 					onChange={(e) => {
@@ -209,7 +211,7 @@ export class CommandEditorWidget extends React.Component {
 		}
 
 		return (
-			<div className="commandParamsOption">
+			<div key={key} className="commandParamsOption">
 				<label>{key}</label>
 				{input}
 			</div>
@@ -217,7 +219,7 @@ export class CommandEditorWidget extends React.Component {
 	};
 
 	get_description = (key) => {
-		if (!key) return <span></span>;
+		if (!key) return null;
 
 		let result = [];
 		let params = command_descriptions[key]['params'];
@@ -229,14 +231,23 @@ export class CommandEditorWidget extends React.Component {
 	};
 
 	get_command_panel = () => {
-		let ships_options = [<option></option>];
+		let ships_options = [<option key="default"></option>];
 		for (let k in this.state.ships) {
-			ships_options.push(<option value={this.state.ships[k]}>{this.state.ships[k]}</option>);
+			let ship_state = this.state.ships[k];
+			ships_options.push(
+				<option key={ship_state} value={ship_state}>
+					{ship_state}
+				</option>
+			);
 		}
 
-		let command_options = [<option></option>];
+		let command_options = [<option key="default"></option>];
 		for (let k in command_descriptions) {
-			command_options.push(<option value={k}>{k}</option>);
+			command_options.push(
+				<option key={k} value={k}>
+					{k}
+				</option>
+			);
 		}
 
 		return (

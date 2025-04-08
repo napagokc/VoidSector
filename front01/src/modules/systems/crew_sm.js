@@ -45,7 +45,11 @@ export class CrewControlWidget extends React.Component {
 		let result = [];
 		for (let team_name in this.state.data.teams) {
 			result.push(
-				<RepairTeamWidget mark_id={this.state.data.mark_id} team_data={this.state.data.teams[team_name]} />
+				<RepairTeamWidget
+					key={team_name}
+					mark_id={this.state.data.mark_id}
+					team_data={this.state.data.teams[team_name]}
+				/>
 			);
 		}
 		return result;

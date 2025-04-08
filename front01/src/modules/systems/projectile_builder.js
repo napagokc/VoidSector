@@ -146,7 +146,7 @@ export class ProjectileBuilderWidget extends React.Component {
 		for (let i in this.state.details_list) {
 			let comp_name = this.state.details_list[i];
 			result.push(
-				<div className="component_controller">
+				<div key={comp_name} className="component_controller">
 					<label>{get_locales(comp_name)}</label>
 					<button
 						onClick={(e) => {
@@ -177,7 +177,7 @@ export class ProjectileBuilderWidget extends React.Component {
 		for (let i in this.state.stats_list) {
 			let stat_name = this.state.stats_list[i];
 			result.push(
-				<div className="component_controller">
+				<div key={stat_name} className="component_controller">
 					<label>
 						{get_locales(stat_name)}:{this.state.stats[stat_name]}
 					</label>
@@ -219,6 +219,7 @@ export class ProjectileBuilderWidget extends React.Component {
 		for (let bp_name in this.state.blueprints) {
 			blueprints.push(
 				<label
+					key={bp_name}
 					className={this.state.selected === bp_name ? 'selected' : ''}
 					onClick={() => {
 						this.onLoadSelected(bp_name);

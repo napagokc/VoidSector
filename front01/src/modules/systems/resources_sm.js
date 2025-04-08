@@ -51,14 +51,14 @@ export class ResourcesControlWidget extends React.Component {
 		let result = [];
 		for (let res_name in this.state.data.stockpile_raw) {
 			result.push(
-				<label>
+				<label key={res_name}>
 					{get_locales(res_name)}($): {this.state.data.stockpile_raw[res_name].toFixed(2)}/
 					{this.state.data.stockpile_raw_capacity}
 				</label>
 			);
 		}
 		result.push(
-			<label>
+			<label key="volume">
 				{get_locales('volume')}(◪): {this.state.data.stockpile_items_occupied}/
 				{this.state.data.stockpile_items_capacity}
 			</label>
@@ -77,8 +77,9 @@ export class ResourcesControlWidget extends React.Component {
 			for (let k in this.state.data.stockpile_items) {
 				let cost = this.state.data.items_cost[k];
 				let volume = this.state.data.items_volume[k];
+
 				render_array.push(
-					<label>
+					<label key={k}>
 						<button
 							onClick={() => {
 								this.produce(k);
@@ -102,8 +103,10 @@ export class ResourcesControlWidget extends React.Component {
 				let item = this.state.data.production_queue[i];
 				let item_name = item[0];
 				let item_count = item[1];
+
 				render_array.push(
 					<button
+						key={item_name}
 						onClick={() => {
 							this.remove_item_from_queue(item_name, i);
 						}}
@@ -148,7 +151,7 @@ export class ResourcesControlWidget extends React.Component {
 		if (this.state.data) {
 			for (let k in this.state.data.stockpile_raw) {
 				render_array.push(
-					<label>
+					<label key={k}>
 						{k}: {this.state.data.stockpile_raw[k]}
 					</label>
 				);

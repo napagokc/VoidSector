@@ -169,13 +169,15 @@ class Navigation extends React.Component {
 		let list_nav = [];
 		for (let i in list) {
 			let val = get_locales(list[i]);
-			if (list[i] === this.props.module) val = <b>{val}</b>;
+			let item_name = list[i];
+			if (item_name === this.props.module) val = <b>{val}</b>;
 
 			list_nav.push(
 				<label
+					key={item_name}
 					className="Navigation_item"
 					onClick={() => {
-						this.onSelectModule(list[i]);
+						this.onSelectModule(item_name);
 					}}
 				>
 					{val}
@@ -183,7 +185,11 @@ class Navigation extends React.Component {
 			);
 		}
 
-		list_nav.push(<button onClick={this.props.onLogout}>{get_locales('LOGOUT')}</button>);
+		list_nav.push(
+			<button key="logout" onClick={this.props.onLogout}>
+				{get_locales('LOGOUT')}
+			</button>
+		);
 
 		/*list_nav.push(<button
          onClick={(e) => {
@@ -249,8 +255,8 @@ class ModuleRenderer extends React.Component {
 			case 'captain':
 				return <PilotStation username={loginController.get_username()} captain={true}></PilotStation>;
 
-			case 'config editor':
-				return <ConfigEditor key="ConfigEditor" />;
+			case 'config_editor':
+				return <ConfigEditor />;
 
 			case 'NPC_pilot':
 				return <PilotStation NPC_pilot={true}></PilotStation>;

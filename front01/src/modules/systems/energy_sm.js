@@ -43,12 +43,16 @@ export class EnergyControlWidget extends React.Component {
 	};
 
 	get_energy_limit = () => {
-		let result = [<button disabled>{'>>'}</button>];
+		let result = [
+			<button key="placeholder" disabled>
+				{'>>'}
+			</button>
+		];
 		let free_energy = this.state.data.energy_free;
 
 		for (let i = 0; i < free_energy; i++) {
 			result.push(
-				<button className="back_green" disabled>
+				<button key={i} className="back_green" disabled>
 					{' '}
 					{i + 1}{' '}
 				</button>
@@ -66,6 +70,7 @@ export class EnergyControlWidget extends React.Component {
 
 			level_widgets.push(
 				<button
+					key={system_name + '_minus'}
 					onClick={(e) => {
 						this.onDecreaseEnergy(system_name);
 					}}
@@ -78,7 +83,7 @@ export class EnergyControlWidget extends React.Component {
 				let classname = '';
 				if (i >= 4) classname = 'back_red';
 				level_widgets.push(
-					<button className={classname} disabled>
+					<button key={system_name + '_' + i} className={classname} disabled>
 						{' '}
 						{i + 1}{' '}
 					</button>
@@ -87,6 +92,7 @@ export class EnergyControlWidget extends React.Component {
 
 			level_widgets.push(
 				<button
+					key={system_name + '_plus'}
 					onClick={(e) => {
 						this.onIncreaseEnergy(system_name);
 					}}
@@ -96,7 +102,7 @@ export class EnergyControlWidget extends React.Component {
 			);
 
 			result.push(
-				<div className="systemUpgradeUnit">
+				<div key={system_name} className="systemUpgradeUnit">
 					<label>{get_locales(system_name)}</label>
 					<div>{level_widgets}</div>
 				</div>

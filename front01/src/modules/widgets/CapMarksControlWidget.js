@@ -39,7 +39,7 @@ export class CapMarksControlWidget extends React.Component {
 
 	get_capmark_control = (char) => {
 		return (
-			<tr>
+			<tr key={char}>
 				<td>{char}</td>
 				<td>
 					{this.state.data[char]['position'][0]}, {this.state.data[char]['position'][1]}

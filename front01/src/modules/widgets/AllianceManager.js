@@ -43,6 +43,7 @@ export class AllianceManager extends React.Component {
 			for (let tmp_i in this.state.data.alliance) {
 				result.push(
 					<button
+						key={tmp_i}
 						onClick={(e) => {
 							this.remove_from_alies(this.state.data.alliance[tmp_i]);
 						}}

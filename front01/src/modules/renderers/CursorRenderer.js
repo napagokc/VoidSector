@@ -10,6 +10,7 @@ class EntityRendererCursor {
 		let objects = [];
 		objects.push(
 			<CursorMarker
+				key="cursor"
 				position={[0, 0, 0]}
 				//size = {600}
 				onUseFrame={onUseFrame}

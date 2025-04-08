@@ -35,6 +35,7 @@ export class ShipsDisplay extends React.Component {
 		for (let mark_id in this.state.data) {
 			result.push(
 				<ShipCard
+					key={mark_id}
 					on_module_selection={this.props.on_module_selection}
 					mark_id={mark_id}
 					data={this.state.data[mark_id]}
@@ -62,7 +63,7 @@ class ShipCard extends React.Component {
 		let result = [];
 		for (let system_name in this.props.data['RnD']) {
 			result.push(
-				<label>
+				<label key={system_name}>
 					{system_name}:{this.props.data['RnD'][system_name]}
 				</label>
 			);
@@ -136,7 +137,7 @@ export class StationsDisplay extends React.Component {
 	get_shipCards_block = () => {
 		let result = [];
 		for (let mark_id in this.state.data) {
-			result.push(<StationCard mark_id={mark_id} data={this.state.data[mark_id]}></StationCard>);
+			result.push(<StationCard key={mark_id} mark_id={mark_id} data={this.state.data[mark_id]}></StationCard>);
 		}
 
 		return result;
@@ -160,7 +161,7 @@ class StationCard extends React.Component {
 		let result = [];
 		for (let system_name in this.props.data['RnD']) {
 			result.push(
-				<label>
+				<label key={system_name}>
 					{system_name}:{this.props.data['RnD'][system_name]}
 				</label>
 			);

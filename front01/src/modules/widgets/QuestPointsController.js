@@ -50,7 +50,7 @@ export class QuestPointsController extends React.Component {
 		let result = [];
 		for (let qp_name in this.state.data) {
 			result.push(
-				<div>
+				<div key={qp_name}>
 					{qp_name}: {this.state.data[qp_name].toString()}{' '}
 					<button
 						onClick={(e) => {

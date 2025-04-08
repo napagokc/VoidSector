@@ -43,7 +43,7 @@ export class InteractionControlWidget extends React.Component {
 		for (let i in this.state.data.interactable_objects) {
 			let iobj_id = this.state.data.interactable_objects[i];
 			result.push(
-				<span>
+				<span key={iobj_id}>
 					<label>{iobj_id[0]}</label>
 					<button
 						onClick={(e) => {

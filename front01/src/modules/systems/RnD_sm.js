@@ -45,12 +45,18 @@ export class RnDControlWidget extends React.Component {
 
 			let i = 0;
 			for (i; i < Number.parseInt(system_level); i++) {
-				level_widgets.push(<button disabled> {upgrade['cost'][i]} </button>);
+				level_widgets.push(
+					<button key={system_name + '_' + i} disabled>
+						{' '}
+						{upgrade['cost'][i]}{' '}
+					</button>
+				);
 			}
 
 			if (upgrade['current_level'] < upgrade['maximal_level']) {
 				level_widgets.push(
 					<button
+						key={system_name + '_upgrade'}
 						onClick={(e) => {
 							this.onUpgrade(system_name);
 						}}
@@ -61,7 +67,7 @@ export class RnDControlWidget extends React.Component {
 			}
 
 			result.push(
-				<div className="systemUpgradeUnit">
+				<div key={system_name} className="systemUpgradeUnit">
 					<label>{system_name}</label>
 					<div>{level_widgets}</div>
 				</div>

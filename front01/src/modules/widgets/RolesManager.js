@@ -67,13 +67,13 @@ export class RoleManagerWidget extends React.Component {
 	};
 
 	get_assigned_roles_row = (username) => {
-		let result = [<td>{get_locales(username)}</td>];
+		let result = [<td key="col_name">{get_locales(username)}</td>];
 		let available_modules = ['captain', 'navigator', 'cannoneer', 'engineer'];
 
 		for (let i in available_modules) {
 			let modulename = available_modules[i];
 			result.push(
-				<td>
+				<td key={'col_' + modulename}>
 					<input
 						type="checkbox"
 						disabled={modulename === username && this.props.username !== 'admin'}
@@ -86,7 +86,7 @@ export class RoleManagerWidget extends React.Component {
 			);
 		}
 
-		return <tr>{result}</tr>;
+		return <tr key={'row_' + username}>{result}</tr>;
 	};
 
 	get_roles_table = () => {

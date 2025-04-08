@@ -89,7 +89,7 @@ export class PilotStation extends React.Component {
 		let result = [];
 		if (this.props.admin) {
 			result.push(
-				<div className={'SystemsLayer SystemsLayerShort'}>
+				<div key="admin_controls_1" className={'SystemsLayer SystemsLayerShort'}>
 					<CrewControlWidget />
 					<RnDControlWidget />
 					<DamageControlWidget />
@@ -98,7 +98,7 @@ export class PilotStation extends React.Component {
 			);
 
 			result.push(
-				<div className="ControlLayer">
+				<div key="admin_controls_2" className="ControlLayer">
 					<div className="engineControlSection">
 						<EngineControlWidget />
 						<InteractionControlWidget />
@@ -110,12 +110,12 @@ export class PilotStation extends React.Component {
 		}
 
 		if (this.props.engineer) {
-			result.push(<EngineerControllerWidget role={'engineer'} />);
+			result.push(<EngineerControllerWidget key="engineer_controls" role={'engineer'} />);
 		}
 
 		if (this.props.navigator) {
 			result.push(
-				<div className="ControlLayer">
+				<div key="navigator_controls" className="ControlLayer">
 					<div className="engineControlSection">
 						<EngineControlWidget />
 						<InteractionControlWidget />
@@ -126,7 +126,7 @@ export class PilotStation extends React.Component {
 
 		if (this.props.cannoneer) {
 			result.push(
-				<div className="ControlLayer">
+				<div key="cannoneer_controls" className="ControlLayer">
 					<ShaftsControlWidget />
 					<ProjectileBuilderWidget />
 					<ResourcesControlWidget />
@@ -137,7 +137,7 @@ export class PilotStation extends React.Component {
 		if (this.props.engineer_old) {
 			let clname = 'SystemsLayer';
 			result.push(
-				<div className={clname}>
+				<div key="engineer_old_controls" className={clname}>
 					<DamageControlWidget />
 					<CrewControlWidget />
 					<ResourcesControlWidget />
@@ -150,7 +150,7 @@ export class PilotStation extends React.Component {
 		if (this.props.captain) {
 			let clname = '';
 			result.push(
-				<div className={clname}>
+				<div key="captain_controls" className={clname}>
 					<ShipOvervieweWidgetLayer role={'captain'} />
 					<div
 						style={{
@@ -170,14 +170,14 @@ export class PilotStation extends React.Component {
 
 		if (this.props.NPC_pilot) {
 			result.push(
-				<div className={'SystemsLayer'}>
+				<div key="NPC_pilot_controls_1" className={'SystemsLayer'}>
 					<DamageControlWidget />
 					<EnergyControlWidget />
 				</div>
 			);
 
 			result.push(
-				<div className="ControlLayer">
+				<div key="NPC_pilot_controls_2" className="ControlLayer">
 					<div className="engineControlSection">
 						<EngineControlWidget />
 						<RadarControlWidget />

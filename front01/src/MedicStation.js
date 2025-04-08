@@ -48,7 +48,7 @@ export class MedicStation extends React.Component {
 				if (response.status === 200) return response.json();
 			})
 			.then((data) => {
-				console.log('update_plague_matrix', data);
+				//console.log('update_plague_matrix', data);
 				this.setState({ plague_matrix: data['plague_matrix'] });
 			})
 			.catch((data) => {});
@@ -60,10 +60,11 @@ export class MedicStation extends React.Component {
 	};
 
 	get_playerole_cards = () => {
-		let result = [<b>{get_locales('Hospital Crew Control')}</b>];
+		let result = [<b key="header">{get_locales('Hospital Crew Control')}</b>];
 		for (let rolename in this.state.data.roles) {
 			result.push(
 				<PlayerRoleHealthCard
+					key={rolename}
 					username={this.props.username}
 					rolename={rolename}
 					data={this.state.data.roles[rolename]}
@@ -196,13 +197,15 @@ class PlayerRoleHealthCard extends React.Component {
 		let result = [];
 		let cures = ['light', 'hard', 'crit'];
 		for (let i in cures) {
+			let cure = cures[i];
 			result.push(
 				<button
+					key={cure}
 					onClick={(e) => {
-						this.apply_cure(scale_name, cures[i]);
+						this.apply_cure(scale_name, cure);
 					}}
 				>
-					{cures[i]}
+					{cure}
 				</button>
 			);
 		}
@@ -218,6 +221,7 @@ class PlayerRoleHealthCard extends React.Component {
 		for (let i in cures) {
 			result.push(
 				<button
+					key={i}
 					onClick={(e) => {
 						this.add_points(scale_name, cures[i]);
 					}}
@@ -472,74 +476,74 @@ class PlagueMatrixSection extends React.Component {
 	get_plague_matrix = () => {
 		if (!this.props.plague_matrix) return <div>plague_matrix</div>;
 
+		let matrix_length = this.props.plague_matrix.length;
 		let marked_cells = [];
 		if (this.props.roles) marked_cells = this.get_marked_cells();
-		let result_column = [];
+		let result_matrix = [];
+
 		let result_row = [
-			<button className="plague_matrix_zero_cell" disabled={true}>
+			<button key="-1_-1" className="plague_matrix_zero_cell" disabled={true}>
 				ZERO
 			</button>
 		];
-
-		for (let i = 0; i < this.props.plague_matrix.length; i++) {
+		for (let i = 0; i < matrix_length; i++) {
 			result_row.push(
-				<button className="plague_matrix_health" disabled={true}>
+				<button key={[-1, i].join('_')} className="plague_matrix_health" disabled={true}>
 					{i}
 				</button>
 			);
 		}
 		result_row.push(
-			<button className="plague_matrix_zero_cell" disabled={true}>
+			<button key={[-1, matrix_length].join('_')} className="plague_matrix_zero_cell" disabled={true}>
 				ZERO
 			</button>
 		);
+		result_matrix.push(<div key="row_-1">{result_row}</div>);
 
-		result_column.push(<div>{result_row}</div>);
-		for (let i = 0; i < this.props.plague_matrix.length; i++) {
+		for (let i = 0; i < matrix_length; i++) {
 			result_row = [
-				<button className="plague_matrix_mental" disabled={true}>
+				<button key={[i, -1].join('_')} className="plague_matrix_mental" disabled={true}>
 					{i}
 				</button>
 			];
-			for (let j = 0; j < this.props.plague_matrix.length; j++) {
+			for (let j = 0; j < matrix_length; j++) {
 				let addClassName = '';
 				if (this.is_cell_marked(i, j, marked_cells)) addClassName = ' plague_matrix_cell_marked ';
 
 				result_row.push(
-					<button className={'plague_matrix_cell' + addClassName} disabled={true}>
+					<button key={[i, j].join('_')} className={'plague_matrix_cell' + addClassName} disabled={true}>
 						{this.props.plague_matrix[i][j]}
 					</button>
 				);
 			}
 			result_row.push(
-				<button className="plague_matrix_mental" disabled={true}>
+				<button key={[i, matrix_length].join('_')} className="plague_matrix_mental" disabled={true}>
 					{i}
 				</button>
 			);
-			result_column.push(<div>{result_row}</div>);
+			result_matrix.push(<div key={'row_' + i}>{result_row}</div>);
 		}
 
 		result_row = [
-			<button className="plague_matrix_zero_cell" disabled={true}>
+			<button key={[matrix_length, -1].join('_')} className="plague_matrix_zero_cell" disabled={true}>
 				ZERO
 			</button>
 		];
-
-		for (let i = 0; i < this.props.plague_matrix.length; i++) {
+		for (let i = 0; i < matrix_length; i++) {
 			result_row.push(
-				<button className="plague_matrix_health" disabled={true}>
+				<button key={[matrix_length, i].join('_')} className="plague_matrix_health" disabled={true}>
 					{i}
 				</button>
 			);
 		}
 		result_row.push(
-			<button className="plague_matrix_zero_cell" disabled={true}>
+			<button key={[matrix_length, matrix_length].join('_')} className="plague_matrix_zero_cell" disabled={true}>
 				ZERO
 			</button>
 		);
-		result_column.push(<div>{result_row}</div>);
+		result_matrix.push(<div key={'row_' + matrix_length}>{result_row}</div>);
 
-		return <div className="plague_matrix_div"> {result_column} </div>;
+		return <div className="plague_matrix_div"> {result_matrix} </div>;
 	};
 
 	render() {

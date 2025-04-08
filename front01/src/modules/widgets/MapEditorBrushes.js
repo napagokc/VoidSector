@@ -38,6 +38,7 @@ export class MapEditorBrushesWidget extends React.Component {
 		for (let tmp_i in options) {
 			result.push(
 				<button
+					key={tmp_i}
 					onClick={(e) => {
 						this.onChangeParam('mode', options[tmp_i]);
 					}}
@@ -47,16 +48,16 @@ export class MapEditorBrushesWidget extends React.Component {
 			);
 		}
 
-		return <div>{result}</div>;
+		return <div key="mode_selector">{result}</div>;
 	};
 
 	get_creator_params = () => {
 		let inputs = [];
 		let keys = ['radius', 'min_size', 'max_size', 'min_weight', 'max_weight'];
-		for (let tmp_i in keys) {
-			let keyname = keys[tmp_i];
+		for (let key in keys) {
+			let keyname = keys[key];
 			inputs.push(
-				<label>
+				<label key={keyname}>
 					{' '}
 					{keyname}:{' '}
 					<input
@@ -71,7 +72,7 @@ export class MapEditorBrushesWidget extends React.Component {
 
 		let keyname = 'closer';
 		inputs.push(
-			<label>
+			<label key={keyname}>
 				{' '}
 				{keyname}:{' '}
 				<input
@@ -86,6 +87,7 @@ export class MapEditorBrushesWidget extends React.Component {
 
 		return (
 			<div
+				key="creator_params"
 				style={{
 					display: 'flex',
 					flexDirection: 'column'
@@ -102,7 +104,7 @@ export class MapEditorBrushesWidget extends React.Component {
 		for (let tmp_i in keys) {
 			let keyname = keys[tmp_i];
 			inputs.push(
-				<label>
+				<label key={keyname}>
 					{' '}
 					{keyname}:{' '}
 					<input
@@ -115,16 +117,16 @@ export class MapEditorBrushesWidget extends React.Component {
 			);
 		}
 
-		let keyname2 = 'obstacles_type';
+		let keyname = 'obstacles_type';
 		inputs.push(
-			<label>
+			<label key={keyname}>
 				{' '}
-				{keyname2}:{' '}
+				{keyname}:{' '}
 				<select
 					onChange={(e) => {
-						this.onChangeParam(keyname2, e.target.value);
+						this.onChangeParam(keyname, e.target.value);
 					}}
-					value={this.state[keyname2]}
+					value={this.state[keyname]}
 				>
 					<option value={'MeteorsCloud'}>MeteorsCloud</option>
 					<option value={'Mine_type1'}>Mine_type1</option>
@@ -138,7 +140,7 @@ export class MapEditorBrushesWidget extends React.Component {
 		for (let tmp_i in keys) {
 			let keyname = keys[tmp_i];
 			inputs.push(
-				<label>
+				<label key={keyname}>
 					{' '}
 					{keyname}:{' '}
 					<input
@@ -153,6 +155,7 @@ export class MapEditorBrushesWidget extends React.Component {
 
 		return (
 			<div
+				key="obstacles_creator_params"
 				style={{
 					display: 'flex',
 					flexDirection: 'column'
@@ -169,7 +172,7 @@ export class MapEditorBrushesWidget extends React.Component {
 		for (let tmp_i in keys) {
 			let keyname = keys[tmp_i];
 			inputs.push(
-				<label>
+				<label key={keyname}>
 					{' '}
 					{keyname}:{' '}
 					<input
@@ -184,6 +187,7 @@ export class MapEditorBrushesWidget extends React.Component {
 
 		return (
 			<div
+				key="deleter_params"
 				style={{
 					display: 'flex',
 					flexDirection: 'column'
@@ -214,7 +218,7 @@ export class MapEditorBrushesWidget extends React.Component {
 
 	render() {
 		let inputs = [
-			<label>
+			<label key="inputs">
 				{' '}
 				State:
 				<button

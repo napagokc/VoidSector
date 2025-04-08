@@ -71,6 +71,7 @@ export class ConfigEditor extends React.Component {
 			let conf = this.state.config_list[i];
 			result.push(
 				<label
+					key={i}
 					onClick={() => {
 						this.getConfig(conf);
 						send_command('config_loader', 'admin', 'load', { filename: conf });
@@ -128,7 +129,7 @@ export class ConfigEditor extends React.Component {
 		let result = [];
 		for (let label in this.state.config_data[section_name]) {
 			result.push(
-				<label>
+				<label key={label}>
 					{label}
 					<input
 						onChange={(e) => {

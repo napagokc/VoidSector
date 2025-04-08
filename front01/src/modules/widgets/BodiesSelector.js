@@ -65,6 +65,7 @@ export class HBodiesSelector extends React.Component {
 	get_control_widget = (key, data) => {
 		return (
 			<div
+				key={key}
 				className="bodySelectorWidget"
 				onMouseEnter={(e) => {
 					this.props.onBodyHighlight(key);
@@ -271,7 +272,7 @@ export class BodyEditor extends React.Component {
 		for (let k in this.state.selected_body_edit) {
 			if (!['predictions', 'vel'].includes(k))
 				result.push(
-					<label>
+					<label key={k}>
 						{k}:{' '}
 						<input
 							onChange={(e) => {
@@ -284,7 +285,7 @@ export class BodyEditor extends React.Component {
 		}
 
 		result.push(
-			<label>
+			<label key="forced">
 				{'forced'}:{' '}
 				<input
 					type="checkbox"
@@ -343,7 +344,7 @@ export class BodyEditor extends React.Component {
 		let result = [];
 		for (let field in this.state.selected_body_stats) {
 			result.push(
-				<label>
+				<label key={field}>
 					{field}: {this.state.selected_body_stats[field]}
 				</label>
 			);
@@ -515,6 +516,7 @@ export class MapLoader extends React.Component {
 			let map = this.state.map_list[i];
 			result.push(
 				<label
+					key={i}
 					onClick={() => {
 						this.onLoadSelected(map);
 					}}
@@ -606,6 +608,7 @@ export class ShipScreenLoader extends React.Component {
 			let map = this.state.map_list[i];
 			result.push(
 				<label
+					key={i}
 					onClick={() => {
 						this.onLoadSelected(map);
 					}}

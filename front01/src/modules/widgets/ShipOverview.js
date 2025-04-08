@@ -136,6 +136,7 @@ export class ShipOvervieweWidget extends React.Component {
 		for (let sp_name in ship_parts_render_params) {
 			objects.push(
 				<ShipsPartMesh
+					key={sp_name}
 					part_name={sp_name}
 					onClick={(e) => {
 						this.proceed_system_selection(sp_name + '_sm');
@@ -148,6 +149,7 @@ export class ShipOvervieweWidget extends React.Component {
 		if (this.props.selected_sm) {
 			objects.push(
 				<ShipsPartMesh
+					key="selected_sm"
 					part_name={this.props.selected_sm.split('_')[0]}
 					selected={true}
 					onClick={(e) => {}}
@@ -307,6 +309,7 @@ export class SystemOvervieweWidget extends React.Component {
 		if (this.state.current_team) {
 			result = [
 				<button
+					key="Release_team"
 					onClick={(e) => {
 						this.on_assign_team('');
 					}}
@@ -318,6 +321,7 @@ export class SystemOvervieweWidget extends React.Component {
 			for (let team_name in this.state.teams) {
 				result.push(
 					<button
+						key={team_name}
 						onClick={(e) => {
 							this.on_assign_team(team_name);
 						}}

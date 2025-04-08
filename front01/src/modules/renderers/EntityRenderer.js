@@ -26,6 +26,7 @@ class EntityRenderer {
 		if ('map_border' in gui_settings && gui_settings['map_border']) {
 			objects_list.push(
 				<MarkerCircle
+					key="map_border"
 					position={[0, 0]}
 					scale_factor={scale_factor}
 					scale_offset={scale_params['scale_offset']}
@@ -56,7 +57,7 @@ class EntityRenderer {
 			);
 		}
 
-		objects_list.push(<ScaleMarker scale_factor={scale_params['scale_factor']} />);
+		objects_list.push(<ScaleMarker key="scale_factor" scale_factor={scale_params['scale_factor']} />);
 
 		return objects_list;
 	};
@@ -75,6 +76,7 @@ class EntityRenderer {
 			if (hbody_id === selected_body_idx) {
 				objects_list.push(
 					<MarkerCircle
+						key={hbody_id}
 						thickness={'bold'}
 						position={data['hBodies'][hbody_id]['pos']}
 						scale_factor={scale_params['scale_factor']}
@@ -92,6 +94,7 @@ class EntityRenderer {
 			if (body_id === selected_body_idx) {
 				objects_list.push(
 					<MarkerCircle
+						key={body_id}
 						thickness={'bold'}
 						position={data['lBodies'][body_id]['pos']}
 						scale_factor={scale_params['scale_factor']}
@@ -155,6 +158,7 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 	if (['hBody', 'ResourceAsteroid'].includes(marker_type)) {
 		objects.push(
 			<MarkerAsteroid
+				key={id + '_MarkerAsteroid'}
 				position={descr['pos']}
 				size={descr['critical_r']}
 				scale_factor={scale_params['scale_factor']}
@@ -167,6 +171,7 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 	if (marker_type === 'WormHole') {
 		objects.push(
 			<WormHole
+				key={id + '_WormHole'}
 				position={descr['pos']}
 				size={descr['critical_r']}
 				scale_factor={scale_params['scale_factor']}
@@ -179,6 +184,7 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 	if (show_gravity) {
 		objects.push(
 			<MarkerCircle
+				key={id + '_show_gravity'}
 				position={descr['pos']}
 				thickness={'thin'}
 				scale_factor={scale_params['scale_factor']}
@@ -192,6 +198,7 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 	if ('critical_r' in descr) {
 		objects.push(
 			<MarkerCircle
+				key={id + '_critical_r'}
 				position={descr['pos']}
 				thickness={'thin'}
 				scale_factor={scale_params['scale_factor']}
@@ -206,6 +213,7 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 	if ('mining_radius' in descr) {
 		objects.push(
 			<MarkerCircle
+				key={id + '_mining_radius'}
 				position={descr['pos']}
 				thickness={'thin'}
 				scale_factor={scale_params['scale_factor']}
@@ -293,6 +301,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 	if (show_id_labels && visible_ships.includes(id)) {
 		objects.push(
 			<MarkerShipIdentifierP1
+				key={id + '_IdentifierP1'}
 				color={color}
 				position={descr['pos']}
 				scale_factor={scale_params['scale_factor']}
@@ -303,6 +312,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 
 		objects.push(
 			<MarkerShipIdentifierP2
+				key={id + '_IdentifierP2'}
 				color={color}
 				text={id}
 				position={descr['pos']}
@@ -317,6 +327,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'ae_Ship':
 			objects.push(
 				<MarkerShip
+					key={id}
 					color={color}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -328,6 +339,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'ShipDebris':
 			objects.push(
 				<MarkerShipDebris
+					key={id}
 					color={0xffffff}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -339,6 +351,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'Kraken':
 			objects.push(
 				<MarkerKraken
+					key={id}
 					color={color}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -350,6 +363,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'SpaceStation':
 			objects.push(
 				<MarkerSpaceStation
+					key={id}
 					color={color}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -361,6 +375,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'SpaceStationDebris':
 			objects.push(
 				<MarkerSpaceStationDebris
+					key={id}
 					color={color}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -372,6 +387,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'QuantumShadow':
 			objects.push(
 				<MarkerShip
+					key={id}
 					color={0x00ffff}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -383,6 +399,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'projectile':
 			objects.push(
 				<MarkerProjectile
+					key={id}
 					color={color}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -395,6 +412,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 
 			objects.push(
 				<MarkerDangerZone
+					key={id}
 					color={color}
 					position={descr['pos']}
 					level={-1}
@@ -407,6 +425,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'MeteorsCloud':
 			objects.push(
 				<MarkerMeteorsCloud
+					key={id}
 					position={descr['pos']}
 					radius={descr['danger_radius']}
 					scale_factor={scale_params['scale_factor']}
@@ -417,6 +436,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'io_Drone':
 			objects.push(
 				<MarkerDrone
+					key={id}
 					color={color}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -427,6 +447,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		case 'interactable_object':
 			objects.push(
 				<MarkerInteractableObject
+					key={id}
 					color={0xffffff}
 					position={descr['pos']}
 					scale_factor={scale_params['scale_factor']}
@@ -442,6 +463,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		if ('direction' in descr) {
 			objects.push(
 				<MarkerDirection
+					key={id + '_direction'}
 					level={2}
 					color={color}
 					rotation={descr['direction']}
@@ -457,6 +479,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 			for (prediction in descr['predictions']) {
 				objects.push(
 					<MarkerDot
+						key={id + '_prediction_' + prediction}
 						color={color}
 						level={3}
 						position={descr['predictions'][prediction]}
@@ -469,6 +492,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 			if ('explosion_radius' in descr && descr['predictions'][prediction]) {
 				objects.push(
 					<MarkerCircle
+						key={id + '_explosion_radius'}
 						thickness={'normal'}
 						level={3}
 						radius={descr['explosion_radius']}
@@ -484,6 +508,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		if ('detection_radius' in descr) {
 			objects.push(
 				<MarkerCircle
+					key={id + '_detection_radius'}
 					thickness={'normal'}
 					radius={descr['detection_radius']}
 					position={descr['pos']}
@@ -497,6 +522,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		if ('detonation_radius' in descr) {
 			objects.push(
 				<MarkerCircle
+					key={id + '_detonation_radius'}
 					thickness={'bold'}
 					radius={descr['detonation_radius']}
 					position={descr['pos']}
@@ -510,6 +536,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		if ('close_scanrange' in descr) {
 			objects.push(
 				<MarkerCircleDash
+					key={id + '_close_scanrange'}
 					radius={descr['close_scanrange']}
 					position={descr['pos']}
 					level={2}

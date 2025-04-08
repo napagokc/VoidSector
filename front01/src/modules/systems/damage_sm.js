@@ -41,7 +41,7 @@ export class DamageControlWidget extends React.Component {
 			for (let system_name in this.state.data.systems_hp) {
 				let current_hp = this.state.data['systems_hp'][system_name]['current_hp'].toFixed(2);
 				result.push(
-					<label>
+					<label key={system_name}>
 						{system_name}:{current_hp}/{this.state.data['systems_hp'][system_name]['max_hp']}
 					</label>
 				);

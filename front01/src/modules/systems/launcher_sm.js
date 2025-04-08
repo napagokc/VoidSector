@@ -43,6 +43,7 @@ export class ShaftsControlWidget extends React.Component {
 		for (let k in this.state.data['shafts']) {
 			shafts_controllers.push(
 				<LauncherShaftController
+					key={k}
 					shaft_state={this.state.data['shafts'][k]}
 					shaft_id={k}
 					mark_id={this.state.data.mark_id}
@@ -145,7 +146,7 @@ export class LauncherShaftController extends React.Component {
 		}
 
 		return (
-			<span className="projectile_param_widget">
+			<span key={key} className="projectile_param_widget">
 				{key}
 				<input
 					type="range"
@@ -176,7 +177,12 @@ export class LauncherShaftController extends React.Component {
 		let options = [];
 		for (let i in this.props.shaft_state.available_projectiles) {
 			let option = this.props.shaft_state.available_projectiles[i];
-			options.push(<option value={option}> {option} </option>);
+			options.push(
+				<option key={option} value={option}>
+					{' '}
+					{option}{' '}
+				</option>
+			);
 		}
 
 		return options;
@@ -203,7 +209,7 @@ export class LauncherShaftController extends React.Component {
 		let labels = [];
 		for (let k in this.props.shaft) {
 			labels.push(
-				<label>
+				<label key={k}>
 					{k}:{this.props.shaft[k].Str}
 				</label>
 			);

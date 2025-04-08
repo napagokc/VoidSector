@@ -103,13 +103,13 @@ export class PerformanceViewer extends React.Component {
 
 			for (let k in last_vals) {
 				stats.push(
-					<label>
+					<label key={k}>
 						{' '}
 						{k}: {last_vals[k].toFixed(4)}
 					</label>
 				);
-				//stats.push(<label> {k}(Avg): {avg_stats[k]}</label>)
-				//stats.push(<label> {k}(PSc): {persec_stats[k]}</label>)
+				//stats.push(<label key={k}> {k}(Avg): {avg_stats[k]}</label>)
+				//stats.push(<label key={k}> {k}(PSc): {persec_stats[k]}</label>)
 			}
 		}
 
