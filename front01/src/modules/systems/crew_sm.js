@@ -34,8 +34,8 @@ export class CrewControlWidget extends React.Component {
 		let med_data = get_system_state('med_sm');
 
 		if (med_data) {
-			crew_data['wounded'] = med_data['hospital']['units'];
-			crew_data['hospitale_cap'] = med_data['hospital']['capacity'];
+			crew_data.wounded = med_data.hospital.units;
+			crew_data.hospitale_cap = med_data.hospital.capacity;
 		}
 
 		this.setState({ data: crew_data });
@@ -67,16 +67,20 @@ export class CrewControlWidget extends React.Component {
 		return (
 			<div className="SystemControlWidget">
 				<b>{get_locales('CrewControl')}</b>
-				<label>
-					{get_locales('total_crew')}:{this.state.data['total_crew']}
-				</label>
-				<label>
-					{get_locales('free_crew')}:{this.state.data['free_crew']}
-				</label>
-				<label>
-					{get_locales('hospital')}:{this.state.data['wounded']}/{this.state.data['hospitale_cap']}
-				</label>
-				{this.get_teams_list()}
+				{this.state.data.total_crew && (
+					<React.Fragment>
+						<label>
+							{get_locales('total_crew')}:{this.state.data.total_crew}
+						</label>
+						<label>
+							{get_locales('free_crew')}:{this.state.data.free_crew}
+						</label>
+						<label>
+							{get_locales('hospital')}:{this.state.data.wounded}/{this.state.data.hospitale_cap}
+						</label>
+						{this.get_teams_list()}
+					</React.Fragment>
+				)}
 			</div>
 		);
 	}
@@ -85,43 +89,43 @@ export class CrewControlWidget extends React.Component {
 export class RepairTeamWidget extends React.Component {
 	onRemoveCrewMember = (e) => {
 		send_command('ship.crew_sm', this.props.mark_id, 'remove_crew_from_team', {
-			team_name: this.props.team_data['name']
+			team_name: this.props.team_data.name
 		});
 	};
 	onAddCrewMember = (e) => {
 		send_command('ship.crew_sm', this.props.mark_id, 'add_crew_to_team', {
-			team_name: this.props.team_data['name']
+			team_name: this.props.team_data.name
 		});
 	};
 
 	render() {
 		let header;
 		if (this.props.mode === 'engineer') {
-			header = <b>{get_locales(this.props.team_data['name'])}</b>;
+			header = <b>{get_locales(this.props.team_data.name)}</b>;
 		} else {
 			header = (
 				<span>
-					<b>{get_locales(this.props.team_data['name'])}: </b>
-					<i>{get_locales(this.props.team_data['state'])}</i>
+					<b>{get_locales(this.props.team_data.name)}: </b>
+					<i>{get_locales(this.props.team_data.state)}</i>
 				</span>
 			);
 		}
 
 		return (
 			<div className="RepairTeamWidget">
-				<img src={'portraits/' + this.props.team_data['name'] + '.jpg'} alt="face"></img>
+				<img src={'portraits/' + this.props.team_data.name + '.jpg'} alt="face"></img>
 				<div className="RepairTeamWidget_data">
 					{header}
-					<progress value={this.props.team_data['loadout']} max={1}></progress>
+					<progress value={this.props.team_data.loadout} max={1}></progress>
 					{this.props.mode !== 'engineer' ? (
 						<div>
 							<button onClick={this.onRemoveCrewMember}>-</button>
-							<label>{this.props.team_data['crew']}/10</label>
+							<label>{this.props.team_data.crew}/10</label>
 							<button onClick={this.onAddCrewMember}>+</button>
 						</div>
 					) : (
 						<div>
-							<label>{this.props.team_data['crew']}/10</label>
+							<label>{this.props.team_data.crew}/10</label>
 						</div>
 					)}
 				</div>

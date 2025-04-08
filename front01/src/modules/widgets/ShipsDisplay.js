@@ -61,10 +61,10 @@ class ShipCard extends React.Component {
 
 	get_RnD_block = () => {
 		let result = [];
-		for (let system_name in this.props.data['RnD']) {
+		for (let system_name in this.props.data.RnD) {
 			result.push(
 				<label key={system_name}>
-					{system_name}:{this.props.data['RnD'][system_name]}
+					{system_name}:{this.props.data.RnD[system_name]}
 				</label>
 			);
 		}
@@ -78,11 +78,11 @@ class ShipCard extends React.Component {
 	};
 
 	move_view = (key) => {
-		set_global_observer_pos(this.props.data['pos']);
+		set_global_observer_pos(this.props.data.pos);
 	};
 
 	get_HP_block = () => {
-		return <div>hp:{this.props.data['hp']}</div>;
+		return <div>hp:{this.props.data.hp}</div>;
 	};
 
 	render() {
@@ -159,10 +159,10 @@ class StationCard extends React.Component {
 
 	get_RnD_block = () => {
 		let result = [];
-		for (let system_name in this.props.data['RnD']) {
+		for (let system_name in this.props.data.RnD) {
 			result.push(
 				<label key={system_name}>
-					{system_name}:{this.props.data['RnD'][system_name]}
+					{system_name}:{this.props.data.RnD[system_name]}
 				</label>
 			);
 		}
@@ -181,7 +181,7 @@ class StationCard extends React.Component {
 	};
 
 	move_view = (key) => {
-		set_global_observer_pos(this.props.data['pos']);
+		set_global_observer_pos(this.props.data.pos);
 	};
 
 	destroy = () => {
@@ -196,9 +196,9 @@ class StationCard extends React.Component {
 					flexDirection: 'column'
 				}}
 			>
-				<label>hp: {this.props.data['hp']}</label>
+				<label>hp: {this.props.data.hp}</label>
 				<label>
-					pos: {this.props.data['pos'][0]}, {this.props.data['pos'][1]}
+					pos: {this.props.data.pos[0]}, {this.props.data.pos[1]}
 				</label>
 			</div>
 		);

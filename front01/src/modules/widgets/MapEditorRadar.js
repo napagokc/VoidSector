@@ -61,7 +61,7 @@ export class MapEditorRadarWidget extends React.Component {
 		o[0] = o[0] + this.state.key_pressed[0];
 		o[1] = o[1] + this.state.key_pressed[1];
 
-		nav_data['observer_pos'] = o;
+		nav_data.observer_pos = o;
 
 		this.setState({
 			data: nav_data,
@@ -110,13 +110,13 @@ export class MapEditorRadarWidget extends React.Component {
 			mouse_position_y = mouse_position_y - this.state.controlled_observer_pos[1];
 		}
 
-		tmp['position'] = [mouse_position_x, mouse_position_y];
+		tmp.position = [mouse_position_x, mouse_position_y];
 		return tmp;
 	};
 
 	onMouseClick = (e) => {
-		if (this.props.brush_state['active']) {
-			let brush = this.props.brush_state['mode'];
+		if (this.props.brush_state.active) {
+			let brush = this.props.brush_state.mode;
 			brush = brush in brushes_map ? brushes_map[brush] : 'brush_delete';
 
 			send_command('map_editor', 'admin', brush, this.get_brush_params(false));
@@ -179,7 +179,7 @@ export class MapEditorRadarWidget extends React.Component {
 	};
 
 	get_cursor_position = () => {
-		let offset = this.state['cursor_position_old'];
+		let offset = this.state.cursor_position_old;
 
 		//let mouse_position_x = (this.state.cursor_position_old[0] * this.state.radar_width / 2) / this.state.scale_factor + offset[0]
 		//let mouse_position_y = (this.state.cursor_position_old[1] * this.state.radar_width / 2) / this.state.scale_factor + offset[1]

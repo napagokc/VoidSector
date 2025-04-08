@@ -23,10 +23,10 @@ class EntityRendererCursor {
 export const entityRendererCursor = new EntityRendererCursor();
 
 export function get_brush_object(brush_params, scale_factor) {
-	if (!brush_params['active']) return [];
+	if (!brush_params.active) return [];
 
 	let color;
-	switch (brush_params['mode']) {
+	switch (brush_params.mode) {
 		case 'deleter':
 			color = 0xff0000;
 			break;
@@ -42,11 +42,11 @@ export function get_brush_object(brush_params, scale_factor) {
 
 	return [
 		<MarkerCircle
-			position={brush_params['position']}
-			thickness={'thin'}
+			position={brush_params.position}
+			thickness="thin"
 			color={color}
 			scale_factor={scale_factor}
-			radius={brush_params['radius']}
+			radius={brush_params.radius}
 			level={0}
 		></MarkerCircle>
 	];

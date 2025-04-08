@@ -48,7 +48,7 @@ export class MedicStation extends React.Component {
 				if (response.status === 200) return response.json();
 			})
 			.then((data) => {
-				this.setState({ plague_matrix: data['plague_matrix'] });
+				this.setState({ plague_matrix: data.plague_matrix });
 			})
 			.catch((data) => {});
 	};
@@ -95,18 +95,17 @@ export class MedicStation extends React.Component {
 			>
 				<b>{get_locales('Hospital NPC Crew Control')}</b>
 				<label>
-					{get_locales('humans in hospital')}: {this.state.data['hospital']['units']}/
-					{this.state.data['hospital']['capacity']}
+					{get_locales('humans in hospital')}: {this.state.data.hospital.units}/
+					{this.state.data.hospital.capacity}
 				</label>
-				<progress value={this.state.data['hospital']['progress']} max={100}></progress>
+				<progress value={this.state.data.hospital.progress} max={100}></progress>
 				{(this.props.username === 'admin') | (this.props.username === 'master_medic') ? (
 					<button
 						onClick={(e) => {
 							this.remove_unit_from_hospital();
 						}}
 					>
-						{' '}
-						return to active crew{' '}
+						return to active crew
 					</button>
 				) : (
 					<none></none>
@@ -116,8 +115,7 @@ export class MedicStation extends React.Component {
 						this.toogle_med_activity();
 					}}
 				>
-					{' '}
-					toogle_med_activity{' '}
+					toogle_med_activity
 				</button>
 			</div>
 		);
@@ -172,7 +170,7 @@ class PlayerRoleHealthCard extends React.Component {
 	};
 
 	toogle_plague_state = () => {
-		let current_state = this.props.data['plague']['active'];
+		let current_state = this.props.data.plague.active;
 		send_command('ship.med_sm.plague', get_observer_id(), 'set_plague_v2_activity', {
 			role: this.props.rolename,
 			state: !current_state
@@ -259,7 +257,7 @@ class PlayerRoleHealthCard extends React.Component {
 						onChange={(e) => {
 							this.setState({ selected_plague_phase_x: e.target.value });
 						}}
-					/>{' '}
+					/>
 				</label>
 				<label>
 					MP_axis:{' '}
@@ -271,14 +269,13 @@ class PlayerRoleHealthCard extends React.Component {
 						onChange={(e) => {
 							this.setState({ selected_plague_phase_y: e.target.value });
 						}}
-					/>{' '}
+					/>
 				</label>
 				<button
 					onClick={(e) => {
 						this.set_plague_phase();
 					}}
 				>
-					{' '}
 					SET PHASE
 				</button>
 			</div>
@@ -311,24 +308,24 @@ class PlayerRoleHealthCard extends React.Component {
 				}}
 			>
 				<label>
-					{get_locales('plague_active')}: {this.props.data['plague']['active'].toString()}
+					{get_locales('plague_active')}: {this.props.data.plague.active.toString()}
 				</label>
 				<label>
-					{get_locales('current_phase')}: {this.props.data['plague']['current_phase'][1]},{' '}
-					{this.props.data['plague']['current_phase'][0]}
+					{get_locales('current_phase')}: {this.props.data.plague.current_phase[1]},{' '}
+					{this.props.data.plague.current_phase[0]}
 				</label>
 				<label>
-					{get_locales('mutator')}: {this.props.data['plague']['mutator']}
+					{get_locales('mutator')}: {this.props.data.plague.mutator}
 				</label>
 				<label>
-					{get_locales('time2next_phase')}: {this.props.data['plague']['time2next_phase']}
+					{get_locales('time2next_phase')}: {this.props.data.plague.time2next_phase}
 				</label>
 			</div>
 		);
 	};
 
 	is_plague_active = () => {
-		return this.props.data['plague']['active'];
+		return this.props.data.plague.active;
 	};
 
 	get_plague_activation_block = () => {
@@ -393,7 +390,7 @@ class PlayerRoleHealthCard extends React.Component {
 	get_curation_availability = () => {
 		return (
 			<label>
-				{get_locales('can_be_cured')}: {this.props.data['can_be_cured'].toString()}
+				{get_locales('can_be_cured')}: {this.props.data.can_be_cured.toString()}
 			</label>
 		);
 	};
@@ -442,7 +439,7 @@ class PlagueMatrixSection extends React.Component {
 		if (['admin', 'master_medic'].includes(this.props.username)) return true;
 
 		for (let role in this.props.roles) {
-			if (this.props.roles[role]['plague']['active']) return true;
+			if (this.props.roles[role].plague.active) return true;
 		}
 
 		return false;
@@ -455,8 +452,8 @@ class PlagueMatrixSection extends React.Component {
 	get_marked_cells = () => {
 		let result = [];
 		for (let role in this.props.roles) {
-			if (this.props.roles[role]['plague']['active']) {
-				let actual_phase = this.props.roles[role]['plague']['current_phase'];
+			if (this.props.roles[role].plague.active) {
+				let actual_phase = this.props.roles[role].plague.current_phase;
 				result.push(actual_phase);
 			}
 		}

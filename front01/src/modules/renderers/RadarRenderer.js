@@ -14,11 +14,11 @@ class RadarRenderer {
 		let objects_list = [];
 		let scale_params = {
 			scale_factor: scale_factor,
-			scale_offset: data['observer_pos']
+			scale_offset: data.observer_pos
 		};
 
-		for (let id in data['scan_marks']) {
-			objects_list = objects_list.concat(get_scanMark(data['scan_marks'][id], scale_params));
+		for (let id in data.scan_marks) {
+			objects_list = objects_list.concat(get_scanMark(data.scan_marks[id], scale_params));
 		}
 
 		return objects_list.concat(this.get_radar_shades(data, scale_factor));
@@ -26,7 +26,7 @@ class RadarRenderer {
 
 	get_radar_shades = (data, scale_factor) => {
 		let result = [];
-		let scan_radius = data['observer_radius'];
+		let scan_radius = data.observer_radius;
 		let sides = ['left', 'right', 'top', 'bottom'];
 		for (let i in sides) {
 			let side_name = sides[i];
@@ -50,18 +50,18 @@ class RadarRenderer {
 		let result = [];
 		let scale_params = {
 			scale_factor: scale_factor,
-			scale_offset: data['observer_pos']
+			scale_offset: data.observer_pos
 		};
 
 		for (let char in cap_marks) {
-			if (cap_marks[char]['active']) {
+			if (cap_marks[char].active) {
 				result.push(
 					<CapMarkMarker
 						key={char}
 						char={char}
-						position={cap_marks[char]['position']}
-						scale_factor={scale_params['scale_factor']}
-						scale_offset={scale_params['scale_offset']}
+						position={cap_marks[char].position}
+						scale_factor={scale_params.scale_factor}
+						scale_offset={scale_params.scale_offset}
 					/>
 				);
 			}
@@ -71,18 +71,19 @@ class RadarRenderer {
 	};
 
 	get_solar_flares_shades = (solar_flare_state) => {
-		if (!solar_flare_state || !solar_flare_state['state']) return [];
+		if (!solar_flare_state || !solar_flare_state.state) return [];
 
+		const solar_shade_path = 'markers/solar_shades/solar_shade.png';
 		return [
 			<MeshObject
-				texture={'markers/solar_shades/solar_shade.png'}
+				texture={solar_shade_path}
 				level={4}
 				position={[-250, 0, 2]}
 				size_array={[100, 600, 1]}
 				color={0xff8000}
 			/>,
 			<MeshObject
-				texture={'markers/solar_shades/solar_shade.png'}
+				texture={solar_shade_path}
 				level={4}
 				position={[250, 0, 2]}
 				rotation={180}
@@ -90,7 +91,7 @@ class RadarRenderer {
 				color={0xff8000}
 			/>,
 			<MeshObject
-				texture={'markers/solar_shades/solar_shade.png'}
+				texture={solar_shade_path}
 				level={4}
 				position={[0, 250, 2]}
 				rotation={-90}
@@ -98,7 +99,7 @@ class RadarRenderer {
 				color={0xff8000}
 			/>,
 			<MeshObject
-				texture={'markers/solar_shades/solar_shade.png'}
+				texture={solar_shade_path}
 				level={4}
 				position={[0, -250, 2]}
 				rotation={90}
@@ -113,7 +114,7 @@ class RadarRenderer {
 
 		return [
 			<MeshObject
-				texture={'markers/damage_shade.png'}
+				texture="markers/damage_shade.png"
 				level={4}
 				position={[0, 0, 0]}
 				size_array={[600, 600, 0.1]}
@@ -177,8 +178,8 @@ let get_scanMark = (descr, scale_params) => {
 			texture={texture}
 			type={mark_type}
 			position={position}
-			scale_factor={scale_params['scale_factor']}
-			scale_offset={scale_params['scale_offset']}
+			scale_factor={scale_params.scale_factor}
+			scale_offset={scale_params.scale_offset}
 		></MarkerRadarMark>
 	);
 

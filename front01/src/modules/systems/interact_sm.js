@@ -50,7 +50,6 @@ export class InteractionControlWidget extends React.Component {
 							this.onInteract(iobj_id[0]);
 						}}
 					>
-						{' '}
 						{iobj_id[1]}
 					</button>
 				</span>

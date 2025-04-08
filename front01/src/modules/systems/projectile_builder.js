@@ -153,8 +153,7 @@ export class ProjectileBuilderWidget extends React.Component {
 							this.onComponentChange(comp_name, -1);
 						}}
 					>
-						{' '}
-						-{' '}
+						-
 					</button>
 					<label>{this.state.edited_blueprint[comp_name]}</label>
 					<button
@@ -162,8 +161,7 @@ export class ProjectileBuilderWidget extends React.Component {
 							this.onComponentChange(comp_name, +1);
 						}}
 					>
-						{' '}
-						+{' '}
+						+
 					</button>
 				</div>
 			);

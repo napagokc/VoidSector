@@ -222,7 +222,7 @@ export class CommandEditorWidget extends React.Component {
 		if (!key) return null;
 
 		let result = [];
-		let params = command_descriptions[key]['params'];
+		let params = command_descriptions[key].params;
 		for (let option in params) {
 			result.push(this.get_option_editor(option, params[option]));
 		}
@@ -261,7 +261,7 @@ export class CommandEditorWidget extends React.Component {
 				</select>
 				<select
 					onChange={(e) => {
-						let target = command_descriptions[e.target.value]['target'];
+						let target = command_descriptions[e.target.value].target;
 						this.setState({
 							command: e.target.value,
 							target: target

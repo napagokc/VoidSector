@@ -127,7 +127,7 @@ export class ResourcesControlWidget extends React.Component {
 
 	get_production_progress = () => {
 		return (
-			<div className={'labeled_progress_bar'}>
+			<div className="labeled_progress_bar">
 				<label>{this.state.data.production_task}</label>
 				<progress value={this.state.data.production_progress} max="1"></progress>
 				<button onClick={this.cancel_item}> {get_locales('cancel_item')} </button>

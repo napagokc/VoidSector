@@ -58,7 +58,6 @@ export class MapEditorBrushesWidget extends React.Component {
 			let keyname = keys[key];
 			inputs.push(
 				<label key={keyname}>
-					{' '}
 					{keyname}:{' '}
 					<input
 						onChange={(e) => {
@@ -73,7 +72,6 @@ export class MapEditorBrushesWidget extends React.Component {
 		let keyname = 'closer';
 		inputs.push(
 			<label key={keyname}>
-				{' '}
 				{keyname}:{' '}
 				<input
 					type="checkbox"
@@ -105,7 +103,6 @@ export class MapEditorBrushesWidget extends React.Component {
 			let keyname = keys[tmp_i];
 			inputs.push(
 				<label key={keyname}>
-					{' '}
 					{keyname}:{' '}
 					<input
 						onChange={(e) => {
@@ -120,7 +117,6 @@ export class MapEditorBrushesWidget extends React.Component {
 		let keyname = 'obstacles_type';
 		inputs.push(
 			<label key={keyname}>
-				{' '}
 				{keyname}:{' '}
 				<select
 					onChange={(e) => {
@@ -128,10 +124,10 @@ export class MapEditorBrushesWidget extends React.Component {
 					}}
 					value={this.state[keyname]}
 				>
-					<option value={'MeteorsCloud'}>MeteorsCloud</option>
-					<option value={'Mine_type1'}>Mine_type1</option>
-					<option value={'Mine_type2'}>Mine_type2</option>
-					<option value={'Mine_type1/Mine_type2'}>Mine_type1/Mine_type2</option>
+					<option value="MeteorsCloud">MeteorsCloud</option>
+					<option value="Mine_type1">Mine_type1</option>
+					<option value="Mine_type2">Mine_type2</option>
+					<option value="Mine_type1/Mine_type2">Mine_type1/Mine_type2</option>
 				</select>
 			</label>
 		);
@@ -141,7 +137,6 @@ export class MapEditorBrushesWidget extends React.Component {
 			let keyname = keys[tmp_i];
 			inputs.push(
 				<label key={keyname}>
-					{' '}
 					{keyname}:{' '}
 					<input
 						onChange={(e) => {
@@ -173,7 +168,6 @@ export class MapEditorBrushesWidget extends React.Component {
 			let keyname = keys[tmp_i];
 			inputs.push(
 				<label key={keyname}>
-					{' '}
 					{keyname}:{' '}
 					<input
 						onChange={(e) => {
@@ -219,16 +213,14 @@ export class MapEditorBrushesWidget extends React.Component {
 	render() {
 		let inputs = [
 			<label key="inputs">
-				{' '}
 				State:
 				<button
 					onClick={(e) => {
 						this.onChangeParam('active', !this.state.active);
 					}}
 				>
-					{' '}
-					{this.state.active.toString()}{' '}
-				</button>{' '}
+					{this.state.active.toString()}
+				</button>
 			</label>,
 			this.get_mode_selector()
 		];

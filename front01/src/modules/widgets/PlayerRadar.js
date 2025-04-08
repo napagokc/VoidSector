@@ -89,7 +89,7 @@ export class PlayersRadarWidget extends React.Component {
 	};
 
 	onSetMark = () => {
-		let offset = this.state.data['observer_pos'];
+		let offset = this.state.data.observer_pos;
 		let mouse_position_x =
 			(this.state.mouse_pos[0] * this.state.radar_width) / 2 / this.state.scale_factor + offset[0];
 		let mouse_position_y =
@@ -102,7 +102,7 @@ export class PlayersRadarWidget extends React.Component {
 	get_cursor_position = () => {
 		if (!this.state.data) return [0.0, 0.0];
 
-		let offset = this.state.data['observer_pos'];
+		let offset = this.state.data.observer_pos;
 		let mouse_position_x =
 			(this.state.mouse_pos[0] * this.state.radar_width) / 2 / this.state.scale_factor + offset[0];
 		let mouse_position_y =
@@ -116,22 +116,22 @@ export class PlayersRadarWidget extends React.Component {
 		let solar_flare_state = get_solarflare();
 		if (!solar_flare_state) return;
 
-		if (solar_flare_state['state']) {
+		if (solar_flare_state.state) {
 			return (
 				<label className="sf_active">
-					{get_locales('time_to_next_sf_phase')}: {solar_flare_state['time2nextphase']}
+					{get_locales('time_to_next_sf_phase')}: {solar_flare_state.time2nextphase}
 				</label>
 			);
-		} else if (solar_flare_state['timer_state']) {
+		} else if (solar_flare_state.timer_state) {
 			return (
 				<label className="sf_active">
-					{get_locales('time_to_flare')}: {solar_flare_state['time2nextphase']}
+					{get_locales('time_to_flare')}: {solar_flare_state.time2nextphase}
 				</label>
 			);
 		} else {
 			return (
-				<label className={solar_flare_state['probability'] === 'high' ? 'sf_high' : 'sf_low'}>
-					{get_locales('sf_probability')}: {get_locales(solar_flare_state['probability'])}
+				<label className={solar_flare_state.probability === 'high' ? 'sf_high' : 'sf_low'}>
+					{get_locales('sf_probability')}: {get_locales(solar_flare_state.probability)}
 				</label>
 			);
 		}
@@ -166,8 +166,8 @@ export class PlayersRadarWidget extends React.Component {
 			<div className="PlayersRadar">
 				<div className="radarSection">
 					<Canvas
-						className={'PlayerRadarCanvas'}
-						id={'MyCanvas'}
+						className="PlayerRadarCanvas"
+						id="MyCanvas"
 						//resize = {{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
 						orthographic={true}
 						onClick={this.state.onMouseMove}
@@ -215,7 +215,6 @@ export class PlayersRadarWidget extends React.Component {
 								{cursor_position[1].toFixed(0)}
 							</label>
 							<label>
-								{' '}
 								{get_locales('toogle_id_labels')}{' '}
 								<input
 									type="checkbox"
@@ -223,7 +222,7 @@ export class PlayersRadarWidget extends React.Component {
 									onChange={(e) => {
 										this.setState({ show_id_labels: e.target.checked });
 									}}
-								></input>{' '}
+								></input>
 							</label>
 							{this.get_solar_flare_timer()}
 						</div>

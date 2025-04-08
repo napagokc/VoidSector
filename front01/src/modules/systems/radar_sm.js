@@ -21,7 +21,7 @@ export class RadarControlWidget extends React.Component {
 			<div className="SystemControlWidget">
 				<b>{get_locales('Radar control')}</b>
 				<NumericStepControlWidjet
-					label={'distant_arc'}
+					label="distant_arc"
 					init_value={10}
 					min={5}
 					max={360}
@@ -29,7 +29,7 @@ export class RadarControlWidget extends React.Component {
 					onChange={this.on_set_radar_arc}
 				/>
 				<NumericStepControlWidjet
-					label={'distant_dir'}
+					label="distant_dir"
 					init_value={0}
 					min={-360}
 					max={+360}

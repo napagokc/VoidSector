@@ -66,7 +66,7 @@ export class EngineControlWidget extends React.Component {
 						this.send_acceleration('acceleration', 0);
 					}}
 					onMouseDown={(e) => {
-						this.send_acceleration('acceleration', 1 * this.state['engine_power']);
+						this.send_acceleration('acceleration', 1 * this.state.engine_power);
 					}}
 					onMouseLeave={(e) => {
 						this.send_acceleration('acceleration', 0);
@@ -103,7 +103,7 @@ export class EngineControlWidget extends React.Component {
 						this.send_acceleration('acceleration', 0);
 					}}
 					onMouseDown={(e) => {
-						this.send_acceleration('acceleration', -1 * this.state['engine_power']);
+						this.send_acceleration('acceleration', -1 * this.state.engine_power);
 					}}
 					onMouseLeave={(e) => {
 						this.send_acceleration('acceleration', 0);
@@ -137,7 +137,6 @@ export class EngineControlWidget extends React.Component {
 			<div className="AccelerationController">
 				<b> {get_locales('Acceleration Control')}</b>
 				<label>
-					{' '}
 					{get_locales('speed')}: {this.state.data ? this.state.data.velocity : 0}
 				</label>
 				<label>
@@ -149,7 +148,7 @@ export class EngineControlWidget extends React.Component {
 				{this.get_buttons_block()}
 				<NumericControlWidjet
 					disabled={this.is_disabled()}
-					label={'prediction_depth'}
+					label="prediction_depth"
 					init_value={10}
 					min={5}
 					max={60}
@@ -158,7 +157,7 @@ export class EngineControlWidget extends React.Component {
 				/>
 				<NumericControlWidjet
 					disabled={this.is_disabled()}
-					label={'engine_power'}
+					label="engine_power"
 					init_value={1}
 					min={0}
 					max={1}

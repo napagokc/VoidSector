@@ -162,7 +162,7 @@ export class ShipOvervieweWidget extends React.Component {
 			<div className="ShipOvervieweWidget">
 				<div className="ShipSection">
 					<Canvas
-						id={'ShipCanvas'}
+						id="ShipCanvas"
 						//resize = {{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
 						orthographic={true}
 						style={{
@@ -224,18 +224,18 @@ export function ShipsPartMesh(props) {
 	//const texture = useLoader(TextureLoader, 'markers/crosschair.png')
 	const meshRef = useRef();
 	let geometry = [
-		ship_parts_render_params[props.part_name]['size'][0],
-		ship_parts_render_params[props.part_name]['size'][1],
-		ship_parts_render_params[props.part_name]['size'][2]
+		ship_parts_render_params[props.part_name].size[0],
+		ship_parts_render_params[props.part_name].size[1],
+		ship_parts_render_params[props.part_name].size[2]
 	];
 
 	geometry[0] = geometry[0] * ship_scaling_factor;
 	geometry[1] = geometry[1] * ship_scaling_factor;
 
 	let position = [
-		ship_parts_render_params[props.part_name]['pos'][0],
-		ship_parts_render_params[props.part_name]['pos'][1],
-		ship_parts_render_params[props.part_name]['pos'][2]
+		ship_parts_render_params[props.part_name].pos[0],
+		ship_parts_render_params[props.part_name].pos[1],
+		ship_parts_render_params[props.part_name].pos[2]
 	];
 	position[0] = position[0] + ship_offsetX_factor;
 
@@ -271,29 +271,24 @@ export class SystemOvervieweWidget extends React.Component {
 
 	proceed_data_message = () => {
 		if (!this.props.sm_name) return;
-		let sm_name = this.props.sm_name;
+
 		let damage_sm = get_system_state('damage_sm');
 		if (!damage_sm) return;
-		let crew_sm = get_system_state('crew_sm');
-		let sm_info = get_system_state(sm_name);
-		let current_hp = damage_sm.systems_hp[sm_name].current_hp;
-		let max_hp = damage_sm.systems_hp[sm_name].max_hp;
-		let current_team = crew_sm.systems[sm_name];
-		let upgrade_level = sm_info.upgrade_level;
 
+		let sm_name = this.props.sm_name;
+		let crew_sm = get_system_state('crew_sm');
 		let upgrade_sm = get_system_state('RnD_sm');
-		let upgrade_cost = upgrade_sm.systems_upgrades[sm_name]['cost'][upgrade_level];
-		let teams = crew_sm.teams;
+		let sm_info = get_system_state(sm_name);
 
 		this.setState({
 			sm_name: sm_name,
 			mark_id: damage_sm.mark_id,
-			current_hp: current_hp.toFixed(1),
-			max_hp: max_hp,
-			current_team: current_team,
-			upgrade_level: upgrade_level,
-			upgrade_cost: upgrade_cost,
-			teams: teams
+			current_hp: damage_sm.systems_hp[this.props.sm_name].current_hp.toFixed(1),
+			max_hp: damage_sm.systems_hp[this.props.sm_name].max_hp,
+			current_team: crew_sm.systems[this.props.sm_name],
+			upgrade_level: sm_info.upgrade_level,
+			upgrade_cost: upgrade_sm.systems_upgrades[this.props.sm_name].cost[sm_info.upgrade_level],
+			teams: crew_sm.teams
 		});
 	};
 
@@ -352,13 +347,11 @@ export class SystemOvervieweWidget extends React.Component {
 					{get_locales('upgrade_level')}: {this.state.upgrade_level}
 				</label>
 
-				{['admin', 'captain'].includes(this.props.role) ? (
+				{['admin', 'captain'].includes(this.props.role) && (
 					<button disabled={!this.state.upgrade_cost} onClick={this.on_system_upgrade}>
 						{get_locales('upgrade')}
-						{this.state.upgrade_cost ? '[' + this.state.upgrade_cost.toString() + ']' : ''}
+						{this.state.upgrade_cost && `[${this.state.upgrade_cost.toString()}]`}
 					</button>
-				) : (
-					<span></span>
 				)}
 
 				{['admin', 'engineer'].includes(this.props.role) ? (

@@ -36,20 +36,20 @@ export class FlaresController extends React.Component {
 			<div className="solarFlare_control">
 				<label>
 					<b>Solar flare state:</b>
-					{sf_state['state'].toString()}
+					{sf_state.state.toString()}
 				</label>
-				<label>time2nextphase:{sf_state['time2nextphase']}</label>
-				<label>probability:{sf_state['probability']}</label>
+				<label>time2nextphase:{sf_state.time2nextphase}</label>
+				<label>probability:{sf_state.probability}</label>
 				<button
 					onClick={() => {
-						this.toogleSolarFlare(!sf_state['state']);
+						this.toogleSolarFlare(!sf_state.state);
 					}}
 				>
 					TOOGLE ACTIVITY
 				</button>
 				<button
 					onClick={() => {
-						this.toogleSolarFlareTimer(!sf_state['timer_state']);
+						this.toogleSolarFlareTimer(!sf_state.timer_state);
 					}}
 				>
 					TOOGLE TIMER

@@ -53,8 +53,7 @@ export class EnergyControlWidget extends React.Component {
 		for (let i = 0; i < free_energy; i++) {
 			result.push(
 				<button key={i} className="back_green" disabled>
-					{' '}
-					{i + 1}{' '}
+					{i + 1}
 				</button>
 			);
 		}
@@ -84,8 +83,7 @@ export class EnergyControlWidget extends React.Component {
 				if (i >= 4) classname = 'back_red';
 				level_widgets.push(
 					<button key={system_name + '_' + i} className={classname} disabled>
-						{' '}
-						{i + 1}{' '}
+						{i + 1}
 					</button>
 				);
 			}

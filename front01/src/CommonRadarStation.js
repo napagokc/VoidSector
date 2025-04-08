@@ -29,7 +29,7 @@ export class CommonRadarStation extends React.Component {
 
 	render() {
 		return (
-			<div className={'CommonRadarStation'}>
+			<div className="CommonRadarStation">
 				<PlayersRadarWidget />
 			</div>
 		);

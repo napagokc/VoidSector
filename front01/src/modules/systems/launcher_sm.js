@@ -40,11 +40,11 @@ export class ShaftsControlWidget extends React.Component {
 		if (!this.state.data) return <div></div>;
 
 		let shafts_controllers = [];
-		for (let k in this.state.data['shafts']) {
+		for (let k in this.state.data.shafts) {
 			shafts_controllers.push(
 				<LauncherShaftController
 					key={k}
-					shaft_state={this.state.data['shafts'][k]}
+					shaft_state={this.state.data.shafts[k]}
 					shaft_id={k}
 					mark_id={this.state.data.mark_id}
 				/>
@@ -77,8 +77,8 @@ export class ShaftsControlWidget extends React.Component {
 
 		if (!this.is_disabled()) {
 			shafts_controllers = this.get_shafts_section();
-			auto_toogle = this.state.data['auto_toggle'];
-			auto_reload = this.state.data['auto_reload'];
+			auto_toogle = this.state.data.auto_toggle;
+			auto_reload = this.state.data.auto_reload;
 		}
 
 		return (
@@ -179,8 +179,7 @@ export class LauncherShaftController extends React.Component {
 			let option = this.props.shaft_state.available_projectiles[i];
 			options.push(
 				<option key={option} value={option}>
-					{' '}
-					{option}{' '}
+					{option}
 				</option>
 			);
 		}
@@ -216,13 +215,13 @@ export class LauncherShaftController extends React.Component {
 		}
 
 		let shaftprogress_classname = '';
-		if (this.props.shaft_state['progress'] >= 100) {
+		if (this.props.shaft_state.progress >= 100) {
 			shaftprogress_classname = 'LauncherShaftController_shaft_progress_ready';
-		} else if (this.props.shaft_state['progress'] > 0 && this.props.shaft_state['progress'] <= 100) {
+		} else if (this.props.shaft_state.progress > 0 && this.props.shaft_state.progress <= 100) {
 			shaftprogress_classname = 'LauncherShaftController_shaft_progress_in_progres';
 		}
 
-		let additional_ClassName = this.props.shaft_state['selected'] ? 'LauncherShaftController_selected' : '';
+		let additional_ClassName = this.props.shaft_state.selected ? 'LauncherShaftController_selected' : '';
 		// <label>type: {this.props.shaft_state["loaded_type"]}</label>
 		return (
 			<div className={'LauncherShaftController ' + additional_ClassName}>
@@ -232,12 +231,12 @@ export class LauncherShaftController extends React.Component {
 					}}
 				>
 					<b>
-						{get_locales('SHAFT')}# {this.props.shaft_id}{' '}
+						{get_locales('SHAFT')}# {this.props.shaft_id}
 					</b>
 				</button>
 
 				<div className={'LauncherShaftController_shaft_progress ' + shaftprogress_classname}>
-					<progress value={this.props.shaft_state['progress']} max="100"></progress>
+					<progress value={this.props.shaft_state.progress} max="100"></progress>
 				</div>
 				<select
 					onChange={(e) => {
@@ -245,8 +244,7 @@ export class LauncherShaftController extends React.Component {
 					}}
 				>
 					<option default value={null}>
-						{' '}
-						{null}
+						{''}
 					</option>
 					{this.get_available_projectiles_options()}
 				</select>
@@ -257,7 +255,6 @@ export class LauncherShaftController extends React.Component {
 						this.load_projectile();
 					}}
 				>
-					{' '}
 					{get_locales('load')}
 				</button>
 				<button
@@ -265,7 +262,6 @@ export class LauncherShaftController extends React.Component {
 						this.unload_projectile();
 					}}
 				>
-					{' '}
 					{get_locales('unload')}
 				</button>
 			</div>

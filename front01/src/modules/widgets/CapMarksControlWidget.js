@@ -42,9 +42,9 @@ export class CapMarksControlWidget extends React.Component {
 			<tr key={char}>
 				<td>{char}</td>
 				<td>
-					{this.state.data[char]['position'][0]}, {this.state.data[char]['position'][1]}
+					{this.state.data[char].position[0]}, {this.state.data[char].position[1]}
 				</td>
-				<td>{this.state.data[char]['active'] ? 'true' : 'false'}</td>
+				<td>{this.state.data[char].active ? 'true' : 'false'}</td>
 				<td>
 					<button
 						onClick={(e) => {

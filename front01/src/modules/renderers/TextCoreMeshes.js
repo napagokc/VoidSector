@@ -23,7 +23,7 @@ export function TextMesh(props) {
 	return (
 		<mesh position={position}>
 			<textGeometry args={[text, { font, size: 10, height: 1 }]} />
-			<meshLambertMaterial attach="material" color={'white'} />
+			<meshLambertMaterial attach="material" color="white" />
 		</mesh>
 	);
 }

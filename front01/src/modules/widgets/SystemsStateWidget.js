@@ -35,7 +35,6 @@ export class SystemStateViewer extends React.Component {
 		for (let k in this.state.system_state) {
 			states.push(
 				<label>
-					{' '}
 					{k}: {this.state.system_state[k]}
 				</label>
 			);

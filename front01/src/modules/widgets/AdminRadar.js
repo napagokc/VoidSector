@@ -47,7 +47,7 @@ export class AdminRadarWidget extends React.Component {
 		timerscounter.add(this.constructor.name, timer_id);
 
 		let tmp_data = this.state.data;
-		tmp_data['observer_pos'] = global_observer_pos;
+		tmp_data.observer_pos = global_observer_pos;
 
 		this.setState({ data: tmp_data });
 	}
@@ -64,7 +64,7 @@ export class AdminRadarWidget extends React.Component {
 		o[0] = o[0] + this.state.key_pressed[0];
 		o[1] = o[1] + this.state.key_pressed[1];
 
-		nav_data['observer_pos'] = o;
+		nav_data.observer_pos = o;
 
 		this.setState({ data: nav_data });
 	};
@@ -206,7 +206,7 @@ export class AdminRadarWidget extends React.Component {
 									this.setState({ scale_factor: e.target.value });
 								}}
 								//value={this.state.progradeAcc}
-							/>{' '}
+							/>
 						</label>
 						{parseFloat(this.state.scale_factor).toFixed(2)}
 						{this.get_buttons_block()}
@@ -215,19 +215,17 @@ export class AdminRadarWidget extends React.Component {
 								this.setState({ controlled_observer_pos: [0, 0] });
 							}}
 						>
-							{' '}
 							CLEAR OFFSET
 						</button>
 						<label>
-							{' '}
-							{get_locales('toogle_id_labels')}{' '}
+							{get_locales('toogle_id_labels')}
 							<input
 								type="checkbox"
 								checked={this.state.show_id_labels}
 								onChange={(e) => {
 									this.setState({ show_id_labels: e.target.checked });
 								}}
-							></input>{' '}
+							></input>
 						</label>
 					</div>
 				</div>

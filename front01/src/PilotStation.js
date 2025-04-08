@@ -84,7 +84,7 @@ export class PilotStation extends React.Component {
 		let result = [];
 		if (this.props.admin) {
 			result.push(
-				<div key="admin_controls_1" className={'SystemsLayer SystemsLayerShort'}>
+				<div key="admin_controls_1" className="SystemsLayer SystemsLayerShort">
 					<CrewControlWidget />
 					<RnDControlWidget />
 					<DamageControlWidget />
@@ -105,7 +105,7 @@ export class PilotStation extends React.Component {
 		}
 
 		if (this.props.engineer) {
-			result.push(<EngineerControllerWidget key="engineer_controls" role={'engineer'} />);
+			result.push(<EngineerControllerWidget key="engineer_controls" role="engineer" />);
 		}
 
 		if (this.props.navigator) {
@@ -146,7 +146,7 @@ export class PilotStation extends React.Component {
 			let clname = '';
 			result.push(
 				<div key="captain_controls" className={clname}>
-					<ShipOvervieweWidgetLayer role={'captain'} />
+					<ShipOvervieweWidgetLayer role="captain" />
 					<div
 						style={{
 							display: 'flex',
@@ -165,7 +165,7 @@ export class PilotStation extends React.Component {
 
 		if (this.props.NPC_pilot) {
 			result.push(
-				<div key="NPC_pilot_controls_1" className={'SystemsLayer'}>
+				<div key="NPC_pilot_controls_1" className="SystemsLayer">
 					<DamageControlWidget />
 					<EnergyControlWidget />
 				</div>
@@ -233,8 +233,8 @@ class MedicineStateWidget extends React.Component {
 			let user_stats_HP = 8;
 
 			if (med_state) {
-				user_stats_MP = med_state['roles'][this.props.username]['MP'];
-				user_stats_HP = med_state['roles'][this.props.username]['HP'];
+				user_stats_MP = med_state.roles[this.props.username].MP;
+				user_stats_HP = med_state.roles[this.props.username].HP;
 			}
 
 			this.props.set_MP_stamina_level(user_stats_MP);

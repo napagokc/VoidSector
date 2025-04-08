@@ -104,7 +104,6 @@ export class PerformanceViewer extends React.Component {
 			for (let k in last_vals) {
 				stats.push(
 					<label key={k}>
-						{' '}
 						{k}: {last_vals[k].toFixed(4)}
 					</label>
 				);

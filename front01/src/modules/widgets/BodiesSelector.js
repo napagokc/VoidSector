@@ -32,12 +32,12 @@ export class HBodiesSelector extends React.Component {
 		let hbodies_data = {};
 		let lbodies_data = {};
 
-		for (let k in nav_data['hBodies']) {
-			hbodies_data[k] = nav_data['hBodies'][k];
+		for (let k in nav_data.hBodies) {
+			hbodies_data[k] = nav_data.hBodies[k];
 		}
 
-		for (let k in nav_data['lBodies']) {
-			lbodies_data[k] = nav_data['lBodies'][k];
+		for (let k in nav_data.lBodies) {
+			lbodies_data[k] = nav_data.lBodies[k];
 		}
 
 		this.setState({ hbodies_data: hbodies_data, lbodies_data: lbodies_data });
@@ -74,7 +74,7 @@ export class HBodiesSelector extends React.Component {
 					this.props.onBodyHighlight(null);
 				}}
 			>
-				<label>{data['type']}</label>
+				<label>{data.type}</label>
 				<label>{key}</label>
 
 				<button
@@ -82,32 +82,28 @@ export class HBodiesSelector extends React.Component {
 						this.take_control(key);
 					}}
 				>
-					{' '}
-					select{' '}
+					select
 				</button>
 				<button
 					onClick={(e) => {
 						this.release_control(key);
 					}}
 				>
-					{' '}
-					release{' '}
+					release
 				</button>
 				<button
 					onClick={(e) => {
 						this.copy_entity(key);
 					}}
 				>
-					{' '}
-					copy{' '}
+					copy
 				</button>
 				<button
 					onClick={(e) => {
 						this.delete(key);
 					}}
 				>
-					{' '}
-					delete{' '}
+					delete
 				</button>
 			</div>
 		);
@@ -220,17 +216,17 @@ export class BodyEditor extends React.Component {
 		let tmp1 = Object.assign({}, this.state.selected_body_ref);
 		let tmp2 = Object.assign({}, body);
 
-		delete tmp1['pos'];
-		delete tmp1['vel'];
-		delete tmp2['pos'];
-		delete tmp2['vel'];
+		delete tmp1.pos;
+		delete tmp1.vel;
+		delete tmp2.pos;
+		delete tmp2.vel;
 
 		return JSON.stringify(tmp1) === JSON.stringify(tmp2);
 	};
 
 	find_in_navdata = (mark_id, navdata) => {
-		if (mark_id in navdata['lBodies']) return navdata['lBodies'][mark_id];
-		else if (mark_id in navdata['hBodies']) return navdata['hBodies'][mark_id];
+		if (mark_id in navdata.lBodies) return navdata.lBodies[mark_id];
+		else if (mark_id in navdata.hBodies) return navdata.hBodies[mark_id];
 
 		return null;
 	};
@@ -394,9 +390,8 @@ export class BodySpawner extends React.Component {
 
 	get_entitytype_selector = () => {
 		let options = [
-			<option key={''} value={''}>
-				{' '}
-				{''}{' '}
+			<option key="" value="">
+				{''}
 			</option>
 		];
 		let options_list = [
@@ -420,8 +415,7 @@ export class BodySpawner extends React.Component {
 			let option = options_list[i];
 			options.push(
 				<option key={option} value={option}>
-					{' '}
-					{option}{' '}
+					{option}
 				</option>
 			);
 		}

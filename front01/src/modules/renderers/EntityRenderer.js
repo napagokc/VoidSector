@@ -11,45 +11,45 @@ class EntityRenderer {
 		let objects_list = [];
 		let scale_params = {
 			scale_factor: scale_factor,
-			scale_offset: data['observer_pos']
+			scale_offset: data.observer_pos
 		};
 
 		let show_gravity = false;
-		if ('show_gravity' in gui_settings && gui_settings['show_gravity']) show_gravity = true;
+		if ('show_gravity' in gui_settings && gui_settings.show_gravity) show_gravity = true;
 
 		let show_id_labels = false;
-		if ('show_id_labels' in gui_settings && gui_settings['show_id_labels']) show_id_labels = true;
+		if ('show_id_labels' in gui_settings && gui_settings.show_id_labels) show_id_labels = true;
 
 		let arrow_scaling = false;
-		if ('arrow_scaling' in gui_settings) arrow_scaling = gui_settings['arrow_scaling'];
+		if ('arrow_scaling' in gui_settings) arrow_scaling = gui_settings.arrow_scaling;
 
-		if ('map_border' in gui_settings && gui_settings['map_border']) {
+		if ('map_border' in gui_settings && gui_settings.map_border) {
 			objects_list.push(
 				<MarkerCircle
 					key="map_border"
 					position={[0, 0]}
 					scale_factor={scale_factor}
-					scale_offset={scale_params['scale_offset']}
-					radius={gui_settings['map_border']}
+					scale_offset={scale_params.scale_offset}
+					radius={gui_settings.map_border}
 					level={4.1}
 					color={0xffff00}
 				/>
 			);
 		}
 
-		for (let hbody_id in data['hBodies']) {
+		for (let hbody_id in data.hBodies) {
 			objects_list = objects_list.concat(
-				get_Rendered_hBody(hbody_id, data['hBodies'][hbody_id], scale_params, show_gravity)
+				get_Rendered_hBody(hbody_id, data.hBodies[hbody_id], scale_params, show_gravity)
 			);
 		}
 
-		for (let lbody_id in data['lBodies']) {
+		for (let lbody_id in data.lBodies) {
 			objects_list = objects_list.concat(
 				get_Rendered_lBody(
-					data['mark_id'],
+					data.mark_id,
 					lbody_id,
-					data['lBodies'][lbody_id],
-					data['visible_ships'],
+					data.lBodies[lbody_id],
+					data.visible_ships,
 					scale_params,
 					show_id_labels,
 					arrow_scaling
@@ -57,7 +57,7 @@ class EntityRenderer {
 			);
 		}
 
-		objects_list.push(<ScaleMarker key="scale_factor" scale_factor={scale_params['scale_factor']} />);
+		objects_list.push(<ScaleMarker key="scale_factor" scale_factor={scale_params.scale_factor} />);
 
 		return objects_list;
 	};
@@ -69,18 +69,18 @@ class EntityRenderer {
 
 		let scale_params = {
 			scale_factor: scale_factor,
-			scale_offset: data['observer_pos']
+			scale_offset: data.observer_pos
 		};
 
-		for (let hbody_id in data['hBodies']) {
+		for (let hbody_id in data.hBodies) {
 			if (hbody_id === selected_body_idx) {
 				objects_list.push(
 					<MarkerCircle
 						key={hbody_id}
-						thickness={'bold'}
-						position={data['hBodies'][hbody_id]['pos']}
-						scale_factor={scale_params['scale_factor']}
-						scale_offset={scale_params['scale_offset']}
+						thickness="bold"
+						position={data.hBodies[hbody_id].pos}
+						scale_factor={scale_params.scale_factor}
+						scale_offset={scale_params.scale_offset}
 						radius={30}
 						color={0x00ff00}
 					></MarkerCircle>
@@ -90,15 +90,15 @@ class EntityRenderer {
 			}
 		}
 
-		for (let body_id in data['lBodies']) {
+		for (let body_id in data.lBodies) {
 			if (body_id === selected_body_idx) {
 				objects_list.push(
 					<MarkerCircle
 						key={body_id}
-						thickness={'bold'}
-						position={data['lBodies'][body_id]['pos']}
-						scale_factor={scale_params['scale_factor']}
-						scale_offset={scale_params['scale_offset']}
+						thickness="bold"
+						position={data.lBodies[body_id].pos}
+						scale_factor={scale_params.scale_factor}
+						scale_offset={scale_params.scale_offset}
 						radius={30}
 						color={0x00ff00}
 					></MarkerCircle>
@@ -142,27 +142,27 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 	if (!descr) return;
 
 	let global_position_x =
-		descr['pos'][0] * scale_params['scale_factor'] - scale_params['scale_offset'][0] * scale_params['scale_factor'];
+		descr.pos[0] * scale_params.scale_factor - scale_params.scale_offset[0] * scale_params.scale_factor;
 	if (global_position_x > 400 || global_position_x < -400) return [];
 
 	let global_position_y =
-		descr['pos'][1] * scale_params['scale_factor'] - scale_params['scale_offset'][1] * scale_params['scale_factor'];
+		descr.pos[1] * scale_params.scale_factor - scale_params.scale_offset[1] * scale_params.scale_factor;
 	if (global_position_y > 400 || global_position_y < -400) return [];
 
 	let objects = [];
 	let level = 0;
-	if ('mapped' in descr && descr['mapped']) level = 2;
+	if ('mapped' in descr && descr.mapped) level = 2;
 
-	let marker_type = descr['marker_type'];
+	let marker_type = descr.marker_type;
 
 	if (['hBody', 'ResourceAsteroid'].includes(marker_type)) {
 		objects.push(
 			<MarkerAsteroid
 				key={id + '_MarkerAsteroid'}
-				position={descr['pos']}
-				size={descr['critical_r']}
-				scale_factor={scale_params['scale_factor']}
-				scale_offset={scale_params['scale_offset']}
+				position={descr.pos}
+				size={descr.critical_r}
+				scale_factor={scale_params.scale_factor}
+				scale_offset={scale_params.scale_offset}
 				level={level}
 			></MarkerAsteroid>
 		);
@@ -172,10 +172,10 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 		objects.push(
 			<WormHole
 				key={id + '_WormHole'}
-				position={descr['pos']}
-				size={descr['critical_r']}
-				scale_factor={scale_params['scale_factor']}
-				scale_offset={scale_params['scale_offset']}
+				position={descr.pos}
+				size={descr.critical_r}
+				scale_factor={scale_params.scale_factor}
+				scale_offset={scale_params.scale_offset}
 				level={level}
 			></WormHole>
 		);
@@ -185,11 +185,11 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 		objects.push(
 			<MarkerCircle
 				key={id + '_show_gravity'}
-				position={descr['pos']}
-				thickness={'thin'}
-				scale_factor={scale_params['scale_factor']}
-				scale_offset={scale_params['scale_offset']}
-				radius={descr['gr']}
+				position={descr.pos}
+				thickness="thin"
+				scale_factor={scale_params.scale_factor}
+				scale_offset={scale_params.scale_offset}
+				radius={descr.gr}
 				level={level}
 			></MarkerCircle>
 		);
@@ -199,11 +199,11 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 		objects.push(
 			<MarkerCircle
 				key={id + '_critical_r'}
-				position={descr['pos']}
-				thickness={'thin'}
-				scale_factor={scale_params['scale_factor']}
-				scale_offset={scale_params['scale_offset']}
-				radius={descr['critical_r']}
+				position={descr.pos}
+				thickness="thin"
+				scale_factor={scale_params.scale_factor}
+				scale_offset={scale_params.scale_offset}
+				radius={descr.critical_r}
 				color={0xff0000}
 				level={level}
 			></MarkerCircle>
@@ -214,11 +214,11 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 		objects.push(
 			<MarkerCircle
 				key={id + '_mining_radius'}
-				position={descr['pos']}
-				thickness={'thin'}
-				scale_factor={scale_params['scale_factor']}
-				scale_offset={scale_params['scale_offset']}
-				radius={descr['mining_radius']}
+				position={descr.pos}
+				thickness="thin"
+				scale_factor={scale_params.scale_factor}
+				scale_offset={scale_params.scale_offset}
+				radius={descr.mining_radius}
 				color={0x00ffff}
 				level={level}
 			></MarkerCircle>
@@ -240,22 +240,22 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 
 let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, show_id_labels, arrow_scaling) => {
 	let global_position_x =
-		descr['pos'][0] * scale_params['scale_factor'] - scale_params['scale_offset'][0] * scale_params['scale_factor'];
+		descr.pos[0] * scale_params.scale_factor - scale_params.scale_offset[0] * scale_params.scale_factor;
 	if (global_position_x > 400 || global_position_x < -400) return [];
 
 	let global_position_y =
-		descr['pos'][1] * scale_params['scale_factor'] - scale_params['scale_offset'][1] * scale_params['scale_factor'];
+		descr.pos[1] * scale_params.scale_factor - scale_params.scale_offset[1] * scale_params.scale_factor;
 	if (global_position_y > 400 || global_position_y < -400) return [];
 
 	let alias;
 	if (!observer_id) alias = 'neutral';
 	else if (observer_id === id) alias = 'self';
 	else {
-		switch (descr['marker_type']) {
+		switch (descr.marker_type) {
 			case 'projectile':
 			case 'io_Drone':
 				alias = 'enemy';
-				if (descr['master_id'] === observer_id) alias = 'friend';
+				if (descr.master_id === observer_id) alias = 'friend';
 				break;
 			case 'ae_Ship':
 				alias = 'enemy';
@@ -277,7 +277,7 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 		enemy: 0
 	};
 
-	if (descr['in_edit_mode']) return [];
+	if (descr.in_edit_mode) return [];
 
 	let objects = [];
 	let color;
@@ -303,9 +303,9 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 			<MarkerShipIdentifierP1
 				key={id + '_IdentifierP1'}
 				color={color}
-				position={descr['pos']}
-				scale_factor={scale_params['scale_factor']}
-				scale_offset={scale_params['scale_offset']}
+				position={descr.pos}
+				scale_factor={scale_params.scale_factor}
+				scale_offset={scale_params.scale_offset}
 				level={0}
 			></MarkerShipIdentifierP1>
 		);
@@ -315,23 +315,23 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				key={id + '_IdentifierP2'}
 				color={color}
 				text={id}
-				position={descr['pos']}
-				scale_factor={scale_params['scale_factor']}
-				scale_offset={scale_params['scale_offset']}
+				position={descr.pos}
+				scale_factor={scale_params.scale_factor}
+				scale_offset={scale_params.scale_offset}
 				level={0}
 			></MarkerShipIdentifierP2>
 		);
 	}
 
-	switch (descr['marker_type']) {
+	switch (descr.marker_type) {
 		case 'ae_Ship':
 			objects.push(
 				<MarkerShip
 					key={id}
 					color={color}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 					level={0}
 				></MarkerShip>
 			);
@@ -341,9 +341,9 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				<MarkerShipDebris
 					key={id}
 					color={0xffffff}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 					level={0}
 				></MarkerShipDebris>
 			);
@@ -353,9 +353,9 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				<MarkerKraken
 					key={id}
 					color={color}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 					level={0}
 				></MarkerKraken>
 			);
@@ -365,9 +365,9 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				<MarkerSpaceStation
 					key={id}
 					color={color}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 					level={0}
 				></MarkerSpaceStation>
 			);
@@ -377,9 +377,9 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				<MarkerSpaceStationDebris
 					key={id}
 					color={color}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 					level={0}
 				></MarkerSpaceStationDebris>
 			);
@@ -389,9 +389,9 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				<MarkerShip
 					key={id}
 					color={0x00ffff}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 					level={0}
 				></MarkerShip>
 			);
@@ -401,24 +401,24 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				<MarkerProjectile
 					key={id}
 					color={color}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerProjectile>
 			);
 			break;
 		case 'ae_BasicZone':
-			color = descr['blast_type'] === 'ae_EMPZone' ? 0x00ffff : 0xff0000;
+			color = descr.blast_type === 'ae_EMPZone' ? 0x00ffff : 0xff0000;
 
 			objects.push(
 				<MarkerDangerZone
 					key={id}
 					color={color}
-					position={descr['pos']}
+					position={descr.pos}
 					level={-1}
-					radius={descr['danger_radius'] * 1.1}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					radius={descr.danger_radius * 1.1}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerDangerZone>
 			);
 			break;
@@ -426,10 +426,10 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 			objects.push(
 				<MarkerMeteorsCloud
 					key={id}
-					position={descr['pos']}
-					radius={descr['danger_radius']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					radius={descr.danger_radius}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerMeteorsCloud>
 			);
 			break;
@@ -438,9 +438,9 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				<MarkerDrone
 					key={id}
 					color={color}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerDrone>
 			);
 			break;
@@ -449,9 +449,9 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 				<MarkerInteractableObject
 					key={id}
 					color={0xffffff}
-					position={descr['pos']}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					position={descr.pos}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerInteractableObject>
 			);
 			break;
@@ -466,40 +466,40 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 					key={id + '_direction'}
 					level={2}
 					color={color}
-					rotation={descr['direction']}
-					position={descr['pos']}
-					scale_factor={arrow_scaling ? 1 : scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					rotation={descr.direction}
+					position={descr.pos}
+					scale_factor={arrow_scaling ? 1 : scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerDirection>
 			);
 		}
 
 		if ('predictions' in descr) {
 			let prediction = 0;
-			for (prediction in descr['predictions']) {
+			for (prediction in descr.predictions) {
 				objects.push(
 					<MarkerDot
 						key={id + '_prediction_' + prediction}
 						color={color}
 						level={3}
-						position={descr['predictions'][prediction]}
-						scale_factor={scale_params['scale_factor']}
-						scale_offset={scale_params['scale_offset']}
+						position={descr.predictions[prediction]}
+						scale_factor={scale_params.scale_factor}
+						scale_offset={scale_params.scale_offset}
 					></MarkerDot>
 				);
 			}
 
-			if ('explosion_radius' in descr && descr['predictions'][prediction]) {
+			if ('explosion_radius' in descr && descr.predictions[prediction]) {
 				objects.push(
 					<MarkerCircle
 						key={id + '_explosion_radius'}
-						thickness={'normal'}
+						thickness="normal"
 						level={3}
-						radius={descr['explosion_radius']}
-						position={descr['predictions'][prediction]}
+						radius={descr.explosion_radius}
+						position={descr.predictions[prediction]}
 						color={0xffff00}
-						scale_factor={scale_params['scale_factor']}
-						scale_offset={scale_params['scale_offset']}
+						scale_factor={scale_params.scale_factor}
+						scale_offset={scale_params.scale_offset}
 					></MarkerCircle>
 				);
 			}
@@ -509,12 +509,12 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 			objects.push(
 				<MarkerCircle
 					key={id + '_detection_radius'}
-					thickness={'normal'}
-					radius={descr['detection_radius']}
-					position={descr['pos']}
+					thickness="normal"
+					radius={descr.detection_radius}
+					position={descr.pos}
 					color={0x00ffff}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerCircle>
 			);
 		}
@@ -523,12 +523,12 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 			objects.push(
 				<MarkerCircle
 					key={id + '_detonation_radius'}
-					thickness={'bold'}
-					radius={descr['detonation_radius']}
-					position={descr['pos']}
+					thickness="bold"
+					radius={descr.detonation_radius}
+					position={descr.pos}
 					color={0xff0000}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerCircle>
 			);
 		}
@@ -537,27 +537,27 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 			objects.push(
 				<MarkerCircleDash
 					key={id + '_close_scanrange'}
-					radius={descr['close_scanrange']}
-					position={descr['pos']}
+					radius={descr.close_scanrange}
+					position={descr.pos}
 					level={2}
 					color={0x00ffff}
-					scale_factor={scale_params['scale_factor']}
-					scale_offset={scale_params['scale_offset']}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
 				></MarkerCircleDash>
 			);
 		}
 
 		if ('distant_scanrange' in descr) {
-			let scan_params = descr['distant_scanrange'];
+			let scan_params = descr.distant_scanrange;
 			objects = objects.concat(
 				getDistantScanArc(
 					scan_params.close_range,
 					scan_params.distant_range,
 					scan_params.distant_arc,
 					scan_params.distant_dir,
-					descr['pos'],
-					scale_params['scale_factor'],
-					scale_params['scale_offset']
+					descr.pos,
+					scale_params.scale_factor,
+					scale_params.scale_offset
 				)
 			);
 		}

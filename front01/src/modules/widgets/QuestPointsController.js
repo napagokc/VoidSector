@@ -57,8 +57,7 @@ export class QuestPointsController extends React.Component {
 							this.toogle_qp_state(qp_name);
 						}}
 					>
-						{' '}
-						toogle_state{' '}
+						toogle_state
 					</button>
 				</div>
 			);
