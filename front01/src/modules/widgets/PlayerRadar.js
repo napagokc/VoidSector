@@ -170,6 +170,7 @@ export class PlayersRadarWidget extends React.Component {
 						id={'MyCanvas'}
 						//resize = {{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
 						orthographic={true}
+						onClick={this.state.onMouseMove}
 						style={{
 							width: '600px',
 							height: '600px',
@@ -185,7 +186,6 @@ export class PlayersRadarWidget extends React.Component {
 						{cap_markers}
 						{solar_flares}
 						{damage_shades}
-						onClick = {this.state.onMouseMove}
 					</Canvas>
 					<div className="RadarShipInfoLayer">
 						<ShipOvervieweWidget onSystemSelection={(e) => {}}></ShipOvervieweWidget>
