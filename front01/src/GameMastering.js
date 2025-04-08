@@ -57,7 +57,7 @@ export class GameMastering extends React.Component {
 		if (this.props.username === 'admin') {
 			return (
 				<div className="SystemsSection">
-					<ShipsDisplay on_module_selection={this.props.on_module_selection} />
+					<ShipsDisplay selectModule={this.props.selectModule} />
 					<StationsDisplay />
 					<CommandEditorWidget />
 					<FlaresController />
@@ -68,7 +68,7 @@ export class GameMastering extends React.Component {
 
 		return (
 			<div className="SystemsSection">
-				<ShipsDisplay on_module_selection={this.props.on_module_selection} />
+				<ShipsDisplay selectModule={this.props.selectModule} />
 			</div>
 		);
 	};

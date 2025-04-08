@@ -8,6 +8,9 @@ let input_message_string = '';
 let input_message_last_json = {};
 // let input_message_last_timestamp = '';
 
+export const EVENT_WEBSOCKET_IS_OPEN = 'websocket_is_open';
+websocket.onopen = () => document.dispatchEvent(new Event(EVENT_WEBSOCKET_IS_OPEN));
+
 export function addEventListener(f) {
 	if (websocket) websocket.addEventListener('message', f);
 }
@@ -45,8 +48,8 @@ websocket.addEventListener('message', receive_message);
 }*/
 //setInterval(check_connection_and_update, 1000)
 
-export function get_websocket() {
-	return websocket;
+export function get_websocket_state() {
+	return websocket.readyState;
 }
 
 export function get_http_address() {

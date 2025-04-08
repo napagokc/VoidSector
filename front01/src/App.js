@@ -2,6 +2,7 @@ import './styles/App.css';
 
 // import the socket
 import React from 'react';
+import SecureLS from 'secure-ls';
 
 import { Administration } from './Administration';
 import { PilotStation } from './PilotStation';
@@ -30,15 +31,92 @@ import './styles/ProductionSM.css';
 import './styles/ShipsDisplay.css';
 import './styles/Plague.css';
 
+const EVENT_AVAILABLE_MODULES_UPDATE = 'available_modules_update';
+const EVENT_LOGIN_STATE_UPDATE = 'login_state_update';
+
+const USERNAME = 'username';
+const MODULE = 'module';
+
+const local_storage = new SecureLS();
+
 class LoginController {
 	constructor() {
-		this.username = 'admin';
+		this.username = local_storage.get(USERNAME);
 		this.available_modules = [];
+
+		if (this.username) {
+			this._update_available_modules();
+			this._startTimer();
+		}
 	}
 
-	login = (username) => {
-		this.username = username;
-		this.update_available_roles();
+	_startTimer = () => {
+		let timer_id = setInterval(this._update_available_modules, 1000);
+		timerscounter.add(this.constructor.name, timer_id);
+	};
+
+	_stopTimer = () => {
+		let timer_id = timerscounter.get(this.constructor.name);
+		if (timer_id) clearInterval(timer_id);
+	};
+
+	_set_modules(modules) {
+		if (JSON.stringify(this.available_modules) !== JSON.stringify(modules)) {
+			this.available_modules = modules;
+			document.dispatchEvent(new Event(EVENT_AVAILABLE_MODULES_UPDATE));
+		}
+	}
+
+	_update_available_modules = async () => {
+		return fetch(get_http_address() + '/users/roles/list', {
+			method: 'GET',
+			headers: { username: this.username }
+		})
+			.then((response) => {
+				if (response.status === 200) return response.json();
+			})
+			.then(this._set_modules.bind(this))
+			.catch((err) => console.log(err));
+	};
+
+	login = async ({ username, password }) => {
+		return fetch(get_http_address() + '/users/login', {
+			method: 'GET',
+			headers: { Username: username, Password: password }
+		})
+			.then((response) => {
+				if (response.status === 200) return response.status;
+			})
+			.then((code) => {
+				if (code === 200) {
+					local_storage.set(USERNAME, username);
+
+					this.username = username;
+					this._update_available_modules();
+
+					this._stopTimer();
+					this._startTimer();
+
+					document.dispatchEvent(new Event(EVENT_LOGIN_STATE_UPDATE));
+
+					send_command('ship.med_sm', 'Sirocco', 'log_in', { role: username }, true);
+					send_command('connection', '', 'auth_login', { password: password }, true);
+				}
+			});
+	};
+
+	logout = () => {
+		this._stopTimer();
+
+		local_storage.remove(USERNAME);
+		local_storage.remove(MODULE);
+
+		this.username = null;
+		this._set_modules([]);
+
+		document.dispatchEvent(new Event(EVENT_LOGIN_STATE_UPDATE));
+
+		send_command('ship.med_sm', 'Sirocco', 'log_out', { role: loginController.get_username() }, true);
 	};
 
 	get_username = () => {
@@ -46,136 +124,61 @@ class LoginController {
 	};
 
 	is_logged = () => {
-		return this.username;
+		return !!this.username;
 	};
 
-	get_available_roles = () => {
+	get_available_modules = () => {
 		return this.available_modules;
-	};
-
-	update_available_roles = () => {
-		return fetch(get_http_address() + '/users/roles/list', {
-			method: 'GET',
-			headers: { username: this.username }
-		})
-			.then((response) => {
-				let code = response.status;
-				if (code === 200) {
-					return response.json();
-				}
-			})
-			.then((data) => {
-				this.available_modules = data;
-			})
-			.catch((data) => {});
 	};
 }
 
-let loginController = new LoginController();
+const loginController = new LoginController();
 
 class LoginWindow extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			Username: '',
-			Password: ''
-		};
-	}
-
-	onLogin = () => {
-		return fetch(get_http_address() + '/users/login', {
-			method: 'GET',
-			headers: this.state
-		})
-			.then((response) => {
-				if (response.status === 200) return response.status;
-			})
-			.then((code) => {
-				if (code === 200) {
-					loginController.login(this.state.Username);
-					send_command('ship.med_sm', 'Sirocco', 'log_in', { role: this.state.Username }, true);
-					send_command('connection', '', 'auth_login', { password: this.state.Password }, true);
-					this.props.onLogin();
-				}
-			});
-	};
-
 	render() {
 		return (
 			<div className="LoginWindow">
 				<label>
-					username:
+					{get_locales(USERNAME)}:{' '}
 					<input
 						onChange={(e) => {
-							this.setState({ Username: e.target.value });
+							this.setState({ username: e.target.value });
 						}}
 					></input>
 				</label>
 				<label>
-					password:
+					{get_locales('password')}:{' '}
 					<input
+						type="password"
 						onChange={(e) => {
-							this.setState({ Password: e.target.value });
+							this.setState({ password: e.target.value });
 						}}
 					></input>
 				</label>
-				<button onClick={this.onLogin}>login</button>
+				<button onClick={() => loginController.login(this.state)}>login</button>
 			</div>
 		);
 	}
 }
 
 class Navigation extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			available_modules: [],
-			selected_module: null
-		};
+	onModulesUpdate() {
+		let modules = loginController.get_available_modules();
+		if (modules.length) {
+			if (!this.props.module) this.props.selectModule(modules[0]);
+			else if (!modules.includes(this.props.module)) this.props.selectModule(null);
+		}
+
+		this.forceUpdate();
 	}
 
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.update_available_modules, 1000);
-		timerscounter.add(this.constructor.name, timer_id);
-	}
-
-	componentWillUnmount() {
-		clearInterval(timerscounter.get(this.constructor.name));
-	}
-
-	update_available_modules = () => {
-		loginController.update_available_roles();
-
-		let modules = loginController.get_available_roles();
-		this.setState({ available_modules: modules });
-
-		if (modules.length) {
-			if (!this.state.selected_module) this.onSelectModule(modules[0]);
-			else if (!modules.includes(this.state.selected_module)) this.onSelectModule(null);
-		}
-	};
-
-	run_simulation = () => {
-		send_command('server', null, 'run', null, true);
-	};
-
-	onSelectModule = (module) => {
-		this.setState({ selected_module: module });
-		this.props.on_module_selection(module);
-	};
-
-	shouldComponentUpdate(nextProps, nextState) {
-		return (
-			this.state.selected_module !== nextState.selected_module ||
-			this.state.available_modules !== nextState.available_modules
-		);
+		this.onModulesUpdate();
+		document.addEventListener(EVENT_AVAILABLE_MODULES_UPDATE, this.onModulesUpdate.bind(this));
 	}
 
 	render() {
-		let list = this.state.available_modules;
+		let list = loginController.get_available_modules();
 		let list_nav = [];
 
 		for (let i in list) {
@@ -188,7 +191,7 @@ class Navigation extends React.Component {
 					key={item_name}
 					className="Navigation_item"
 					onClick={() => {
-						this.onSelectModule(item_name);
+						this.props.selectModule(item_name);
 					}}
 				>
 					{val}
@@ -197,7 +200,7 @@ class Navigation extends React.Component {
 		}
 
 		list_nav.push(
-			<button key="logout" onClick={this.props.onLogout}>
+			<button key="logout" onClick={loginController.logout}>
 				{get_locales('LOGOUT')}
 			</button>
 		);
@@ -238,13 +241,13 @@ class ModuleRenderer extends React.Component {
 				return <MapEditor></MapEditor>;
 
 			case 'admin':
-				return <Administration on_module_selection={this.props.on_module_selection}></Administration>;
+				return <Administration selectModule={this.props.selectModule}></Administration>;
 
 			case 'game_master':
 				return (
 					<GameMastering
 						username={loginController.get_username()}
-						on_module_selection={this.props.on_module_selection}
+						selectModule={this.props.selectModule}
 					></GameMastering>
 				);
 
@@ -288,14 +291,13 @@ class MainApp extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			module: null
+			module: local_storage.get(MODULE)
 		};
 	}
 
-	on_module_selection = (module_name) => {
-		this.setState({
-			module: module_name
-		});
+	selectModule = (module_name) => {
+		this.setState({ module: module_name });
+		local_storage.set(MODULE, module_name);
 	};
 
 	render() {
@@ -303,15 +305,11 @@ class MainApp extends React.Component {
 
 		return (
 			<div className="App" key="App">
-				<Navigation
-					onLogout={this.props.onLogout}
-					module={this.state.module}
-					on_module_selection={this.on_module_selection}
-				></Navigation>
+				<Navigation module={this.state.module} selectModule={this.selectModule}></Navigation>
 				<ModuleRenderer
 					key="ModuleRenderer"
 					module={this.state.module}
-					on_module_selection={this.on_module_selection}
+					selectModule={this.selectModule}
 				></ModuleRenderer>
 			</div>
 		);
@@ -319,30 +317,15 @@ class MainApp extends React.Component {
 }
 
 class App extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			logged: true
-		};
+	componentDidMount() {
+		document.addEventListener(EVENT_LOGIN_STATE_UPDATE, () => {
+			this.forceUpdate();
+		});
 	}
 
-	onLogout = (e) => {
-		this.setState({ logged: false });
-		send_command('ship.med_sm', 'Sirocco', 'log_out', { role: loginController.get_username() }, true);
-	};
-
 	render() {
-		if (this.state.logged) {
-			return <MainApp onLogout={this.onLogout} />;
-		}
-
-		return (
-			<LoginWindow
-				onLogin={() => {
-					this.setState({ logged: true });
-				}}
-			/>
-		);
+		if (loginController.is_logged()) return <MainApp />;
+		return <LoginWindow />;
 	}
 }
 

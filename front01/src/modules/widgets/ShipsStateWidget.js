@@ -29,7 +29,7 @@ export class ShipsStateWidget extends React.Component {
 	take_control = (key) => {
 		send_command('connection', key, 'take_control_on_entity', { target_id: key });
 		this.props.on_ship_selected(key);
-		if (key) this.props.on_module_selection('pilot');
+		if (key) this.props.selectModule('pilot');
 	};
 
 	proceed_data_message = () => {

@@ -4,6 +4,8 @@ const locales = {
     "LOGOUT": "ВЫЙТИ",
     "Navigation": "Меню",
     "Module not available": "Модуль недоступен",
+    "username": "имя пользователя",
+    "password": "пароль",
 
     //shafts
     "ProjectileLauncher Control": "Торпедный аппарат",
@@ -136,7 +138,6 @@ const locales = {
     "InteractionControl": "Управление захватом",
 
     //roles
-    "username": "Офицер",
     "captain": "Капитан",
     "navigator": "Навигатор",
     "cannoneer": "Канонир",

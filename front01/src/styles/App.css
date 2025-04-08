@@ -40,11 +40,14 @@ body {
 	color: red;
 }
 
+*:has(> .LoginWindow) {
+	text-align: center;
+}
+
 .LoginWindow {
-	display: flex;
-	width: 100%;
+	display: inline-flex;
 	flex-direction: column;
-	align-items: center;
+	align-items: flex-end;
 }
 
 .LoginWindow > label {
@@ -52,7 +55,7 @@ body {
 }
 
 .LoginWindow > button {
-	margin-top: 10px;
+	margin: 10px auto 0;
 }
 
 table td {

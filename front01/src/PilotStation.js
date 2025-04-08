@@ -9,7 +9,13 @@ import { RnDControlWidget } from './modules/systems/RnD_sm.js';
 import { EngineControlWidget } from './modules/systems/engine_sm.js';
 import { ShaftsControlWidget } from './modules/systems/launcher_sm.js';
 import { ProjectileBuilderWidget } from './modules/systems/projectile_builder.js';
-import { get_observer_id, get_system_state } from './modules/network/connections';
+import {
+	get_observer_id,
+	get_websocket_state,
+	take_control,
+	get_system_state,
+	EVENT_WEBSOCKET_IS_OPEN
+} from './modules/network/connections';
 import { timerscounter } from './modules/utils/updatetimers';
 import { CrewControlWidget } from './modules/systems/crew_sm.js';
 import { EngineerControllerWidget } from './modules/widgets/ShipOverview.js';
@@ -19,7 +25,6 @@ import { ShipOvervieweWidgetLayer } from './modules/widgets/ShipOverview.js';
 import { RoleManagerWidget } from './modules/widgets/RolesManager.js';
 import { get_medicine_state } from './modules/network/connections';
 import { AllianceManager } from './modules/widgets/AllianceManager.js';
-import { take_control } from './modules/network/connections';
 
 import './styles/PilotStation.css';
 
@@ -31,17 +36,20 @@ export class PilotStation extends React.Component {
 			is_taking_damage: false,
 			mental_stamina_level: 8
 		};
+
+		this._handle_websocket_bind = this._handle_websocket.bind(this);
+	}
+
+	_handle_websocket() {
+		take_control('Sirocco');
+		document.addEventListener(EVENT_WEBSOCKET_IS_OPEN, this._handle_websocket_bind);
 	}
 
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.proceed_data_message, 30);
-		timerscounter.add(this.constructor.name, timer_id);
-
 		if (!this.props.NPC_pilot && get_observer_id() == null) {
-			take_control('Sirocco');
+			if (get_websocket_state() !== 1) {
+				document.addEventListener(EVENT_WEBSOCKET_IS_OPEN, this._handle_websocket_bind);
+			} else take_control('Sirocco');
 		}
 	}
 
@@ -65,19 +73,6 @@ export class PilotStation extends React.Component {
 		if (this.state.hp_level > 4) return 'PilotStation_light_HP';
 		if (this.state.hp_level > 1) return 'PilotStation_hard_HP';
 		return 'PilotStation_crit_HP';
-	};
-
-	componentWillUnmount() {
-		clearInterval(timerscounter.get(this.constructor.name));
-	}
-
-	proceed_data_message = () => {};
-
-	get_current_panel = () => {
-		if (this.props.captain) return 'captain';
-		if (this.props.navigator) return 'navigator';
-		if (this.props.cannoneer) return 'cannoneer';
-		if (this.props.engineer) return 'engineer';
 	};
 
 	render() {

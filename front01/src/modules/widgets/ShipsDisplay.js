@@ -36,7 +36,7 @@ export class ShipsDisplay extends React.Component {
 			result.push(
 				<ShipCard
 					key={mark_id}
-					on_module_selection={this.props.on_module_selection}
+					selectModule={this.props.selectModule}
 					mark_id={mark_id}
 					data={this.state.data[mark_id]}
 				></ShipCard>
@@ -74,7 +74,7 @@ class ShipCard extends React.Component {
 	take_control = (key) => {
 		send_command('connection', key, 'take_control_on_entity', { target_id: key });
 		//this.props.on_ship_selected(key)
-		if (key) this.props.on_module_selection('NPC_pilot');
+		if (key) this.props.selectModule('NPC_pilot');
 	};
 
 	move_view = (key) => {
