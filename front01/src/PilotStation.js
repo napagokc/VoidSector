@@ -10,20 +10,23 @@ import { EngineControlWidget } from './modules/systems/engine_sm.js';
 import { ShaftsControlWidget } from './modules/systems/launcher_sm.js';
 import { ProjectileBuilderWidget } from './modules/systems/projectile_builder.js';
 import {
-	get_observer_id,
+	addEventListener,
+	removeEventListener,
 	get_websocket_state,
+	get_observer_id,
 	take_control,
 	get_system_state,
+	get_medicine_state,
 	EVENT_WEBSOCKET_IS_OPEN
-} from './modules/network/connections';
+} from './modules/network/connections.js';
 import { timerscounter } from './modules/utils/updatetimers';
 import { CrewControlWidget } from './modules/systems/crew_sm.js';
 import { EngineerControllerWidget } from './modules/widgets/ShipOverview.js';
+import { ShipsDisplay } from './modules/widgets/ShipsDisplay.js';
 import { RadarControlWidget } from './modules/systems/radar_sm.js';
 import { CapMarksControlWidget } from './modules/widgets/CapMarksControlWidget.js';
 import { ShipOvervieweWidgetLayer } from './modules/widgets/ShipOverview.js';
 import { RoleManagerWidget } from './modules/widgets/RolesManager.js';
-import { get_medicine_state } from './modules/network/connections';
 import { AllianceManager } from './modules/widgets/AllianceManager.js';
 
 import './styles/PilotStation.css';
@@ -164,22 +167,39 @@ export class PilotStation extends React.Component {
 		}
 
 		if (this.props.NPC_pilot) {
-			result.push(
-				<div key="NPC_pilot_controls_1" className="SystemsLayer">
-					<DamageControlWidget />
-					<EnergyControlWidget />
-				</div>
-			);
-
-			result.push(
-				<div key="NPC_pilot_controls_2" className="ControlLayer">
-					<div className="engineControlSection">
-						<EngineControlWidget />
-						<RadarControlWidget />
+			if (get_observer_id()) {
+				result.push(
+					<div key="NPC_pilot_controls_1" className="SystemsLayer">
+						<DamageControlWidget />
+						<EnergyControlWidget />
 					</div>
-					<ShaftsControlWidget />
-				</div>
-			);
+				);
+
+				result.push(
+					<div key="NPC_pilot_controls_2" className="ControlLayer">
+						<div className="engineControlSection">
+							<EngineControlWidget />
+							<RadarControlWidget />
+						</div>
+						<ShaftsControlWidget />
+					</div>
+				);
+			} else {
+				let self = this;
+				let observer_watch = () => {
+					if (get_observer_id()) {
+						self.forceUpdate();
+						removeEventListener(observer_watch);
+					}
+				};
+				addEventListener(observer_watch);
+
+				result.push(
+					<div key="NPC_pilot_controls" className="SystemsSection">
+						<ShipsDisplay />
+					</div>
+				);
+			}
 		}
 
 		let add_MPclassName = this.get_MP_visual_effects_class();

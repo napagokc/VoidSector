@@ -74,7 +74,7 @@ class ShipCard extends React.Component {
 	take_control = (key) => {
 		send_command('connection', key, 'take_control_on_entity', { target_id: key });
 		//this.props.on_ship_selected(key)
-		if (key) this.props.selectModule('NPC_pilot');
+		if (key && this.props.selectModule) this.props.selectModule('NPC_pilot');
 	};
 
 	move_view = (key) => {
