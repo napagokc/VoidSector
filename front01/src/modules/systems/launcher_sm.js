@@ -67,9 +67,8 @@ export class ShaftsControlWidget extends React.Component {
 		});
 	};
 
-	is_disabled = () => {
-		if (this.state.status && this.state.status === 'OK' && this.state.mark_id) return false;
-		return true;
+	is_enabled = () => {
+		return this.state.status && this.state.status === 'OK' && this.state.mark_id;
 	};
 
 	render() {
@@ -77,7 +76,7 @@ export class ShaftsControlWidget extends React.Component {
 		let auto_toogle = false;
 		let auto_reload = false;
 
-		if (!this.is_disabled()) {
+		if (this.is_enabled()) {
 			shafts_controllers = this.get_shafts_section();
 			auto_toogle = this.state.auto_toggle;
 			auto_reload = this.state.auto_reload;

@@ -242,9 +242,7 @@ class RadarCentralShade extends React.Component {
 
 	render() {
 		let size = this.props.size * this.props.scale_factor * 2;
-		if (isNaN(size)) return null;
-
-		return (
+		return isNaN(size) ? null : (
 			<MeshObject
 				texture={this.texture}
 				///position={[this.props.position[0], this.props.position[1], 1]}

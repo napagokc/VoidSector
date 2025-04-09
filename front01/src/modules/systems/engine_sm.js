@@ -38,8 +38,7 @@ export class EngineControlWidget extends React.Component {
 	};
 
 	is_disabled = () => {
-		if (this.state.status === 'OK' && this.state.mark_id) return false;
-		return true;
+		return !this.state.mark_id || this.state.status !== 'OK';
 	};
 
 	//accPrograde, accNormal

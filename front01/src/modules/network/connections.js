@@ -75,90 +75,56 @@ export function send_command(level, target_id, command, params, null_confirmed =
 
 export function get_system_state(system_name) {
 	let message_data_json = input_message_last_json;
-	if (
-		typeof message_data_json != typeof {} ||
-		!('state_data' in message_data_json) ||
-		!message_data_json.state_data ||
-		!(system_name in message_data_json.state_data)
-	) {
-		return null;
-	}
-
-	return message_data_json.state_data[system_name];
+	return message_data_json?.state_data?.[system_name] ? message_data_json.state_data[system_name] : null;
 }
 
 export function get_navdata() {
-	try {
-		let message_data_json = input_message_last_json;
-		if (
-			typeof message_data_json != typeof {} ||
-			!('nav_data' in message_data_json) ||
-			!('hBodies' in message_data_json.nav_data) ||
-			!('lBodies' in message_data_json.nav_data)
-		) {
-			return null;
-		}
-
-		return message_data_json.nav_data;
-	} catch (error) {
+	let message_data_json = input_message_last_json;
+	if (!message_data_json?.nav_data || !message_data_json.nav_data?.hBodies || !message_data_json.nav_data?.lBodies) {
 		return null;
 	}
+
+	return message_data_json.nav_data;
 }
 
 export function get_performance() {
 	let message_data_json = input_message_last_json;
-	if (typeof message_data_json != typeof {} || !('performance' in message_data_json)) return null;
-
-	return message_data_json.performance;
+	return message_data_json?.performance ? message_data_json.performance : null;
 }
 
 export function get_server_systems_state() {
 	let message_data_json = input_message_last_json;
-	if (typeof message_data_json != typeof {} || !('systems_state' in message_data_json)) return null;
-
-	return message_data_json.systems_state;
+	return message_data_json?.systems_state ? message_data_json.systems_state : null;
 }
 
 export function get_ships_state() {
 	let message_data_json = input_message_last_json;
-	if (typeof message_data_json != typeof {} || !('ships_state' in message_data_json)) return null;
-
-	return message_data_json.ships_state;
+	return message_data_json?.ships_state ? message_data_json.ships_state : null;
 }
 
 export function get_stations_state() {
 	let message_data_json = input_message_last_json;
-	if (typeof message_data_json != typeof {} || !('stations_state' in message_data_json)) return null;
-
-	return message_data_json.stations_state;
+	return message_data_json?.stations_state ? message_data_json.stations_state : null;
 }
 
 export function get_observer_id() {
 	let message_data_json = input_message_last_json;
-	if (typeof message_data_json != typeof {} || !('observer_id' in message_data_json)) return null;
-
-	return message_data_json.observer_id;
+	return message_data_json?.observer_id ? message_data_json.observer_id : null;
 }
 
 export function get_capmarks() {
 	let message_data_json = input_message_last_json;
-	if (typeof message_data_json != typeof {} || !('cap_marks' in message_data_json)) return null;
-
-	return message_data_json.cap_marks;
+	return message_data_json?.cap_marks ? message_data_json.cap_marks : null;
 }
 
 export function get_solarflare() {
 	let message_data_json = input_message_last_json;
-	if (typeof message_data_json != typeof {} || !('solar_flare' in message_data_json)) return null;
-
-	return message_data_json.solar_flare;
+	return message_data_json?.solar_flare ? message_data_json.solar_flare : null;
 }
 
 export function get_medicine_state(username) {
 	let message_data_json = get_system_state('med_sm');
-	if (!message_data_json || !('roles' in message_data_json)) return true;
-
-	return !message_data_json.roles[username].disabled;
+	return !message_data_json || !('roles' in message_data_json) ? true : !message_data_json.roles[username].disabled;
 }
 
 export function take_control(key) {
@@ -167,14 +133,10 @@ export function take_control(key) {
 
 export function is_taking_damage() {
 	let message_data_json = get_system_state('damage_sm');
-	if (!message_data_json) return false;
-
-	return message_data_json.is_taking_damage;
+	return message_data_json?.is_taking_damage ? message_data_json.is_taking_damage : false;
 }
 
 export function get_map_border() {
 	let message_data_json = input_message_last_json;
-	if (typeof message_data_json != typeof {} || !('map_border' in message_data_json)) return null;
-
-	return message_data_json.map_border;
+	return message_data_json?.map_border ? message_data_json.map_border : null;
 }

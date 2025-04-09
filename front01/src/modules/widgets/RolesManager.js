@@ -48,8 +48,7 @@ export class RoleManagerWidget extends React.Component {
 	};
 
 	is_module_accesable = (username, modulename) => {
-		if (this.state?.[username]?.[modulename]) return this.state[username][modulename];
-		return false;
+		return this.state?.[username]?.[modulename] ? this.state[username][modulename] : false;
 	};
 
 	get_assigned_roles_row = (username) => {
