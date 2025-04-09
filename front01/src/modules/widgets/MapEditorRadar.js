@@ -197,32 +197,13 @@ export class MapEditorRadarWidget extends React.Component {
 			this.props.highlighted_body_idx
 		);
 		let aim_markers = entityRendererCursor.get_objects_from_data(this.onMouseMove, this.onMouseClick);
-		let radar_size = this.state.radar_width.toString() + 'px';
 		let brush_objects = get_brush_object(this.get_brush_params(true), this.state.scale_factor);
 
 		let cursor_position = this.get_cursor_position();
 
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					alignItems: 'center',
-					width: '620px',
-					height: '700px',
-					border: 'solid 1px'
-				}}
-			>
-				<Canvas
-					//resize = {{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
-					orthographic={true}
-					style={{
-						width: radar_size,
-						height: radar_size,
-						border: 'solid',
-						background: 'black'
-					}}
-				>
+			<div className="AdminRadarSection">
+				<Canvas orthographic={true} style={{ width: this.state.radar_width, height: this.state.radar_width }}>
 					<ambientLight />
 					{objects}
 					{aim_markers}
@@ -231,13 +212,7 @@ export class MapEditorRadarWidget extends React.Component {
 					{brush_objects}
 				</Canvas>
 
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'row',
-						justifyContent: 'space-between'
-					}}
-				>
+				<div className="flex flex_space_between">
 					<label>
 						SCALE:{' '}
 						<input
@@ -255,7 +230,6 @@ export class MapEditorRadarWidget extends React.Component {
 						/>
 					</label>
 					{parseFloat(this.state.scale_factor).toFixed(2)}
-					<label>"frame_id:"{this.state.frame_id}</label>
 					{this.get_buttons_block()}
 					<button
 						onClick={() => {

@@ -166,17 +166,9 @@ export class PlayersRadarWidget extends React.Component {
 			<div className="PlayersRadar">
 				<div className="radarSection">
 					<Canvas
-						className="PlayerRadarCanvas"
-						id="MyCanvas"
-						//resize = {{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
 						orthographic={true}
 						onClick={this.state.onMouseMove}
-						style={{
-							width: '600px',
-							height: '600px',
-							border: 'solid',
-							background: 'black'
-						}}
+						style={{ width: this.state.radar_width, height: this.state.radar_width }}
 					>
 						<ambientLight />
 						{aim_markers}

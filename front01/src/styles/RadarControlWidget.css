@@ -15,7 +15,6 @@
 	align-items: center;
 	justify-content: center;
 	border: 1px solid green;
-	color: grey;
 	margin: 5px;
 	padding: 10px;
 }
@@ -31,4 +30,36 @@
 .ShipSection {
 	border: 1px solid green;
 	margin: 5px;
+}
+
+.PlayersRadar {
+	display: flex;
+	flex-direction: row;
+
+	border: solid 1px;
+}
+
+.PlayersRadar > .radarSection {
+	display: flex;
+	flex-direction: column;
+	align-items: center;
+	background-color: black;
+	color: gray;
+}
+
+.PlayersRadar > .detectedShips {
+	display: flex;
+	flex-direction: column;
+	width: 60px;
+}
+
+.PlayersRadar > .detectedShips label:hover {
+	color: red;
+}
+
+.CommonRadarStation {
+	display: flex;
+	flex-direction: row;
+	background-color: black;
+	justify-content: center;
 }

@@ -49,12 +49,7 @@ export class Administration extends React.Component {
 			<div className="Administration">
 				<b>Administration</b>
 				<div className="AdminControlPanel"></div>
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'row'
-					}}
-				>
+				<div className="flex">
 					<AdminRadarWidget />
 					<div className="SystemsSection">
 						<div className="SystemsSectionLevel">

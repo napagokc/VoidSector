@@ -25,3 +25,19 @@
 	background-color: red;
 	color: white;
 }
+
+.flex {
+	display: flex;
+}
+
+.flex_column {
+	flex-direction: column;
+}
+
+.flex_space_between {
+	justify-content: space-between;
+}
+
+.flex > * {
+	flex: 0 1 auto;
+}

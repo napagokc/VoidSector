@@ -59,16 +59,13 @@ export class AllianceManager extends React.Component {
 
 	get_input_panel = () => {
 		return (
-			<div>
+			<React.Fragment>
 				<input
-					style={{
-						width: '100px'
-					}}
+					value={this.state.input_value}
 					onChange={(e) => {
 						this.setState({ input_value: e.target.value });
 					}}
-					value={this.state.input_value}
-				></input>
+				/>
 				<button
 					onClick={(e) => {
 						this.add_to_allies(this.state.input_value);
@@ -76,13 +73,13 @@ export class AllianceManager extends React.Component {
 				>
 					{get_locales('mark_as_allias')}
 				</button>
-			</div>
+			</React.Fragment>
 		);
 	};
 
 	render() {
 		return (
-			<div className="SystemControlWidget">
+			<div className="SystemControlWidget AllianceManager">
 				<b>{get_locales('Alliance_controller')}</b>
 				{this.get_alliance_list()}
 				{this.get_input_panel()}

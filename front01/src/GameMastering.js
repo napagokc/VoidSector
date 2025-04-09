@@ -77,12 +77,7 @@ export class GameMastering extends React.Component {
 		return (
 			<div className="Administration">
 				<b>Administration</b>
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'row'
-					}}
-				>
+				<div className="flex">
 					<AdminRadarWidget />
 					{this.get_control_block()}
 				</div>

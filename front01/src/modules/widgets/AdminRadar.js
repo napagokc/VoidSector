@@ -21,11 +21,10 @@ export class AdminRadarWidget extends React.Component {
 		super(props);
 
 		this.state = {
+			radar_width: 600,
 			scale_width: 600,
 			scale_factor: 1,
-
 			controlled_observer_pos: [0, 0],
-
 			data: {
 				observer_pos: [0, 0],
 				hBodies: {},
@@ -162,14 +161,8 @@ export class AdminRadarWidget extends React.Component {
 			<div className="PlayersRadar">
 				<div className="radarSection">
 					<Canvas
-						//resize = {{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
 						orthographic={true}
-						style={{
-							width: '600px',
-							height: '600px',
-							border: 'solid',
-							background: 'black'
-						}}
+						style={{ width: this.state.radar_width, height: this.state.radar_width }}
 					>
 						<ambientLight />
 						{objects}
@@ -178,14 +171,7 @@ export class AdminRadarWidget extends React.Component {
 						{solar_flares}
 					</Canvas>
 
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							color: 'grey'
-						}}
-					>
+					<div className="flex flex_space_between">
 						<label>
 							SCALE:{' '}
 							<input

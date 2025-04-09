@@ -1,11 +1,18 @@
+body,
+#root,
+.App {
+	height: 100%;
+	width: 100%;
+}
+
 button {
 	width: 100px;
 	margin: 1px;
 }
 
-.div_vertical {
-	display: flex;
-	flex-direction: column;
+div:has(> div > canvas) {
+	border: none;
+	background: black;
 }
 
 .NumericControlWidjet {

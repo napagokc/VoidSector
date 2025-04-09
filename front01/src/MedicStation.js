@@ -86,13 +86,7 @@ export class MedicStation extends React.Component {
 		if (this.state.data && !this.state.data.hospital) return [];
 
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column',
-					paddingBottom: '5px'
-				}}
-			>
+			<div className="flex flex_column">
 				<b>{get_locales('Hospital NPC Crew Control')}</b>
 				<label>
 					{get_locales('humans in hospital')}: {this.state.data.hospital.units}/
@@ -123,12 +117,7 @@ export class MedicStation extends React.Component {
 
 	render() {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'row'
-				}}
-			>
+			<div className="flex">
 				<div className="SystemControlWidget">
 					{this.get_hospital_crew_control()}
 					{this.get_playerole_cards()}
@@ -241,12 +230,7 @@ class PlayerRoleHealthCard extends React.Component {
 
 	get_plague_phase_setter = () => {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column'
-				}}
-			>
+			<div className="flex flex_column">
 				<label>
 					HP_axis:{' '}
 					<input
@@ -301,12 +285,7 @@ class PlayerRoleHealthCard extends React.Component {
 
 	get_plague_state = () => {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column'
-				}}
-			>
+			<div className="flex flex_column">
 				<label>
 					{get_locales('plague_active')}: {this.props.data.plague.active.toString()}
 				</label>
@@ -330,12 +309,7 @@ class PlayerRoleHealthCard extends React.Component {
 
 	get_plague_activation_block = () => {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column'
-				}}
-			>
+			<div className="flex flex_column">
 				<button
 					onClick={(e) => {
 						this.toogle_plague_state();
@@ -349,12 +323,7 @@ class PlayerRoleHealthCard extends React.Component {
 
 	get_plague_control_block = () => {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'row'
-				}}
-			>
+			<div className="flex">
 				<button
 					onClick={(e) => {
 						this.apply_mutator('A');

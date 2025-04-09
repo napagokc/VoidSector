@@ -190,12 +190,7 @@ class StationCard extends React.Component {
 
 	get_stats_block = () => {
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column'
-				}}
-			>
+			<div className="flex flex_column">
 				<label>hp: {this.props.data.hp}</label>
 				<label>
 					pos: {this.props.data.pos[0]}, {this.props.data.pos[1]}

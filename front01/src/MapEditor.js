@@ -58,12 +58,7 @@ export class MapEditor extends React.Component {
 		return (
 			<div className="Administration">
 				<b>Administration</b>
-				<div
-					style={{
-						display: 'flex',
-						flexDirection: 'row'
-					}}
-				>
+				<div className="flex">
 					<MapLoader></MapLoader>
 					<ShipScreenLoader></ShipScreenLoader>
 					<MapEditorRadarWidget

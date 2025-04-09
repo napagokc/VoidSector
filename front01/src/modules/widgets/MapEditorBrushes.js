@@ -84,13 +84,7 @@ export class MapEditorBrushesWidget extends React.Component {
 		);
 
 		return (
-			<div
-				key="creator_params"
-				style={{
-					display: 'flex',
-					flexDirection: 'column'
-				}}
-			>
+			<div key="creator_params" className="flex flex_column">
 				{inputs}
 			</div>
 		);
@@ -149,13 +143,7 @@ export class MapEditorBrushesWidget extends React.Component {
 		}
 
 		return (
-			<div
-				key="obstacles_creator_params"
-				style={{
-					display: 'flex',
-					flexDirection: 'column'
-				}}
-			>
+			<div key="obstacles_creator_params" className="flex flex_column">
 				{inputs}
 			</div>
 		);
@@ -180,13 +168,7 @@ export class MapEditorBrushesWidget extends React.Component {
 		}
 
 		return (
-			<div
-				key="deleter_params"
-				style={{
-					display: 'flex',
-					flexDirection: 'column'
-				}}
-			>
+			<div key="deleter_params" className="flex flex_column">
 				{inputs}
 			</div>
 		);
@@ -226,12 +208,7 @@ export class MapEditorBrushesWidget extends React.Component {
 		];
 
 		return (
-			<div
-				style={{
-					display: 'flex',
-					flexDirection: 'column'
-				}}
-			>
+			<div className="flex flex_column">
 				<b>Brush Controller</b>
 				{inputs}
 				{this.get_params_panel()}

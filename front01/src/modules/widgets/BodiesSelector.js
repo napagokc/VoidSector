@@ -110,23 +110,17 @@ export class HBodiesSelector extends React.Component {
 	};
 
 	get_hbodies_list = () => {
-		let percs = 100 / this.state.slots_in_row;
-		let style_grid = '';
-		for (let i = 0; i < this.state.slots_in_row; i++) {
-			style_grid = style_grid + percs.toFixed(2).toString() + '% ';
-		}
 		let hbodies = [];
 		for (let k in this.state.hbodies_data) {
 			if (this.state.hbodies_data[k]) {
 				hbodies.push(this.get_control_widget(k, this.state.hbodies_data[k]));
 			}
 		}
+
 		return (
 			<div
 				className="BodiesSelector_section"
-				style={{
-					gridTemplateColumns: style_grid
-				}}
+				style={{ gridTemplateColumns: `repeat(${this.state.slots_in_row}, 1fr)` }}
 			>
 				{hbodies}
 			</div>
@@ -135,12 +129,6 @@ export class HBodiesSelector extends React.Component {
 
 	get_lbodies_list = () => {
 		let lbodies = [];
-		let percs = 100 / this.state.slots_in_row;
-		let style_grid = '';
-		for (let i = 0; i < this.state.slots_in_row; i++) {
-			style_grid = style_grid + percs.toFixed(2).toString() + '% ';
-		}
-
 		for (let k in this.state.lbodies_data) {
 			if (this.state.lbodies_data[k]) {
 				if (!['Mine_type2', 'MeteorsCloud'].includes(this.state.lbodies_data[k].type)) {
@@ -148,12 +136,11 @@ export class HBodiesSelector extends React.Component {
 				}
 			}
 		}
+
 		return (
 			<div
 				className="BodiesSelector_section"
-				style={{
-					gridTemplateColumns: style_grid
-				}}
+				style={{ gridTemplateColumns: `repeat(${this.state.slots_in_row}, 1fr)` }}
 			>
 				{lbodies}
 			</div>
@@ -162,7 +149,7 @@ export class HBodiesSelector extends React.Component {
 
 	render() {
 		return (
-			<div className="BodiesSelector div_vertical">
+			<div className="BodiesSelector flex flex_column">
 				<b>"BodiesSelector"</b>
 				<input
 					type="number"
@@ -350,7 +337,7 @@ export class BodyEditor extends React.Component {
 	render() {
 		return (
 			<div className="BodyEditor">
-				<div className="div_vertical">
+				<div className="flex flex_column">
 					<b>BodyEditor</b>
 					{this.get_attributes()}
 					<button
@@ -361,7 +348,7 @@ export class BodyEditor extends React.Component {
 						Commit
 					</button>
 				</div>
-				<div className="div_vertical">
+				<div className="flex flex_column">
 					<b>BodyStats</b>
 					{this.get_body_stats()}
 				</div>
@@ -433,7 +420,7 @@ export class BodySpawner extends React.Component {
 
 	render() {
 		return (
-			<div className="div_vertical">
+			<div className="flex flex_column">
 				<b>BodySpawner</b>
 				{this.get_entitytype_selector()}
 				<label>

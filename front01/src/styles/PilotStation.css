@@ -36,13 +36,16 @@
 	border: 1px solid black;
 }
 
-.SystemsLayer .SystemControlWidget {
-	height: 200px;
+.AllianceManager input {
+	width: 100px;
 }
 
-.ControlLayer {
-	display: flex;
-	flex-direction: column;
+.SystemControlWidget > .flex {
+	padding-bottom: 5px;
+}
+
+.SystemsLayer .SystemControlWidget {
+	height: 200px;
 }
 
 .Stockpile {
@@ -62,31 +65,7 @@
 	flex-direction: row;
 }
 
-.PlayersRadar {
-	display: flex;
-	flex-direction: row;
-
-	border: solid 1px;
-}
-
-.PlayersRadar > .radarSection {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	background-color: black;
-}
-
-.PlayersRadar > .detectedShips {
-	display: flex;
-	flex-direction: column;
-	width: 60px;
-}
-
-.PlayersRadar > .detectedShips label:hover {
-	color: red;
-}
-
-.is_taking_damage_class {
+.is_taking_damage {
 	border: 10px solid red;
 }
 
@@ -127,13 +106,6 @@
 .PilotStation_crit_MP_fatigue * {
 	opacity: 0;
 	border: white;
-}
-
-.CommonRadarStation {
-	display: flex;
-	flex-direction: row;
-	background-color: black;
-	justify-content: center;
 }
 
 .PilotStation_light_HP {

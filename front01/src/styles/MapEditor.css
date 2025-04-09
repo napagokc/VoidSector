@@ -6,9 +6,11 @@
 
 .BodiesSelector_section {
 	display: grid;
-
+	justify-items: center;
+	gap: 5px 0;
 	overflow: scroll;
-	height: 200px;
+	max-height: 170px;
+	margin-bottom: 5px;
 }
 
 .BodyEditor {
@@ -34,12 +36,13 @@
 }
 
 .FileLoader .map_selector {
+	flex: 1 0 auto;
 	display: flex;
 	flex-direction: column;
-	height: 500px;
 	overflow: scroll;
 	overflow-x: hidden;
 	width: 150px;
+	max-height: 620px;
 }
 
 .map_selector .selected {
@@ -56,9 +59,18 @@
 	color: red;
 }
 
+.AdminRadarSection {
+	display: flex;
+	flex-direction: column;
+	width: 620px;
+	border: 1px solid;
+}
+
 .BodiesInteractorSection {
 	width: 100%;
 	border: 1px solid red;
+	display: flex;
+	flex-direction: column;
 }
 
 .bodySelectorWidget {
@@ -68,4 +80,8 @@
 	padding: 5px;
 	width: fit-content;
 	height: fit-content;
+}
+
+.bodySelectorWidget button {
+	align-self: center;
 }

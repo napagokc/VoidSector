@@ -161,17 +161,7 @@ export class ShipOvervieweWidget extends React.Component {
 		return (
 			<div className="ShipOvervieweWidget">
 				<div className="ShipSection">
-					<Canvas
-						id="ShipCanvas"
-						//resize = {{ scroll: true, debounce: { scroll: 50, resize: 0 } }}
-						orthographic={true}
-						style={{
-							width: '300px',
-							height: '200px',
-							border: 'solid',
-							background: 'black'
-						}}
-					>
+					<Canvas id="ShipCanvas" orthographic={true} style={{ width: '300px', height: '200px' }}>
 						<ambientLight />
 						{objects}
 					</Canvas>

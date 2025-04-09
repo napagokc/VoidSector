@@ -79,11 +79,6 @@ export class PilotStation extends React.Component {
 	};
 
 	render() {
-		let is_taking_damage_class = '';
-		if (this.state.is_taking_damage) {
-			is_taking_damage_class = 'is_taking_damage_class';
-		}
-
 		let result = [];
 		if (this.props.admin) {
 			result.push(
@@ -96,14 +91,14 @@ export class PilotStation extends React.Component {
 			);
 
 			result.push(
-				<div key="admin_controls_2" className="ControlLayer">
+				<React.Fragment key="admin_controls_2">
 					<div className="engineControlSection">
 						<EngineControlWidget />
 						<InteractionControlWidget />
 						<RadarControlWidget />
 					</div>
 					<ShaftsControlWidget />
-				</div>
+				</React.Fragment>
 			);
 		}
 
@@ -113,29 +108,28 @@ export class PilotStation extends React.Component {
 
 		if (this.props.navigator) {
 			result.push(
-				<div key="navigator_controls" className="ControlLayer">
+				<React.Fragment key="navigator_controls">
 					<div className="engineControlSection">
 						<EngineControlWidget />
 						<InteractionControlWidget />
 					</div>
-				</div>
+				</React.Fragment>
 			);
 		}
 
 		if (this.props.cannoneer) {
 			result.push(
-				<div key="cannoneer_controls" className="ControlLayer">
+				<React.Fragment key="cannoneer_controls">
 					<ShaftsControlWidget />
 					<ProjectileBuilderWidget />
 					<ResourcesControlWidget />
-				</div>
+				</React.Fragment>
 			);
 		}
 
 		if (this.props.engineer_old) {
-			let clname = 'SystemsLayer';
 			result.push(
-				<div key="engineer_old_controls" className={clname}>
+				<div key="engineer_old_controls" className="SystemsLayer">
 					<DamageControlWidget />
 					<CrewControlWidget />
 					<ResourcesControlWidget />
@@ -146,23 +140,16 @@ export class PilotStation extends React.Component {
 		}
 
 		if (this.props.captain) {
-			let clname = '';
 			result.push(
-				<div key="captain_controls" className={clname}>
+				<React.Fragment key="captain_controls">
 					<ShipOvervieweWidgetLayer role="captain" />
-					<div
-						style={{
-							display: 'flex',
-							flexDirection: 'row',
-							height: 'fit-content'
-						}}
-					>
+					<div className="flex">
 						<CrewControlWidget />
 						<RoleManagerWidget username={this.props.username} />
 						<AllianceManager></AllianceManager>
 					</div>
 					<CapMarksControlWidget />
-				</div>
+				</React.Fragment>
 			);
 		}
 
@@ -176,13 +163,13 @@ export class PilotStation extends React.Component {
 				);
 
 				result.push(
-					<div key="NPC_pilot_controls_2" className="ControlLayer">
+					<React.Fragment key="NPC_pilot_controls_2">
 						<div className="engineControlSection">
 							<EngineControlWidget />
 							<RadarControlWidget />
 						</div>
 						<ShaftsControlWidget />
-					</div>
+					</React.Fragment>
 				);
 			} else {
 				let self = this;
@@ -194,11 +181,7 @@ export class PilotStation extends React.Component {
 				};
 				addEventListener(observer_watch);
 
-				result.push(
-					<div key="NPC_pilot_controls" className="SystemsSection">
-						<ShipsDisplay />
-					</div>
-				);
+				result.push(<ShipsDisplay key="NPC_pilot_controls" />);
 			}
 		}
 
@@ -213,7 +196,9 @@ export class PilotStation extends React.Component {
 					cap_control={this.props.captain}
 				/>
 
-				<div className={'PilotStationControlSection ' + is_taking_damage_class}>{result}</div>
+				<div className={'PilotStationControlSection' + (this.state.is_taking_damage ? 'is_taking_damage' : '')}>
+					{result}
+				</div>
 
 				<MedicineStateWidget
 					set_MP_stamina_level={this.set_MP_stamina_level}

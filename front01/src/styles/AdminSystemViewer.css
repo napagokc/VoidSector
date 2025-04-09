@@ -1,9 +1,10 @@
 .AdminSystemViewer {
 	display: flex;
 	flex-direction: column;
+	flex: 0 1 auto;
+	max-height: 170px;
 	border: 1px solid black;
 	margin: 5px;
-	height: 300px;
 	overflow: scroll;
 }
 
