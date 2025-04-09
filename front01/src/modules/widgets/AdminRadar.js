@@ -100,7 +100,6 @@ export class AdminRadarWidget extends React.Component {
 		let step = 20;
 		return (
 			<div className="AccelerationController_btnblock">
-				<button disabled> {'<<<<'} </button>
 				<button
 					onMouseUp={(e) => {
 						this.move_observer_step([0, 0]);
@@ -109,10 +108,8 @@ export class AdminRadarWidget extends React.Component {
 						this.move_observer_step([0, step]);
 					}}
 				>
-					{' '}
-					Forw{' '}
+					🠉
 				</button>
-				<button disabled> {'>>>>'} </button>
 
 				<button
 					onMouseUp={(e) => {
@@ -122,8 +119,7 @@ export class AdminRadarWidget extends React.Component {
 						this.move_observer_step([-step, 0]);
 					}}
 				>
-					{' '}
-					TLeft{' '}
+					🠈
 				</button>
 				<button
 					onMouseUp={(e) => {
@@ -133,8 +129,7 @@ export class AdminRadarWidget extends React.Component {
 						this.move_observer_step([0, -step]);
 					}}
 				>
-					{' '}
-					Back{' '}
+					🠋
 				</button>
 				<button
 					onMouseUp={(e) => {
@@ -144,8 +139,7 @@ export class AdminRadarWidget extends React.Component {
 						this.move_observer_step([step, 0]);
 					}}
 				>
-					{' '}
-					TRight{' '}
+					🠊
 				</button>
 			</div>
 		);

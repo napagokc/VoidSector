@@ -55,10 +55,6 @@ export class EngineControlWidget extends React.Component {
 	get_buttons_block = () => {
 		return (
 			<div className="AccelerationController_btnblock">
-				<button disabled className="non_selectable_text">
-					{' '}
-					{'<<<<'}{' '}
-				</button>
 				<button
 					className="non_selectable_text"
 					disabled={this.is_disabled()}
@@ -72,12 +68,7 @@ export class EngineControlWidget extends React.Component {
 						this.send_acceleration('acceleration', 0);
 					}}
 				>
-					{' '}
-					Forw{' '}
-				</button>
-				<button disabled className="non_selectable_text">
-					{' '}
-					{'>>>>'}{' '}
+					🠉
 				</button>
 
 				<button
@@ -93,8 +84,7 @@ export class EngineControlWidget extends React.Component {
 						this.send_acceleration('rotation', 0);
 					}}
 				>
-					{' '}
-					Left{' '}
+					🠈
 				</button>
 				<button
 					className="non_selectable_text"
@@ -109,8 +99,7 @@ export class EngineControlWidget extends React.Component {
 						this.send_acceleration('acceleration', 0);
 					}}
 				>
-					{' '}
-					Back{' '}
+					🠋
 				</button>
 				<button
 					className="non_selectable_text"
@@ -125,8 +114,7 @@ export class EngineControlWidget extends React.Component {
 						this.send_acceleration('rotation', 0);
 					}}
 				>
-					{' '}
-					Right{' '}
+					🠊
 				</button>
 			</div>
 		);

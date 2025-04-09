@@ -127,7 +127,6 @@ export class MapEditorRadarWidget extends React.Component {
 		let step = 20;
 		return (
 			<div className="AccelerationController_btnblock">
-				<button disabled> {'<<<<'} </button>
 				<button
 					onMouseUp={(e) => {
 						this.move_observer_step([0, 0]);
@@ -136,10 +135,8 @@ export class MapEditorRadarWidget extends React.Component {
 						this.move_observer_step([0, step]);
 					}}
 				>
-					{' '}
-					Forw{' '}
+					🠉
 				</button>
-				<button disabled> {'>>>>'} </button>
 
 				<button
 					onMouseUp={(e) => {
@@ -149,8 +146,7 @@ export class MapEditorRadarWidget extends React.Component {
 						this.move_observer_step([-step, 0]);
 					}}
 				>
-					{' '}
-					TLeft{' '}
+					🠈
 				</button>
 				<button
 					onMouseUp={(e) => {
@@ -160,8 +156,7 @@ export class MapEditorRadarWidget extends React.Component {
 						this.move_observer_step([0, -step]);
 					}}
 				>
-					{' '}
-					Back{' '}
+					🠋
 				</button>
 				<button
 					onMouseUp={(e) => {
@@ -171,8 +166,7 @@ export class MapEditorRadarWidget extends React.Component {
 						this.move_observer_step([step, 0]);
 					}}
 				>
-					{' '}
-					TRight{' '}
+					🠊
 				</button>
 			</div>
 		);
@@ -254,11 +248,11 @@ export class MapEditorRadarWidget extends React.Component {
 							className="slider"
 							id="valueForward"
 							value={this.state.scale_factor}
+							//value={this.state.progradeAcc}
 							onChange={(e) => {
 								this.setState({ scale_factor: e.target.value });
 							}}
-							//value={this.state.progradeAcc}
-						/>{' '}
+						/>
 					</label>
 					{parseFloat(this.state.scale_factor).toFixed(2)}
 					<label>"frame_id:"{this.state.frame_id}</label>
@@ -268,7 +262,6 @@ export class MapEditorRadarWidget extends React.Component {
 							this.setState({ controlled_observer_pos: [0, 0] });
 						}}
 					>
-						{' '}
 						CLEAR OFFSET
 					</button>
 				</div>
