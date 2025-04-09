@@ -57,8 +57,7 @@ export class MapEditor extends React.Component {
 	render() {
 		return (
 			<div className="Administration">
-				<h4>Administration</h4>
-				<div></div>
+				<b>Administration</b>
 				<div
 					style={{
 						display: 'flex',
