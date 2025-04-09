@@ -238,14 +238,18 @@ class RadarShadeBorder extends React.Component {
 }
 
 class RadarCentralShade extends React.Component {
+	texture = 'markers/radar_shades/radar_central_shade.png';
+
 	render() {
-		let texture = 'markers/radar_shades/radar_central_shade.png';
+		let size = this.props.size * this.props.scale_factor * 2;
+		if (isNaN(size)) return null;
+
 		return (
 			<MeshObject
-				texture={texture}
+				texture={this.texture}
 				///position={[this.props.position[0], this.props.position[1], 1]}
 				position={[0, 0, 1]}
-				size={this.props.size * this.props.scale_factor * 2}
+				size={size}
 				color={0xffffff}
 				level={2}
 			/>
