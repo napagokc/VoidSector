@@ -9,10 +9,8 @@ export class InteractionControlWidget extends React.Component {
 		super(props);
 
 		this.state = {
-			data: {
-				interactable_objects: []
-			},
-			hided: true
+			mark_id: null,
+			interactable_objects: []
 		};
 	}
 
@@ -31,17 +29,17 @@ export class InteractionControlWidget extends React.Component {
 
 	proceed_data_message = () => {
 		let perf_data = get_system_state('interact_sm');
-		if (perf_data) this.setState({ data: perf_data });
+		if (perf_data) this.setState(perf_data);
 	};
 
 	onInteract = (target_id) => {
-		send_command('ship.interact_sm', this.state.data.mark_id, 'interact', { target_id: target_id });
+		send_command('ship.interact_sm', this.state.mark_id, 'interact', { target_id: target_id });
 	};
 
 	get_interactable_objects = () => {
 		let result = [];
-		for (let i in this.state.data.interactable_objects) {
-			let iobj_id = this.state.data.interactable_objects[i];
+		for (let i in this.state.interactable_objects) {
+			let iobj_id = this.state.interactable_objects[i];
 			result.push(
 				<span key={iobj_id}>
 					<label>{iobj_id[0]}</label>

@@ -42,14 +42,6 @@ export class RadarControlWidget extends React.Component {
 }
 
 export class RadarStatsWidget extends React.Component {
-	constructor(props) {
-		super(props);
-
-		this.state = {
-			data: {}
-		};
-	}
-
 	componentDidMount() {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) {
@@ -66,23 +58,23 @@ export class RadarStatsWidget extends React.Component {
 
 	proceed_data_message = () => {
 		let data = get_system_state('radar_sm');
-		if (data) this.setState({ data: data });
+		if (data) this.setState(data);
 	};
 
 	render() {
 		return (
 			<div className="RadarStatsWidget">
 				<label>
-					{get_locales('close_range')}: {this.state.data.close_range}
+					{get_locales('close_range')}: {this.state.close_range}
 				</label>
 				<label>
-					{get_locales('distant_range')}: {this.state.data.distant_range}
+					{get_locales('distant_range')}: {this.state.distant_range}
 				</label>
 				<label>
-					{get_locales('distant_dir')}: {this.state.data.distant_dir}
+					{get_locales('distant_dir')}: {this.state.distant_dir}
 				</label>
 				<label>
-					{get_locales('distant_arc')}: {this.state.data.distant_arc}
+					{get_locales('distant_arc')}: {this.state.distant_arc}
 				</label>
 			</div>
 		);

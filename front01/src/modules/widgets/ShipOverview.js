@@ -17,13 +17,6 @@ import { CrewControlWidget } from '../systems/crew_sm.js';
 import { RadarControlWidget } from '../systems/radar_sm';
 
 export class EngineerControllerWidget extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selected_sm: null
-		};
-	}
-
 	componentDidMount() {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) clearInterval(timer_id);
@@ -75,11 +68,6 @@ export class ShipOvervieweWidgetLayer extends React.Component {
 }
 
 export class ShipOvervieweWidget extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-
 	componentDidMount() {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) clearInterval(timer_id);
@@ -93,7 +81,7 @@ export class ShipOvervieweWidget extends React.Component {
 	}
 
 	proceed_data_message = () => {
-		this.setState({ damage_sm: get_system_state('damage_sm') });
+		this.setState(get_system_state('damage_sm'));
 	};
 
 	proceed_system_selection = (sm_name) => {
@@ -102,12 +90,11 @@ export class ShipOvervieweWidget extends React.Component {
 	};
 
 	get_hp_color = (sm_name) => {
-		if (!('damage_sm' in this.state) || !this.state.damage_sm || !(sm_name in this.state.damage_sm.systems_hp)) {
+		if (!this.state?.systems_hp || !(sm_name in this.state.systems_hp)) {
 			return 0xffffff;
 		}
 
-		let perc_hp =
-			this.state.damage_sm.systems_hp[sm_name].current_hp / this.state.damage_sm.systems_hp[sm_name].max_hp;
+		let perc_hp = this.state.systems_hp[sm_name].current_hp / this.state.systems_hp[sm_name].max_hp;
 		if (perc_hp < 1) {
 			let perc_hp_step = 0.2;
 			perc_hp = perc_hp - (perc_hp % perc_hp_step);
@@ -242,7 +229,16 @@ export function ShipsPartMesh(props) {
 export class SystemOvervieweWidget extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {};
+		this.state = {
+			sm_name: null,
+			mark_id: null,
+			current_hp: null,
+			max_hp: null,
+			current_team: null,
+			upgrade_level: null,
+			upgrade_cost: null,
+			teams: {}
+		};
 	}
 
 	componentDidMount() {

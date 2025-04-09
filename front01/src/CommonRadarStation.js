@@ -8,11 +8,6 @@ import './styles/PilotStation.css';
 export class CommonRadarStation extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = {
-			selected: null,
-			is_taking_damage: false
-		};
-
 		this._handle_websocket_bind = this._handle_websocket.bind(this);
 	}
 

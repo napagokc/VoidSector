@@ -10,8 +10,13 @@ export class EngineControlWidget extends React.Component {
 		super(props);
 
 		this.state = {
+			mark_id: null,
+			status: null,
 			engine_power: 1,
-			prediction_depth: 10
+			velocity: null,
+			direction: null,
+			deltaV: null,
+			heat_level: null
 		};
 	}
 
@@ -29,26 +34,23 @@ export class EngineControlWidget extends React.Component {
 	}
 
 	proceed_data_message = () => {
-		let system_state = get_system_state('engine_sm');
-		this.setState({ data: system_state });
+		this.setState(get_system_state('engine_sm'));
 	};
 
 	is_disabled = () => {
-		if (this.state.data && this.state.data.status === 'OK' && this.state.data.mark_id) return false;
+		if (this.state.status === 'OK' && this.state.mark_id) return false;
 		return true;
 	};
 
 	//accPrograde, accNormal
 	send_acceleration = (engine_key, direction_scalar) => {
 		let params = { [engine_key]: direction_scalar };
-		if (this.state.data) send_command('ship.engine_sm', this.state.data.mark_id, 'set_acceleration', params);
+		if (this.state.mark_id) send_command('ship.engine_sm', this.state.mark_id, 'set_acceleration', params);
 	};
 
 	send_prediction_depth = (prediction_depth) => {
-		if (this.state.data) {
-			send_command('ship.engine_sm', this.state.data.mark_id, 'set_prediction_depth', {
-				value: prediction_depth
-			});
+		if (this.state.mark_id) {
+			send_command('ship.engine_sm', this.state.mark_id, 'set_prediction_depth', { value: prediction_depth });
 		}
 	};
 
@@ -125,13 +127,13 @@ export class EngineControlWidget extends React.Component {
 			<div className="AccelerationController">
 				<b> {get_locales('Acceleration Control')}</b>
 				<label>
-					{get_locales('speed')}: {this.state.data ? this.state.data.velocity : 0}
+					{get_locales('speed')}: {this.state.velocity ? this.state.velocity : 0}
 				</label>
 				<label>
-					{get_locales('direction')}: {this.state.data ? this.state.data.direction : 0}
+					{get_locales('direction')}: {this.state.direction ? this.state.direction : 0}
 				</label>
 				<label>
-					{get_locales('deltaV')}: {this.state.data ? this.state.data.deltaV : 0}
+					{get_locales('deltaV')}: {this.state.deltaV ? this.state.deltaV : 0}
 				</label>
 				{this.get_buttons_block()}
 				<NumericControlWidjet
@@ -156,7 +158,7 @@ export class EngineControlWidget extends React.Component {
 				/>
 				<span className="AccelerationHeatbar">
 					<label>{get_locales('overheat')}:</label>
-					<progress value={this.state.data ? this.state.data.heat_level : 0} max={100}></progress>
+					<progress value={this.state.heat_level ? this.state.heat_level : 0} max={100}></progress>
 				</span>
 			</div>
 		);

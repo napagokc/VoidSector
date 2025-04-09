@@ -9,10 +9,9 @@ export class EnergyControlWidget extends React.Component {
 		super(props);
 
 		this.state = {
-			data: {
-				systems_energy: {}
-			},
-			hided: true
+			mark_id: null,
+			energy_free: 0,
+			systems_energy: {}
 		};
 	}
 
@@ -31,15 +30,15 @@ export class EnergyControlWidget extends React.Component {
 
 	proceed_data_message = () => {
 		let perf_data = get_system_state('energy_sm');
-		if (perf_data) this.setState({ data: perf_data });
+		if (perf_data) this.setState(perf_data);
 	};
 
 	onIncreaseEnergy = (system_name) => {
-		send_command('ship.energy_sm', this.state.data.mark_id, 'increase_energy_level', { system: system_name });
+		send_command('ship.energy_sm', this.state.mark_id, 'increase_energy_level', { system: system_name });
 	};
 
 	onDecreaseEnergy = (system_name) => {
-		send_command('ship.energy_sm', this.state.data.mark_id, 'decrease_energy_level', { system: system_name });
+		send_command('ship.energy_sm', this.state.mark_id, 'decrease_energy_level', { system: system_name });
 	};
 
 	get_energy_limit = () => {
@@ -48,9 +47,8 @@ export class EnergyControlWidget extends React.Component {
 				{'>>'}
 			</button>
 		];
-		let free_energy = this.state.data.energy_free;
 
-		for (let i = 0; i < free_energy; i++) {
+		for (let i = 0; i < this.state.energy_free; i++) {
 			result.push(
 				<button key={i} className="back_green" disabled>
 					{i + 1}
@@ -63,8 +61,8 @@ export class EnergyControlWidget extends React.Component {
 
 	get_energy_controls = () => {
 		let result = [];
-		for (let system_name in this.state.data.systems_energy) {
-			let energy_level = this.state.data.systems_energy[system_name];
+		for (let system_name in this.state.systems_energy) {
+			let energy_level = this.state.systems_energy[system_name];
 			let level_widgets = [];
 
 			level_widgets.push(

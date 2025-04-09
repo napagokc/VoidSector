@@ -8,10 +8,7 @@ export class RnDControlWidget extends React.Component {
 		super(props);
 
 		this.state = {
-			data: {
-				systems_upgrades: {}
-			},
-			hided: true
+			systems_upgrades: {}
 		};
 	}
 	componentDidMount() {
@@ -29,17 +26,17 @@ export class RnDControlWidget extends React.Component {
 
 	proceed_data_message = () => {
 		let perf_data = get_system_state('RnD_sm');
-		if (perf_data) this.setState({ data: perf_data });
+		if (perf_data) this.setState(perf_data);
 	};
 
 	onUpgrade = (system_name) => {
-		send_command('ship.RnD_sm', this.state.data.mark_id, 'upgrade_system', { system: system_name });
+		send_command('ship.RnD_sm', this.state.mark_id, 'upgrade_system', { system: system_name });
 	};
 
 	get_systems_upgrades = () => {
 		let result = [];
-		for (let system_name in this.state.data.systems_upgrades) {
-			let upgrade = this.state.data.systems_upgrades[system_name];
+		for (let system_name in this.state.systems_upgrades) {
+			let upgrade = this.state.systems_upgrades[system_name];
 			let system_level = upgrade.current_level;
 			let level_widgets = [];
 

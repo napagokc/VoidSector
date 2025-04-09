@@ -23,19 +23,13 @@ export class PlayersRadarWidget extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			scale_width: 600,
 			scale_factor: 1,
 			radar_width: 600,
 			data: {
 				mark_id: '',
-				observer_pos: [0, 0],
-				hBodies: {},
-				lBodies: {}
+				observer_pos: [0, 0]
 			},
-
-			entities_list: [],
 			entity_hovered: '',
-
 			mouse_pos: 0,
 			show_id_labels: true
 		};

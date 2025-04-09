@@ -9,7 +9,6 @@ export class ProjectileBuilderWidget extends React.Component {
 		super(props);
 
 		this.state = {
-			mark_id: null,
 			details_list: [
 				'thruster',
 				'timer',

@@ -8,7 +8,8 @@ export class AllianceManager extends React.Component {
 	constructor() {
 		super();
 		this.state = {
-			data: {},
+			alliance: {},
+			mark_id: null,
 			input_value: ''
 		};
 	}
@@ -26,32 +27,30 @@ export class AllianceManager extends React.Component {
 	}
 
 	proceed_message = () => {
-		this.setState({ data: get_system_state('launcher_sm') });
+		this.setState(get_system_state('launcher_sm'));
 	};
 
 	add_to_allies = (mark_id) => {
-		send_command('ship.launcher_sm', this.state.data.mark_id, 'add_to_alliance', { mark_id: mark_id });
+		send_command('ship.launcher_sm', this.state.mark_id, 'add_to_alliance', { mark_id: mark_id });
 	};
 
 	remove_from_alies = (mark_id) => {
-		send_command('ship.launcher_sm', this.state.data.mark_id, 'remove_from_alliance', { mark_id: mark_id });
+		send_command('ship.launcher_sm', this.state.mark_id, 'remove_from_alliance', { mark_id: mark_id });
 	};
 
 	get_alliance_list = () => {
 		let result = [];
-		if (this.state?.data?.alliance) {
-			for (let tmp_i in this.state.data.alliance) {
-				result.push(
-					<button
-						key={tmp_i}
-						onClick={(e) => {
-							this.remove_from_alies(this.state.data.alliance[tmp_i]);
-						}}
-					>
-						{this.state.data.alliance[tmp_i]}[x]
-					</button>
-				);
-			}
+		for (let tmp_i in this.state.alliance) {
+			result.push(
+				<button
+					key={tmp_i}
+					onClick={(e) => {
+						this.remove_from_alies(this.state.alliance[tmp_i]);
+					}}
+				>
+					{this.state.alliance[tmp_i]}[x]
+				</button>
+			);
 		}
 
 		return <div>{result}</div>;

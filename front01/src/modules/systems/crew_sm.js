@@ -9,10 +9,12 @@ export class CrewControlWidget extends React.Component {
 		super(props);
 
 		this.state = {
-			data: {
-				total_crew: -1,
-				teams: {}
-			}
+			mark_id: null,
+			total_crew: null,
+			free_crew: null,
+			wounded: null,
+			hospitale_cap: null,
+			teams: {}
 		};
 	}
 
@@ -38,17 +40,17 @@ export class CrewControlWidget extends React.Component {
 			crew_data.hospitale_cap = med_data.hospital.capacity;
 		}
 
-		this.setState({ data: crew_data });
+		this.setState(crew_data);
 	};
 
 	get_teams_list = () => {
 		let result = [];
-		for (let team_name in this.state.data.teams) {
+		for (let team_name in this.state.teams) {
 			result.push(
 				<RepairTeamWidget
 					key={team_name}
-					mark_id={this.state.data.mark_id}
-					team_data={this.state.data.teams[team_name]}
+					mark_id={this.state.mark_id}
+					team_data={this.state.teams[team_name]}
 				/>
 			);
 		}
@@ -56,27 +58,19 @@ export class CrewControlWidget extends React.Component {
 	};
 
 	render() {
-		if (!this.state.data) {
-			return (
-				<div className="SystemControlWidget">
-					<b>CrewControl</b>
-				</div>
-			);
-		}
-
 		return (
 			<div className="SystemControlWidget">
 				<b>{get_locales('CrewControl')}</b>
-				{this.state.data.total_crew && (
+				{this.state.total_crew && (
 					<React.Fragment>
 						<label>
-							{get_locales('total_crew')}:{this.state.data.total_crew}
+							{get_locales('total_crew')}:{this.state.total_crew}
 						</label>
 						<label>
-							{get_locales('free_crew')}:{this.state.data.free_crew}
+							{get_locales('free_crew')}:{this.state.free_crew}
 						</label>
 						<label>
-							{get_locales('hospital')}:{this.state.data.wounded}/{this.state.data.hospitale_cap}
+							{get_locales('hospital')}:{this.state.wounded}/{this.state.hospitale_cap}
 						</label>
 						{this.get_teams_list()}
 					</React.Fragment>

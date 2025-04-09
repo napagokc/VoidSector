@@ -8,7 +8,6 @@ export class SystemStateViewer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: {},
 			hided: false,
 			system_state: {}
 		};

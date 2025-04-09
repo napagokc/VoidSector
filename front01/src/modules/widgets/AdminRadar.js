@@ -22,7 +22,6 @@ export class AdminRadarWidget extends React.Component {
 
 		this.state = {
 			radar_width: 600,
-			scale_width: 600,
 			scale_factor: 1,
 			controlled_observer_pos: [0, 0],
 			data: {
@@ -31,7 +30,6 @@ export class AdminRadarWidget extends React.Component {
 				lBodies: {},
 				aZones: {}
 			},
-			entities_list: [],
 			entity_hovered: '',
 			key_pressed: [0, 0],
 			show_id_labels: true

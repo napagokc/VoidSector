@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { get_performance, get_system_state } from '../network/connections';
+import { get_performance } from '../network/connections';
 import { timerscounter } from '../utils/updatetimers';
 
 const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
@@ -63,11 +63,7 @@ export class PerformanceViewer extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = {
-			data: {},
-			hided: false,
-			system_state: {}
-		};
+		this.state = { hided: false };
 	}
 
 	componentDidMount() {
@@ -84,14 +80,10 @@ export class PerformanceViewer extends React.Component {
 
 	proceed_data_message = () => {
 		let perf_data = get_performance();
-		this.setState({ data: perf_data });
+		this.setState(perf_data);
 
-		for (let k in perf_data) {
-			smoother.add_data(k, perf_data[k]);
-		}
+		for (let k in perf_data) smoother.add_data(k, perf_data[k]);
 		smoother.add_timestamp();
-
-		this.setState({ system_state: get_system_state });
 	};
 
 	render() {

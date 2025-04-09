@@ -13,8 +13,8 @@ export class MedicStation extends React.Component {
 		super(props);
 		this.state = {
 			plague_matrix: null,
-			data: {},
-			hided: true
+			roles: {},
+			hospital: {}
 		};
 	}
 
@@ -55,18 +55,18 @@ export class MedicStation extends React.Component {
 
 	proceed_data_message = () => {
 		let med_data = get_system_state('med_sm');
-		if (med_data) this.setState({ data: med_data });
+		if (med_data) this.setState(med_data);
 	};
 
 	get_playerole_cards = () => {
 		let result = [<b key="header">{get_locales('Hospital Crew Control')}</b>];
-		for (let rolename in this.state.data.roles) {
+		for (let rolename in this.state.roles) {
 			result.push(
 				<PlayerRoleHealthCard
 					key={rolename}
 					username={this.props.username}
 					rolename={rolename}
-					data={this.state.data.roles[rolename]}
+					data={this.state.roles[rolename]}
 				/>
 			);
 		}
@@ -83,16 +83,15 @@ export class MedicStation extends React.Component {
 	};
 
 	get_hospital_crew_control = () => {
-		if (this.state.data && !this.state.data.hospital) return [];
+		if (!this.state.hospital) return [];
 
 		return (
 			<div className="flex flex_column">
 				<b>{get_locales('Hospital NPC Crew Control')}</b>
 				<label>
-					{get_locales('humans in hospital')}: {this.state.data.hospital.units}/
-					{this.state.data.hospital.capacity}
+					{get_locales('humans in hospital')}: {this.state.hospital.units}/{this.state.hospital.capacity}
 				</label>
-				<progress value={this.state.data.hospital.progress} max={100}></progress>
+				<progress value={this.state.hospital.progress} max={100}></progress>
 				{(this.props.username === 'admin') | (this.props.username === 'master_medic') ? (
 					<button
 						onClick={(e) => {
@@ -125,7 +124,7 @@ export class MedicStation extends React.Component {
 
 				<PlagueMatrixSection
 					plague_matrix={this.state.plague_matrix}
-					roles={this.state.data.roles}
+					roles={this.state.roles}
 					username={this.props.username}
 				></PlagueMatrixSection>
 			</div>
@@ -137,7 +136,6 @@ class PlayerRoleHealthCard extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selected_plague_state: null,
 			selected_plague_phase_x: 3,
 			selected_plague_phase_y: 3
 		};
@@ -386,13 +384,6 @@ class PlayerRoleHealthCard extends React.Component {
 }
 
 class PlagueMatrixSection extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			plague_matrix: null
-		};
-	}
-
 	componentDidMount() {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) clearInterval(timer_id);

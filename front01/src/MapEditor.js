@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { send_command } from './modules/network/connections.js';
+import { send_command, take_control } from './modules/network/connections.js';
 
 import { MapEditorRadarWidget } from './modules/widgets/MapEditorRadar.js';
 import {
@@ -20,24 +20,20 @@ export class MapEditor extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selected_body_idx: 'asdas',
-			highlighted_body_idx: '',
+			selected_body_idx: null,
+			highlighted_body_idx: null,
 			brush_state: { active: false }
 		};
 	}
 
 	componentDidMount() {
-		this.take_control(null);
+		take_control(null);
 		send_command('hBodiesPool', 'admin', 'set_realtime_update', { value: true });
 	}
 
 	componentWillUnmount() {
 		send_command('hBodiesPool', 'admin', 'set_realtime_update', { value: false });
 	}
-
-	take_control = (key) => {
-		send_command('connection', key, 'take_control_on_entity', { target_id: key });
-	};
 
 	restart_simulation = () => {
 		send_command('server', null, 'restart', null, true);

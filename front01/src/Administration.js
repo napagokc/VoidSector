@@ -10,14 +10,6 @@ import { QuestPointsController } from './modules/widgets/QuestPointsController.j
 import './styles/Administration.css';
 
 export class Administration extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			selected: null,
-			sf_timer_value: 0
-		};
-	}
-
 	componentDidMount() {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) clearInterval(timer_id);

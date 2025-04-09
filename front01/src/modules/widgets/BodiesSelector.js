@@ -150,7 +150,7 @@ export class HBodiesSelector extends React.Component {
 	render() {
 		return (
 			<div className="BodiesSelector flex flex_column">
-				<b>"BodiesSelector"</b>
+				<b>BodiesSelector</b>
 				<input
 					type="number"
 					onChange={(e) => {

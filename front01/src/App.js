@@ -230,11 +230,6 @@ class Navigation extends React.Component {
 }
 
 class ModuleRenderer extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {};
-	}
-
 	render() {
 		switch (this.props.module) {
 			case 'map_editor':

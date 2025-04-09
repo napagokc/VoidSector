@@ -4,13 +4,6 @@ import { send_command, get_observer_id, get_http_address } from '../network/conn
 import { timerscounter } from '../utils/updatetimers';
 
 export class QuestPointsController extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: {}
-		};
-	}
-
 	componentDidMount() {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) clearInterval(timer_id);
@@ -31,13 +24,7 @@ export class QuestPointsController extends React.Component {
 				return response.json();
 			})
 			.then((data) => {
-				switch (message_code) {
-					case 200:
-						this.setState({ data: data });
-						break;
-					default:
-						break;
-				}
+				if (message_code == 200) this.setState(data);
 			})
 			.catch((e) => {});
 	};
@@ -48,10 +35,10 @@ export class QuestPointsController extends React.Component {
 
 	get_quest_point_list = () => {
 		let result = [];
-		for (let qp_name in this.state.data) {
+		for (let qp_name in this.state) {
 			result.push(
 				<div key={qp_name}>
-					{qp_name}: {this.state.data[qp_name].toString()}{' '}
+					{qp_name}: {this.state[qp_name].toString()}{' '}
 					<button
 						onClick={(e) => {
 							this.toogle_qp_state(qp_name);

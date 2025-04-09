@@ -11,7 +11,11 @@ export class ShaftsControlWidget extends React.Component {
 		super(props);
 
 		this.state = {
-			data: null,
+			status: null,
+			mark_id: null,
+			shafts: null,
+			auto_toggle: false,
+			auto_reload: false,
 			vel_scalar: 0,
 			vel_angle: 0
 		};
@@ -31,22 +35,20 @@ export class ShaftsControlWidget extends React.Component {
 	}
 
 	proceed_data_message = () => {
-		let system_state = get_system_state('launcher_sm');
-
-		this.setState({ data: system_state });
+		this.setState(get_system_state('launcher_sm'));
 	};
 
 	get_shafts_section = () => {
-		if (!this.state.data) return <div></div>;
+		if (!this.state.shafts) return <div></div>;
 
 		let shafts_controllers = [];
-		for (let k in this.state.data.shafts) {
+		for (let k in this.state.shafts) {
 			shafts_controllers.push(
 				<LauncherShaftController
 					key={k}
-					shaft_state={this.state.data.shafts[k]}
+					shaft_state={this.state.shafts[k]}
 					shaft_id={k}
-					mark_id={this.state.data.mark_id}
+					mark_id={this.state.mark_id}
 				/>
 			);
 		}
@@ -55,18 +57,18 @@ export class ShaftsControlWidget extends React.Component {
 	};
 
 	onLaunch = () => {
-		send_command('ship.launcher_sm', this.state.data.mark_id, 'launch', {});
+		send_command('ship.launcher_sm', this.state.mark_id, 'launch', {});
 	};
 
 	onAim = () => {
-		send_command('ship.launcher_sm', this.state.data.mark_id, 'aim', {
+		send_command('ship.launcher_sm', this.state.mark_id, 'aim', {
 			vel_angle: this.state.vel_angle,
 			vel_scalar: this.state.vel_scalar
 		});
 	};
 
 	is_disabled = () => {
-		if (this.state.data && this.state.data.status === 'OK' && this.state.data.mark_id) return false;
+		if (this.state.status && this.state.status === 'OK' && this.state.mark_id) return false;
 		return true;
 	};
 
@@ -77,8 +79,8 @@ export class ShaftsControlWidget extends React.Component {
 
 		if (!this.is_disabled()) {
 			shafts_controllers = this.get_shafts_section();
-			auto_toogle = this.state.data.auto_toggle;
-			auto_reload = this.state.data.auto_reload;
+			auto_toogle = this.state.auto_toggle;
+			auto_reload = this.state.auto_reload;
 		}
 
 		return (
@@ -89,7 +91,7 @@ export class ShaftsControlWidget extends React.Component {
 						type="checkbox"
 						checked={auto_toogle}
 						onChange={(e) => {
-							send_command('ship.launcher_sm', this.state.data.mark_id, 'auto_toggle', {
+							send_command('ship.launcher_sm', this.state.mark_id, 'auto_toggle', {
 								active: e.target.checked
 							});
 						}}
@@ -99,7 +101,7 @@ export class ShaftsControlWidget extends React.Component {
 						type="checkbox"
 						checked={auto_reload}
 						onChange={(e) => {
-							send_command('ship.launcher_sm', this.state.data.mark_id, 'auto_reload', {
+							send_command('ship.launcher_sm', this.state.mark_id, 'auto_reload', {
 								active: e.target.checked
 							});
 						}}

@@ -7,7 +7,6 @@ export class ShipsStateWidget extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: {},
 			hided: false,
 			ships_state: {}
 		};

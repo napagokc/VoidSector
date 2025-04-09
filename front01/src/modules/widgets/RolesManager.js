@@ -5,15 +5,6 @@ import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
 
 export class RoleManagerWidget extends React.Component {
-	constructor() {
-		super();
-		this.state = {
-			data: {
-				captain: {}
-			}
-		};
-	}
-
 	componentDidMount() {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) clearInterval(timer_id);
@@ -32,7 +23,7 @@ export class RoleManagerWidget extends React.Component {
 				if (response.status === 200) return response.json();
 			})
 			.then((data) => {
-				if (data) this.setState({ data: data });
+				if (data) this.setState(data);
 			})
 			.catch((error) => {
 				console.error('There is some error', error);
@@ -49,20 +40,15 @@ export class RoleManagerWidget extends React.Component {
 			}
 		})
 			.then((response) => {
-				let code = response.status;
-				if (code === 200) {
-					return response.json();
-				}
+				if (response.status === 200) return response.json();
 			})
 			.then((data) => {
-				if (data) {
-					this.setState({ data: data });
-				}
+				if (data) this.setState(data);
 			});
 	};
 
 	is_module_accesable = (username, modulename) => {
-		if (this.state?.data?.[username]?.[modulename]) return this.state.data[username][modulename];
+		if (this.state?.[username]?.[modulename]) return this.state[username][modulename];
 		return false;
 	};
 

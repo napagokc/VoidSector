@@ -9,8 +9,17 @@ export class ResourcesControlWidget extends React.Component {
 		super(props);
 
 		this.state = {
-			data: {},
-			hided: true
+			mark_id: null,
+			stockpile_raw: {},
+			stockpile_raw_capacity: null,
+			stockpile_items: {},
+			stockpile_items_occupied: null,
+			stockpile_items_capacity: null,
+			items_cost: {},
+			items_volume: {},
+			production_queue: {},
+			production_task: null,
+			production_progress: null
 		};
 	}
 
@@ -28,20 +37,19 @@ export class ResourcesControlWidget extends React.Component {
 	}
 
 	proceed_data_message = () => {
-		let perf_data = get_system_state('resources_sm');
-		this.setState({ data: perf_data });
+		this.setState(get_system_state('resources_sm'));
 	};
 
 	cancel_item = (e) => {
-		send_command('ship.resources_sm', this.state.data.mark_id, 'cancel_item_production', {});
+		send_command('ship.resources_sm', this.state.mark_id, 'cancel_item_production', {});
 	};
 
 	clear_production = (e) => {
-		send_command('ship.resources_sm', this.state.data.mark_id, 'clear_production', {});
+		send_command('ship.resources_sm', this.state.mark_id, 'clear_production', {});
 	};
 
 	remove_item_from_queue = (item_name, item_idx) => {
-		send_command('ship.resources_sm', this.state.data.mark_id, 'remove_item_from_production_queue', {
+		send_command('ship.resources_sm', this.state.mark_id, 'remove_item_from_production_queue', {
 			item_name: item_name,
 			item_idx: item_idx
 		});
@@ -49,18 +57,17 @@ export class ResourcesControlWidget extends React.Component {
 
 	get_resource_header = () => {
 		let result = [];
-		for (let res_name in this.state.data.stockpile_raw) {
+		for (let res_name in this.state.stockpile_raw) {
 			result.push(
 				<label key={res_name}>
-					{get_locales(res_name)}($): {this.state.data.stockpile_raw[res_name].toFixed(2)}/
-					{this.state.data.stockpile_raw_capacity}
+					{get_locales(res_name)}($): {this.state.stockpile_raw[res_name].toFixed(2)}/
+					{this.state.stockpile_raw_capacity}
 				</label>
 			);
 		}
 		result.push(
 			<label key="volume">
-				{get_locales('volume')}(◪): {this.state.data.stockpile_items_occupied}/
-				{this.state.data.stockpile_items_capacity}
+				{get_locales('volume')}(◪): {this.state.stockpile_items_occupied}/{this.state.stockpile_items_capacity}
 			</label>
 		);
 
@@ -68,29 +75,27 @@ export class ResourcesControlWidget extends React.Component {
 	};
 
 	produce = (item_name) => {
-		send_command('ship.resources_sm', this.state.data.mark_id, 'produce_item', { item_name: item_name });
+		send_command('ship.resources_sm', this.state.mark_id, 'produce_item', { item_name: item_name });
 	};
 
 	get_items = () => {
 		let render_array = [];
-		if (this.state.data) {
-			for (let k in this.state.data.stockpile_items) {
-				let cost = this.state.data.items_cost[k];
-				let volume = this.state.data.items_volume[k];
+		for (let k in this.state.stockpile_items) {
+			let cost = this.state.items_cost[k];
+			let volume = this.state.items_volume[k];
 
-				render_array.push(
-					<label key={k}>
-						<button
-							onClick={() => {
-								this.produce(k);
-							}}
-						>
-							{k} [{this.state.data.stockpile_items[k]}]
-						</button>
-						: ${cost} ◪{volume}
-					</label>
-				);
-			}
+			render_array.push(
+				<label key={k}>
+					<button
+						onClick={() => {
+							this.produce(k);
+						}}
+					>
+						{k} [{this.state.stockpile_items[k]}]
+					</button>
+					: ${cost} ◪{volume}
+				</label>
+			);
 		}
 
 		return <div className="StockpileItems">{render_array}</div>;
@@ -98,23 +103,21 @@ export class ResourcesControlWidget extends React.Component {
 
 	get_production_queue = () => {
 		let render_array = [];
-		if (this.state.data) {
-			for (let i in this.state.data.production_queue) {
-				let item = this.state.data.production_queue[i];
-				let item_name = item[0];
-				let item_count = item[1];
+		for (let i in this.state.production_queue) {
+			let item = this.state.production_queue[i];
+			let item_name = item[0];
+			let item_count = item[1];
 
-				render_array.push(
-					<button
-						key={item_name}
-						onClick={() => {
-							this.remove_item_from_queue(item_name, i);
-						}}
-					>
-						{item_name} [{item_count}]
-					</button>
-				);
-			}
+			render_array.push(
+				<button
+					key={item_name}
+					onClick={() => {
+						this.remove_item_from_queue(item_name, i);
+					}}
+				>
+					{item_name} [{item_count}]
+				</button>
+			);
 		}
 
 		return (
@@ -128,49 +131,30 @@ export class ResourcesControlWidget extends React.Component {
 	get_production_progress = () => {
 		return (
 			<div className="labeled_progress_bar">
-				<label>{this.state.data.production_task}</label>
-				<progress value={this.state.data.production_progress} max="1"></progress>
+				<label>{this.state.production_task}</label>
+				<progress value={this.state.production_progress} max="1"></progress>
 				<button onClick={this.cancel_item}> {get_locales('cancel_item')} </button>
 			</div>
 		);
 	};
 
 	render() {
-		if (!this.state.data) {
-			return (
-				<div className="SystemControlWidget">
-					{' '}
-					<label>
-						<b>{get_locales('Production_sm')}</b>
-					</label>
-				</div>
-			);
-		}
-
-		let render_array = [];
-		if (this.state.data) {
-			for (let k in this.state.data.stockpile_raw) {
-				render_array.push(
-					<label key={k}>
-						{k}: {this.state.data.stockpile_raw[k]}
-					</label>
-				);
-			}
-		}
-
 		return (
 			<div className="SystemControlWidget ProductionSM">
 				<label>
 					<b>{get_locales('Production_sm')}</b>
 				</label>
+				{this.state.mark_id && (
+					<React.Fragment>
+						{this.get_resource_header()}
+						<div className="items_section">
+							{this.get_items()}
+							{this.get_production_queue()}
+						</div>
 
-				{this.get_resource_header()}
-				<div className="items_section">
-					{this.get_items()}
-					{this.get_production_queue()}
-				</div>
-
-				{this.get_production_progress()}
+						{this.get_production_progress()}
+					</React.Fragment>
+				)}
 			</div>
 		);
 	}

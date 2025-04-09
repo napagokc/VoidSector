@@ -35,7 +35,6 @@ export class PilotStation extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			selected: null,
 			is_taking_damage: false,
 			mental_stamina_level: 8
 		};

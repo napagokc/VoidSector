@@ -8,7 +8,8 @@ export class CapMarksControlWidget extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			data: {}
+			data: {},
+			mark_id: null
 		};
 	}
 

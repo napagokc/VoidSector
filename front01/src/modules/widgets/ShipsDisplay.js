@@ -6,59 +6,7 @@ import { timerscounter } from '../utils/updatetimers';
 
 import { set_global_observer_pos } from './AdminRadar';
 
-export class ShipsDisplay extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: {}
-		};
-	}
-
-	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.proceed_data_message, 30);
-		timerscounter.add(this.constructor.name, timer_id);
-	}
-
-	componentWillUnmount() {
-		clearInterval(timerscounter.get(this.constructor.name));
-	}
-
-	proceed_data_message = () => {
-		this.setState({ data: get_ships_state() });
-	};
-
-	get_shipCards_block = () => {
-		let result = [];
-		for (let mark_id in this.state.data) {
-			result.push(
-				<ShipCard
-					key={mark_id}
-					selectModule={this.props.selectModule}
-					mark_id={mark_id}
-					data={this.state.data[mark_id]}
-				></ShipCard>
-			);
-		}
-		return result;
-	};
-
-	render() {
-		let ships_card = this.get_shipCards_block();
-		return <div className="ShipsDisplay">{ships_card}</div>;
-	}
-}
-
 class ShipCard extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			command: ''
-		};
-	}
-
 	get_RnD_block = () => {
 		let result = [];
 		for (let system_name in this.props.data.RnD) {
@@ -110,14 +58,7 @@ class ShipCard extends React.Component {
 	}
 }
 
-export class StationsDisplay extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			data: {}
-		};
-	}
-
+export class ShipsDisplay extends React.Component {
 	componentDidMount() {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) clearInterval(timer_id);
@@ -131,15 +72,21 @@ export class StationsDisplay extends React.Component {
 	}
 
 	proceed_data_message = () => {
-		this.setState({ data: get_stations_state() });
+		this.setState(get_ships_state());
 	};
 
 	get_shipCards_block = () => {
 		let result = [];
-		for (let mark_id in this.state.data) {
-			result.push(<StationCard key={mark_id} mark_id={mark_id} data={this.state.data[mark_id]}></StationCard>);
+		for (let mark_id in this.state) {
+			result.push(
+				<ShipCard
+					key={mark_id}
+					selectModule={this.props.selectModule}
+					mark_id={mark_id}
+					data={this.state[mark_id]}
+				></ShipCard>
+			);
 		}
-
 		return result;
 	};
 
@@ -150,13 +97,6 @@ export class StationsDisplay extends React.Component {
 }
 
 class StationCard extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			command: ''
-		};
-	}
-
 	get_RnD_block = () => {
 		let result = [];
 		for (let system_name in this.props.data.RnD) {
@@ -227,5 +167,37 @@ class StationCard extends React.Component {
 				</button>
 			</div>
 		);
+	}
+}
+
+export class StationsDisplay extends React.Component {
+	componentDidMount() {
+		let timer_id = timerscounter.get(this.constructor.name);
+		if (!timer_id) clearInterval(timer_id);
+
+		timer_id = setInterval(this.proceed_data_message, 30);
+		timerscounter.add(this.constructor.name, timer_id);
+	}
+
+	componentWillUnmount() {
+		clearInterval(timerscounter.get(this.constructor.name));
+	}
+
+	proceed_data_message = () => {
+		this.setState(get_stations_state());
+	};
+
+	get_shipCards_block = () => {
+		let result = [];
+		for (let mark_id in this.state) {
+			result.push(<StationCard key={mark_id} mark_id={mark_id} data={this.state[mark_id]}></StationCard>);
+		}
+
+		return result;
+	};
+
+	render() {
+		let ships_card = this.get_shipCards_block();
+		return <div className="ShipsDisplay">{ships_card}</div>;
 	}
 }
