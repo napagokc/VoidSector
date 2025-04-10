@@ -1,5 +1,18 @@
-.NumericStepControlWidjet {
-	display: flex;
-	flex-direction: row;
-	align-items: center;
+.NumericControlWidjet {
+	padding: 0 5px;
+	margin-bottom: 10px;
+}
+
+.NumericControlWidjet .flex {
+	gap: 0 5px;
+	margin-bottom: 5px;
+}
+
+.NumericControlWidjet button {
+	width: auto;
+}
+
+.NumericControlWidjet input {
+	width: 100%;
+	margin: 0;
 }

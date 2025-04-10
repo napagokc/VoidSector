@@ -8,19 +8,36 @@ export class NumericControlWidjet extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			init_value: this.props.init_value,
 			value: this.props.init_value
 		};
 	}
 
+	_onChange = (value) => {
+		if (value > this.props.max) value = this.props.min;
+		if (value < this.props.min) value = this.props.max;
+		if (value !== this.state.value) {
+			this.setState({ value: value });
+			this.props.onChange(value);
+		}
+	};
+
 	onChange = (e) => {
-		let value = e.target.value;
-		this.setState({ value: value }, () => this.props.onChange(value));
+		this._onChange(e.target.value);
+	};
+
+	reset = () => {
+		this._onChange(this.state.init_value);
 	};
 
 	render() {
 		return (
-			<label>
-				{get_locales(this.props.label)}:
+			<label className="NumericControlWidjet">
+				<div className="flex flex_space_between">
+					{get_locales(this.props.label)}:
+					<input type="number" step={this.props.step} value={this.state.value} onChange={this.onChange} />
+					<button onClick={this.reset}>{get_locales('reset')}</button>
+				</div>
 				<input
 					disabled={this.props.disabled}
 					type="range"
@@ -32,7 +49,6 @@ export class NumericControlWidjet extends React.Component {
 					onChange={this.onChange}
 					//value={this.state.progradeAcc}
 				/>
-				{parseFloat(this.state.value).toFixed(2)}
 			</label>
 		);
 	}

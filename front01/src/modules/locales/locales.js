@@ -151,7 +151,7 @@ const locales = {
     "CURSOR_POS": "Координаты курсора",
     "SCALE": "Масштаб",
     "common_radar":"Общий радар",
-
+    "reset":"сброс",
 
     //CapPointsController
     "CapPointsController": "Навигационные метки",

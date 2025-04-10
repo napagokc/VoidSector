@@ -15,11 +15,6 @@ div:has(> div > canvas) {
 	background: black;
 }
 
-.NumericControlWidjet {
-	display: flex;
-	flex-direction: row;
-}
-
 .AccelerationController {
 	display: flex;
 	flex-direction: column;
