@@ -15,7 +15,6 @@
 	flex-direction: column;
 	border: solid 1px;
 	width: 100%;
-	height: 165px;
 	align-items: flex-start;
 }
 
@@ -35,7 +34,20 @@
 }
 
 .projectile_param_widget {
-	width: 150px;
+	width: 100%;
+	margin-top: 10px;
+}
+
+.projectile_param_widget .NumericControlWidjet {
+	padding: 0;
+}
+
+.projectile_param_widget .NumericControlWidjet .flex {
+	flex-wrap: wrap;
+}
+
+.projectile_param_widget .NumericControlWidjet .flex input {
+	max-width: min(50%, 100px);
 }
 
 .LauncherShaftController select {

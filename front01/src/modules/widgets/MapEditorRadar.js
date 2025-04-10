@@ -8,6 +8,8 @@ import { timerscounter } from '../utils/updatetimers';
 
 import { get_navdata, send_command } from '../network/connections';
 
+import { NumericControlWidjet } from '../widgets/NumericControlWidget';
+
 import { entityRendererCursor } from '../renderers/CursorRenderer';
 import { get_brush_object } from '../renderers/CursorRenderer';
 import { entityRenderer } from '../renderers/EntityRenderer';
@@ -213,23 +215,14 @@ export class MapEditorRadarWidget extends React.Component {
 				</Canvas>
 
 				<div className="flex flex_space_between">
-					<label>
-						SCALE:{' '}
-						<input
-							type="range"
-							min={0.05}
-							max={2}
-							step={0.02}
-							className="slider"
-							id="valueForward"
-							value={this.state.scale_factor}
-							//value={this.state.progradeAcc}
-							onChange={(e) => {
-								this.setState({ scale_factor: e.target.value });
-							}}
-						/>
-					</label>
-					{parseFloat(this.state.scale_factor).toFixed(2)}
+					<NumericControlWidjet
+						label="SCALE"
+						init_value={this.state.scale_factor}
+						min={0.1}
+						max={2}
+						step={0.02}
+						onChange={(value) => this.setState({ scale_factor: value })}
+					/>
 					{this.get_buttons_block()}
 					<button
 						onClick={() => {

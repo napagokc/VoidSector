@@ -6,6 +6,8 @@ import { timerscounter } from '../utils/updatetimers';
 
 import { send_command, get_system_state } from '../network/connections';
 
+import { NumericControlWidjet } from '../widgets/NumericControlWidget';
+
 import '../../styles/ShaftsControlWidget.css';
 
 export class ShaftsControlWidget extends React.Component {
@@ -145,21 +147,16 @@ export class LauncherShaftController extends React.Component {
 		}
 
 		return (
-			<span key={key} className="projectile_param_widget">
-				{key}
-				<input
-					type="range"
+			<div key={key} className="projectile_param_widget">
+				<NumericControlWidjet
+					label={key}
+					init_value={this.state.launch_params[key]}
 					min={min_value}
 					max={max_value}
 					step={step_value}
-					className="slider"
-					onChange={(e) => {
-						this.set_launch_params(key, e.target.value);
-					}}
-					value={this.state.launch_params[key]}
+					onChange={(value) => this.set_launch_params(key, value)}
 				/>
-				<output>{this.state.launch_params[key]}</output>
-			</span>
+			</div>
 		);
 	};
 

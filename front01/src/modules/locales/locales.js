@@ -45,6 +45,7 @@ const locales = {
     "ttl_time": "Активное время",
     "details": "К-во деталей",
     "velocity_penalty": "Управляемость",
+    "activation_delay": "Задержка активации",
 
     //Production sm
     "Production_sm": "Автофабрика",

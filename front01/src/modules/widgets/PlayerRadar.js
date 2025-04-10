@@ -15,6 +15,8 @@ import {
 	get_map_border
 } from '../network/connections';
 
+import { NumericControlWidjet } from '../widgets/NumericControlWidget';
+
 import { entityRenderer } from '../renderers/EntityRenderer';
 import { radarRenderer } from '../renderers/RadarRenderer';
 import { entityRendererCursor } from '../renderers/CursorRenderer';
@@ -175,23 +177,14 @@ export class PlayersRadarWidget extends React.Component {
 					<div className="RadarShipInfoLayer">
 						<ShipOvervieweWidget onSystemSelection={(e) => {}}></ShipOvervieweWidget>
 						<div className="ShipNavigationInfo">
-							<label>
-								{get_locales('SCALE')}:{' '}
-								<input
-									type="range"
-									min={0.1}
-									max={2}
-									step={0.02}
-									className="slider"
-									id="valueForward"
-									value={this.state.scale_factor}
-									onChange={(e) => {
-										this.setState({ scale_factor: e.target.value });
-									}}
-									//value={this.state.progradeAcc}
-								/>{' '}
-								{parseFloat(this.state.scale_factor).toFixed(2)}
-							</label>
+							<NumericControlWidjet
+								label="SCALE"
+								init_value={this.state.scale_factor}
+								min={0.1}
+								max={2}
+								step={0.02}
+								onChange={(value) => this.setState({ scale_factor: value })}
+							/>
 							<label>
 								{get_locales('POS')}: {observer_pos[0].toFixed(0)},{observer_pos[1].toFixed(0)}
 							</label>
