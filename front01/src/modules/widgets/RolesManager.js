@@ -6,11 +6,8 @@ import { get_locales } from '../locales/locales';
 
 export class RoleManagerWidget extends React.Component {
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.onUpdate, 1000);
-		timerscounter.add(this.constructor.name, timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
+		timerscounter.add(this.constructor.name, setInterval(this.onUpdate, 1000));
 
 		this.onUpdate();
 	}

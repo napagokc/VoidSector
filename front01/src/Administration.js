@@ -10,20 +10,6 @@ import { QuestPointsController } from './modules/widgets/QuestPointsController.j
 import './styles/Administration.css';
 
 export class Administration extends React.Component {
-	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(() => {
-			this.forceUpdate();
-		}, 30);
-		timerscounter.add(this.constructor.name, timer_id);
-	}
-
-	componentWillUnmount() {
-		clearInterval(timerscounter.get(this.constructor.name));
-	}
-
 	restart_simulation = () => {
 		send_command('server', null, 'restart', null, true);
 	};

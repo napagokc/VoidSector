@@ -51,13 +51,11 @@ class LoginController {
 	}
 
 	_startTimer = () => {
-		let timer_id = setInterval(this._update_available_modules, 1000);
-		timerscounter.add(this.constructor.name, timer_id);
+		timerscounter.add(this.constructor.name, setInterval(this._update_available_modules, 1000));
 	};
 
 	_stopTimer = () => {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (timer_id) clearInterval(timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
 	};
 
 	_set_modules(modules) {

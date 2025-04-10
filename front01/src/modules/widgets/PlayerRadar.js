@@ -36,11 +36,8 @@ export class PlayersRadarWidget extends React.Component {
 	}
 
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.proceed_data_message, 30);
-		timerscounter.add(this.constructor.name, timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
+		timerscounter.add(this.constructor.name, setInterval(this.proceed_data_message, 30));
 	}
 
 	componentWillUnmount() {

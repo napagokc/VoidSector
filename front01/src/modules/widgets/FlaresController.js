@@ -13,11 +13,8 @@ export class FlaresController extends React.Component {
 	}
 
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.proceed_message, 1000);
-		timerscounter.add(this.constructor.name, timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
+		timerscounter.add(this.constructor.name, setInterval(this.proceed_message, 1000));
 
 		ensureWebsocketIsOpen(() => setTimeout(this.proceed_message, 30));
 	}

@@ -17,18 +17,6 @@ import { CrewControlWidget } from '../systems/crew_sm.js';
 import { RadarControlWidget } from '../systems/radar_sm';
 
 export class EngineerControllerWidget extends React.Component {
-	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.proceed_data_message, 30);
-		timerscounter.add(this.constructor.name, timer_id);
-	}
-
-	componentWillUnmount() {
-		clearInterval(timerscounter.get(this.constructor.name));
-	}
-
 	render() {
 		return (
 			<div className="EngineerControllerWidget">
@@ -69,11 +57,8 @@ export class ShipOvervieweWidgetLayer extends React.Component {
 
 export class ShipOvervieweWidget extends React.Component {
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.proceed_data_message, 30);
-		timerscounter.add(this.constructor.name, timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
+		timerscounter.add(this.constructor.name, setInterval(this.proceed_data_message, 30));
 	}
 
 	componentWillUnmount() {
@@ -242,17 +227,12 @@ export class SystemOvervieweWidget extends React.Component {
 	}
 
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) {
-			clearInterval(timer_id);
-		}
-		timer_id = setInterval(this.proceed_data_message, 30);
-		timerscounter.add(this.constructor.name, timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
+		timerscounter.add(this.constructor.name, setInterval(this.proceed_data_message, 30));
 	}
 
 	componentWillUnmount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		clearInterval(timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
 	}
 
 	proceed_data_message = () => {

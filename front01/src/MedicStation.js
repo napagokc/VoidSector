@@ -25,17 +25,11 @@ export class MedicStation extends React.Component {
 	}
 
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
+		timerscounter.add(this.constructor.name, setInterval(this.proceed_data_message, 30));
 
-		timer_id = setInterval(this.proceed_data_message, 30);
-		timerscounter.add(this.constructor.name, timer_id);
-
-		let timer_id2 = timerscounter.get(this.constructor.name + '_plague');
-		if (!timer_id2) clearInterval(timer_id2);
-
-		timer_id2 = setInterval(this.update_plague_matrix, 1000);
-		timerscounter.add(this.constructor.name + '_plague', timer_id2);
+		clearInterval(timerscounter.get(this.constructor.name + '_plague'));
+		timerscounter.add(this.constructor.name + '_plague', setInterval(this.update_plague_matrix, 1000));
 
 		this.update_plague_matrix();
 
@@ -393,13 +387,12 @@ class PlayerRoleHealthCard extends React.Component {
 
 class PlagueMatrixSection extends React.Component {
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
+		timerscounter.add(this.constructor.name, setInterval(this.update_plague_matrix, 1000));
+	}
 
-		timer_id = setInterval(this.update_plague_matrix, 1000);
-		timerscounter.add(this.constructor.name, timer_id);
-
-		if (!get_observer_id()) take_control('Sirocco');
+	componentWillUnmount() {
+		clearInterval(timerscounter.get(this.constructor.name));
 	}
 
 	is_any_infected = () => {
@@ -412,10 +405,6 @@ class PlagueMatrixSection extends React.Component {
 
 		return false;
 	};
-
-	componentWillUnmount() {
-		clearInterval(timerscounter.get(this.constructor.name));
-	}
 
 	get_marked_cells = () => {
 		let result = [];

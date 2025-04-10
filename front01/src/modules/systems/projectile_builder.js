@@ -89,16 +89,12 @@ export class ProjectileBuilderWidget extends React.Component {
 	};
 
 	componentDidMount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		if (!timer_id) clearInterval(timer_id);
-
-		timer_id = setInterval(this.update_blueprints, 1000);
-		timerscounter.add(this.constructor.name, timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
+		timerscounter.add(this.constructor.name, setInterval(this.update_blueprints, 1000));
 	}
 
 	componentWillUnmount() {
-		let timer_id = timerscounter.get(this.constructor.name);
-		clearInterval(timer_id);
+		clearInterval(timerscounter.get(this.constructor.name));
 	}
 
 	onComponentChange = (comp_name, step) => {
