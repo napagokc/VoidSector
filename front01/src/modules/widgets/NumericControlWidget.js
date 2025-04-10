@@ -15,7 +15,8 @@ export class NumericControlWidjet extends React.Component {
 	}
 
 	onChange = (e) => {
-		this.setState({ value: e.target.value }, this.props.onChange(parseFloat(this.state.value)));
+		let value = e.target.value;
+		this.setState({ value: value }, () => this.props.onChange(value));
 	};
 
 	render() {

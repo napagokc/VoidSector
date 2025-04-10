@@ -12,11 +12,11 @@ import '../../styles/RadarControlWidget.css';
 
 export class RadarControlWidget extends React.Component {
 	on_set_radar_arc = (value) => {
-		send_command('ship.radar_sm', get_observer_id(), 'set_radar_arc', { radar_arc: value });
+		send_command('ship.radar_sm', get_observer_id(), 'set_radar_arc', { radar_arc: parseInt(value) });
 	};
 
 	on_set_radar_dir = (value) => {
-		send_command('ship.radar_sm', get_observer_id(), 'set_radar_dir', { radar_dir: -value + 90 });
+		send_command('ship.radar_sm', get_observer_id(), 'set_radar_dir', { radar_dir: 90 - parseInt(value) });
 	};
 
 	render() {
