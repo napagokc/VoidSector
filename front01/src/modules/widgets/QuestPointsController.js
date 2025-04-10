@@ -17,14 +17,12 @@ export class QuestPointsController extends React.Component {
 	}
 
 	proceed_data_message = () => {
-		let message_code = 0;
 		return fetch(get_http_address() + '/quest_controller/get_state', { method: 'GET' })
 			.then((response) => {
-				message_code = response.status;
-				return response.json();
+				if (response.status === 200) return response.json();
 			})
 			.then((data) => {
-				if (message_code == 200) this.setState(data);
+				if (data) this.setState(data);
 			})
 			.catch((e) => {});
 	};
