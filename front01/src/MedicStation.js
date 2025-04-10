@@ -3,7 +3,13 @@ import React from 'react';
 import { take_control } from './modules/network/connections';
 import { get_locales } from './modules/locales/locales';
 
-import { send_command, get_system_state, get_observer_id, get_http_address } from './modules/network/connections';
+import {
+	ensureWebsocketIsOpen,
+	send_command,
+	get_system_state,
+	get_observer_id,
+	get_http_address
+} from './modules/network/connections';
 import { timerscounter } from './modules/utils/updatetimers';
 
 import './styles/MedicStation.css';
@@ -31,7 +37,9 @@ export class MedicStation extends React.Component {
 		timer_id2 = setInterval(this.update_plague_matrix, 1000);
 		timerscounter.add(this.constructor.name + '_plague', timer_id2);
 
-		if (!get_observer_id()) take_control('Sirocco');
+		this.update_plague_matrix();
+
+		if (!get_observer_id()) ensureWebsocketIsOpen(() => take_control('Sirocco'));
 	}
 
 	componentWillUnmount() {

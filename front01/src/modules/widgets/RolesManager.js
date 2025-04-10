@@ -11,6 +11,8 @@ export class RoleManagerWidget extends React.Component {
 
 		timer_id = setInterval(this.onUpdate, 1000);
 		timerscounter.add(this.constructor.name, timer_id);
+
+		this.onUpdate();
 	}
 
 	componentWillUnmount() {

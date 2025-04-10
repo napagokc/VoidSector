@@ -1,38 +1,26 @@
 import { ip } from '../configs/configs';
 
+const EVENT_WEBSOCKET_IS_OPEN = 'websocket_is_open';
+
 let path2server_ws = 'ws://' + ip + ':5000';
 let path2server_http = 'http://' + ip + ':1924';
 
 let websocket = new WebSocket(path2server_ws);
-let input_message_string = '';
 let input_message_last_json = {};
 // let input_message_last_timestamp = '';
 
-export const EVENT_WEBSOCKET_IS_OPEN = 'websocket_is_open';
-websocket.onopen = () => document.dispatchEvent(new Event(EVENT_WEBSOCKET_IS_OPEN));
-
-export function addEventListener(f) {
-	if (websocket) websocket.addEventListener('message', f);
-}
-export function removeEventListener(f) {
-	if (websocket) websocket.removeEventListener('message', f);
-}
-
-function parse_message_to_json() {
+function receive_message({ data }) {
+	// input_message_last_timestamp = new Date();
 	try {
 		input_message_last_json = {};
-		let tmp_json = JSON.parse(input_message_string);
+		let tmp_json = JSON.parse(data);
 		if (tmp_json) input_message_last_json = tmp_json;
 	} catch (error) {
 		input_message_last_json = {};
 	}
 }
 
-function receive_message({ data }) {
-	input_message_string = data;
-	// input_message_last_timestamp = new Date();
-	parse_message_to_json();
-}
+websocket.onopen = () => document.dispatchEvent(new Event(EVENT_WEBSOCKET_IS_OPEN));
 websocket.addEventListener('message', receive_message);
 
 /*function check_connection_and_update() {
@@ -47,6 +35,25 @@ websocket.addEventListener('message', receive_message);
 	}
 }*/
 //setInterval(check_connection_and_update, 1000)
+
+export function addEventListener(f) {
+	if (websocket) websocket.addEventListener('message', f);
+}
+
+export function removeEventListener(f) {
+	if (websocket) websocket.removeEventListener('message', f);
+}
+
+export function ensureWebsocketIsOpen(f) {
+	if (websocket.readyState !== 1) {
+		let websocket_handler = () => {
+			f();
+			document.addEventListener(EVENT_WEBSOCKET_IS_OPEN, websocket_handler);
+		};
+
+		document.addEventListener(EVENT_WEBSOCKET_IS_OPEN, websocket_handler);
+	} else f();
+}
 
 export function get_websocket_state() {
 	return websocket.readyState;

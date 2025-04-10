@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { get_system_state, send_command } from '../network/connections';
+import { ensureWebsocketIsOpen, get_system_state, send_command } from '../network/connections';
 import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
 
@@ -20,6 +20,8 @@ export class AllianceManager extends React.Component {
 
 		timer_id = setInterval(this.proceed_message, 1000);
 		timerscounter.add(this.constructor.name, timer_id);
+
+		ensureWebsocketIsOpen(() => setTimeout(this.proceed_message, 30));
 	}
 
 	componentWillUnmount() {

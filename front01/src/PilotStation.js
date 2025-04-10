@@ -12,12 +12,11 @@ import { ProjectileBuilderWidget } from './modules/systems/projectile_builder.js
 import {
 	addEventListener,
 	removeEventListener,
-	get_websocket_state,
+	ensureWebsocketIsOpen,
 	get_observer_id,
 	take_control,
 	get_system_state,
-	get_medicine_state,
-	EVENT_WEBSOCKET_IS_OPEN
+	get_medicine_state
 } from './modules/network/connections.js';
 import { timerscounter } from './modules/utils/updatetimers';
 import { CrewControlWidget } from './modules/systems/crew_sm.js';
@@ -38,21 +37,10 @@ export class PilotStation extends React.Component {
 			is_taking_damage: false,
 			mental_stamina_level: 8
 		};
-
-		this._handle_websocket_bind = this._handle_websocket.bind(this);
-	}
-
-	_handle_websocket() {
-		take_control('Sirocco');
-		document.addEventListener(EVENT_WEBSOCKET_IS_OPEN, this._handle_websocket_bind);
 	}
 
 	componentDidMount() {
-		if (!this.props.NPC_pilot && get_observer_id() == null) {
-			if (get_websocket_state() !== 1) {
-				document.addEventListener(EVENT_WEBSOCKET_IS_OPEN, this._handle_websocket_bind);
-			} else take_control('Sirocco');
-		}
+		if (!this.props.NPC_pilot && get_observer_id() == null) ensureWebsocketIsOpen(() => take_control('Sirocco'));
 	}
 
 	set_MP_stamina_level = (mental_stamina_level) => {

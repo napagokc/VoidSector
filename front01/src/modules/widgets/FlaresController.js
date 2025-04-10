@@ -2,7 +2,7 @@ import React from 'react';
 
 import { timerscounter } from '../utils/updatetimers';
 import { get_solarflare } from '../network/connections';
-import { send_command } from '../network/connections';
+import { ensureWebsocketIsOpen, send_command } from '../network/connections';
 
 export class FlaresController extends React.Component {
 	constructor() {
@@ -16,12 +16,14 @@ export class FlaresController extends React.Component {
 		let timer_id = timerscounter.get(this.constructor.name);
 		if (!timer_id) clearInterval(timer_id);
 
-		timer_id = setInterval(this.onUpdate, 1000);
+		timer_id = setInterval(this.proceed_message, 1000);
 		timerscounter.add(this.constructor.name, timer_id);
+
+		ensureWebsocketIsOpen(() => setTimeout(this.proceed_message, 30));
 	}
 
-	onUpdate = () => {
-		this.forceUpdate();
+	proceed_message = () => {
+		this.setState(get_solarflare());
 	};
 
 	componentWillUnmount() {
@@ -29,27 +31,26 @@ export class FlaresController extends React.Component {
 	}
 
 	get_solarFlare_control = () => {
-		let sf_state = get_solarflare();
-		if (!sf_state) return <div></div>;
+		if (!('state' in this.state)) return null;
 
 		return (
 			<div className="solarFlare_control">
 				<label>
 					<b>Solar flare state:</b>
-					{sf_state.state.toString()}
+					{this.state.state.toString()}
 				</label>
-				<label>time2nextphase:{sf_state.time2nextphase}</label>
-				<label>probability:{sf_state.probability}</label>
+				<label>time2nextphase:{this.state.time2nextphase}</label>
+				<label>probability:{this.state.probability}</label>
 				<button
 					onClick={() => {
-						this.toogleSolarFlare(!sf_state.state);
+						this.toogleSolarFlare(!this.state.state);
 					}}
 				>
 					TOOGLE ACTIVITY
 				</button>
 				<button
 					onClick={() => {
-						this.toogleSolarFlareTimer(!sf_state.timer_state);
+						this.toogleSolarFlareTimer(!this.state.timer_state);
 					}}
 				>
 					TOOGLE TIMER

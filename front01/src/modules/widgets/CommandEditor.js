@@ -154,6 +154,8 @@ export class CommandEditorWidget extends React.Component {
 
 		timer_id = setInterval(this.proceed_data_message, 30);
 		timerscounter.add(this.constructor.name, timer_id);
+
+		this.proceed_data_message();
 	}
 
 	componentWillUnmount() {
