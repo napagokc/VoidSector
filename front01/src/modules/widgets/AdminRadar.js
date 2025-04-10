@@ -189,7 +189,8 @@ export class AdminRadarWidget extends React.Component {
 						{this.get_buttons_block()}
 						<button
 							onClick={() => {
-								this.setState({ controlled_observer_pos: [0, 0] });
+								set_global_observer_pos([0, 0]);
+								this.proceed_data_message();
 							}}
 						>
 							CLEAR OFFSET
