@@ -38,7 +38,7 @@ const locales = {
     "activation_time": "Макс.время до активации",
     "cost": "Стоимость",
     "emp_radius": "Радиус ЭМП-поражения",
-    "explosion_radius/damage": "Радиус/Макс.урон взрыва",
+    "explosion_radius_or_damage": "Радиус/Макс.урон взрыва",
     "projectiles_detection_radius": "Радиус обнаружения снарядов",
     "ship_detection_radius": "Радиус обнаружения кораблей",
     "speed_up": "Скорость",

@@ -6,59 +6,47 @@ import { timerscounter } from '../utils/updatetimers';
 
 import { send_command, get_http_address, current_mark_id } from '../network/connections';
 
+const details_list = [
+	'thruster',
+	'timer',
+	'inhibitor',
+	'explosive',
+	'emp',
+	'entities_detection',
+	'projectiles_detection',
+	'buster',
+	'detonator',
+	'decoy'
+];
+
+const stats_list = [
+	'speed_up',
+	'activation_time',
+	'ttl_time',
+	'explosion_radius_or_damage',
+	'emp_radius',
+	'ship_detection_radius',
+	'projectiles_detection_radius',
+	'velocity_penalty',
+	'cost'
+];
+
 export class ProjectileBuilderWidget extends React.Component {
 	constructor(props) {
 		super(props);
 
+		let edited_blueprints = {};
+		for (let detail in details_list) edited_blueprints[details_list[detail]] = 0;
+
+		let stats = {};
+		for (let stat in stats_list) stats[stats_list[stat]] = 0;
+		stats.speed_up = 1;
+		stats.velocity_penalty = 1;
+
 		this.state = {
-			details_list: [
-				'thruster',
-				'timer',
-				'inhibitor',
-				'explosive',
-				'emp',
-				'entities_detection',
-				'projectiles_detection',
-				'buster',
-				'detonator',
-				'decoy'
-			],
-			stats_list: [
-				'speed_up',
-				'activation_time',
-				'ttl_time',
-				'explosion_radius/damage',
-				'emp_radius',
-				'ship_detection_radius',
-				'projectiles_detection_radius',
-				'velocity_penalty',
-				'cost'
-			],
 			blueprints: {},
-			edited_blueprint: {
-				thruster: 0,
-				timer: 0,
-				inhibitor: 0,
-				explosive: 0,
-				emp: 0,
-				entities_detection: 0,
-				projectiles_detection: 0,
-				buster: 0,
-				detonator: 0,
-				decoy: 0
-			},
-			stats: {
-				activation_time: 0,
-				cost: 0,
-				emp_radius: 0,
-				'explosion_radius/damage': 0,
-				projectiles_detection_radius: 0,
-				ship_detection_radius: 0,
-				speed_up: 1,
-				ttl_time: 0,
-				details: 0,
-				velocity_penalty: 1
-			},
+			edited_blueprints: edited_blueprints,
+			stats: stats,
 			selected: 'new_blueprint_name'
 		};
 	}
@@ -100,20 +88,20 @@ export class ProjectileBuilderWidget extends React.Component {
 	}
 
 	onComponentChange = (comp_name, step) => {
-		let value = this.state.edited_blueprint[comp_name] + step;
+		let value = this.state.edited_blueprints[comp_name] + step;
 		if (value < 0) return;
 
-		let tmp_bp = this.state.edited_blueprint;
+		let tmp_bp = this.state.edited_blueprints;
 		tmp_bp[comp_name] = value;
 
-		this.setState({ edited_blueprint: tmp_bp }, this.updateStats);
+		this.setState({ edited_blueprints: tmp_bp }, this.updateStats);
 	};
 
 	updateStats = () => {
 		var myInit = {
 			method: 'GET',
 			headers: {
-				blueprint: JSON.stringify(this.state.edited_blueprint)
+				blueprint: JSON.stringify(this.state.edited_blueprints)
 			},
 			'cache-control': 'no-store'
 		};
@@ -140,8 +128,8 @@ export class ProjectileBuilderWidget extends React.Component {
 
 	get_components_selector = () => {
 		let result = [];
-		for (let i in this.state.details_list) {
-			let comp_name = this.state.details_list[i];
+		for (let i in details_list) {
+			let comp_name = details_list[i];
 			result.push(
 				<div key={comp_name} className="component_controller">
 					<label>{get_locales(comp_name)}</label>
@@ -152,7 +140,7 @@ export class ProjectileBuilderWidget extends React.Component {
 					>
 						-
 					</button>
-					<label>{this.state.edited_blueprint[comp_name]}</label>
+					<label>{this.state.edited_blueprints[comp_name]}</label>
 					<button
 						onClick={(e) => {
 							this.onComponentChange(comp_name, +1);
@@ -169,8 +157,8 @@ export class ProjectileBuilderWidget extends React.Component {
 
 	get_stats_panel = () => {
 		let result = [];
-		for (let i in this.state.stats_list) {
-			let stat_name = this.state.stats_list[i];
+		for (let i in stats_list) {
+			let stat_name = stats_list[i];
 			result.push(
 				<div key={stat_name} className="component_controller">
 					<label>
@@ -185,16 +173,16 @@ export class ProjectileBuilderWidget extends React.Component {
 
 	onLoadSelected = (bp_name) => {
 		let tmp_bp = Object.assign({}, this.state.blueprints[bp_name]);
-		this.setState({ selected: bp_name, edited_blueprint: tmp_bp }, this.updateStats);
+		this.setState({ selected: bp_name, edited_blueprints: tmp_bp }, this.updateStats);
 	};
 
 	onSaveCurrent = () => {
 		send_command('ship.resources_sm', current_mark_id, 'save_projectile_blueprint', {
 			bp_name: this.state.selected,
-			bp_content: this.state.edited_blueprint
+			bp_content: this.state.edited_blueprints
 		});
 		let tmp_bps = this.state.blueprints;
-		tmp_bps[this.state.selected] = this.state.edited_blueprint;
+		tmp_bps[this.state.selected] = this.state.edited_blueprints;
 
 		this.setState({ blueprints: tmp_bps });
 	};
