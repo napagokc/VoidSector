@@ -1,17 +1,17 @@
 import React from 'react';
 
-import { send_command, take_control } from './modules/network/connections.js';
+import { send_command, take_control } from './modules/network/connections';
 
-import { MapEditorRadarWidget } from './modules/widgets/MapEditorRadar.js';
+import { MapEditorRadarWidget } from './modules/widgets/MapEditorRadar';
+import { PerformanceViewer } from './modules/widgets/PerformanceWidget';
+import { MapEditorBrushesWidget } from './modules/widgets/MapEditorBrushes';
 import {
 	HBodiesSelector,
 	BodyEditor,
 	BodySpawner,
 	MapLoader,
 	ShipScreenLoader
-} from './modules/widgets/BodiesSelector.js';
-import { PerformanceViewer } from './modules/widgets/PerformanceWidget.js';
-import { MapEditorBrushesWidget } from './modules/widgets/MapEditorBrushes.js';
+} from './modules/widgets/BodiesSelector';
 
 import './styles/Administration.css';
 import './styles/MapEditor.css';

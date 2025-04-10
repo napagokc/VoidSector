@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { send_command, get_observer_id, get_http_address } from '../network/connections';
 import { timerscounter } from '../utils/updatetimers';
+
+import { send_command, get_observer_id, get_http_address } from '../network/connections';
 
 export class QuestPointsController extends React.Component {
 	componentDidMount() {

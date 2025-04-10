@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { send_command, get_system_state } from '../network/connections';
-import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
+import { send_command, get_system_state } from '../network/connections';
 
 export class InteractionControlWidget extends React.Component {
 	constructor(props) {

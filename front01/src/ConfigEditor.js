@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { send_command, get_http_address } from './modules/network/connections.js';
+import { send_command, get_http_address } from './modules/network/connections';
 
-import { timerscounter } from './modules/utils/updatetimers.js';
+import { timerscounter } from './modules/utils/updatetimers';
 
 import './styles/Administration.css';
 import './styles/ConfigEditor.css';

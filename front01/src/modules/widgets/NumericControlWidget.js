@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
 
 import '../../styles/NumericControlWidget.css';
 

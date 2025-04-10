@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { MeshObject, GuiMeshObject, MarkerCircleDash, MarkerCircle, MarkerDot } from './GraphicsCoreMeshes.js';
-import { getDistantScanArc } from './RadarRenderer.js';
-import { TextMesh } from './TextCoreMeshes.js';
+import { MeshObject, GuiMeshObject, MarkerCircleDash, MarkerCircle, MarkerDot } from './GraphicsCoreMeshes';
+import { getDistantScanArc } from './RadarRenderer';
+import { TextMesh } from './TextCoreMeshes';
 
 class EntityRenderer {
 	get_objects_from_data = (data, scale_factor, gui_settings = []) => {

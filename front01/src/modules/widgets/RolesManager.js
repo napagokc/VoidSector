@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { get_http_address } from '../network/connections';
-import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
+import { get_http_address } from '../network/connections';
 
 export class RoleManagerWidget extends React.Component {
 	componentDidMount() {

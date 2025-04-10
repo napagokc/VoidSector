@@ -1,6 +1,6 @@
 import React from 'react';
 
-import { PlayersRadarWidget } from './modules/widgets/PlayerRadar.js';
+import { PlayersRadarWidget } from './modules/widgets/PlayerRadar';
 import { ensureWebsocketIsOpen, take_control } from './modules/network/connections';
 
 import './styles/PilotStation.css';

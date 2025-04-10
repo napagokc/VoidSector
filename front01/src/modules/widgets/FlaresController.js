@@ -1,8 +1,8 @@
 import React from 'react';
 
 import { timerscounter } from '../utils/updatetimers';
-import { get_solarflare } from '../network/connections';
-import { ensureWebsocketIsOpen, send_command } from '../network/connections';
+
+import { ensureWebsocketIsOpen, send_command, get_solarflare } from '../network/connections';
 
 export class FlaresController extends React.Component {
 	constructor() {

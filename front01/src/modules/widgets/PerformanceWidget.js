@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { get_performance } from '../network/connections';
 import { timerscounter } from '../utils/updatetimers';
+
+import { get_performance } from '../network/connections';
 
 const average = (arr) => arr.reduce((p, c) => p + c, 0) / arr.length;
 

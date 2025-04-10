@@ -1,14 +1,16 @@
 import React from 'react';
 
-import { get_navdata, get_solarflare, get_map_border } from '../network/connections';
-
 import { Canvas } from '@react-three/fiber';
 
-import { entityRenderer } from '../renderers/EntityRenderer';
-import { entityRendererCursor } from '../renderers/CursorRenderer';
-import { timerscounter } from '../utils/updatetimers';
-import { radarRenderer } from '../renderers/RadarRenderer';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
+import { get_navdata, get_solarflare, get_map_border } from '../network/connections';
+
+import { entityRendererCursor } from '../renderers/CursorRenderer';
+import { entityRenderer } from '../renderers/EntityRenderer';
+import { radarRenderer } from '../renderers/RadarRenderer';
 
 export let global_observer_pos = [0, 0];
 

@@ -1,5 +1,11 @@
 import React from 'react';
 
+import { Canvas } from '@react-three/fiber';
+
+import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
 import {
 	send_command,
 	get_navdata,
@@ -9,14 +15,10 @@ import {
 	get_map_border
 } from '../network/connections';
 
-import { Canvas } from '@react-three/fiber';
-
 import { entityRenderer } from '../renderers/EntityRenderer';
 import { radarRenderer } from '../renderers/RadarRenderer';
-
 import { entityRendererCursor } from '../renderers/CursorRenderer';
-import { timerscounter } from '../utils/updatetimers';
-import { get_locales } from '../locales/locales';
+
 import { ShipOvervieweWidget } from './ShipOverview';
 
 export class PlayersRadarWidget extends React.Component {

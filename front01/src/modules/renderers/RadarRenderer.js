@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { MeshObject, MarkerDot } from './GraphicsCoreMeshes.js';
 import { Vector2 } from 'three';
+
+import { MeshObject, MarkerDot } from './GraphicsCoreMeshes';
 
 const LINE_POINTS_COUNT = 25;
 const ANGLE_STEP_RAD = -3.14 / (180 / 5);

@@ -1,8 +1,11 @@
-import { useLoader } from '@react-three/fiber';
 import React, { useRef } from 'react';
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
-import { useFrame, useThree } from '@react-three/fiber';
+
 import { Vector3 } from 'three';
+
+import { useLoader, useFrame, useThree } from '@react-three/fiber';
+
+import { TextureLoader } from 'three/src/loaders/TextureLoader';
+
 import { MarkerCircle } from './GraphicsCoreMeshes';
 
 class EntityRendererCursor {

@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { get_system_state } from '../network/connections';
 import { timerscounter } from '../utils/updatetimers';
+
+import { get_system_state } from '../network/connections';
 
 export class HospitalCrewWidget extends React.Component {
 	componentDidMount() {

@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { get_server_systems_state } from '../network/connections';
-import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
+import { get_server_systems_state } from '../network/connections';
 
 export class SystemStateViewer extends React.Component {
 	constructor(props) {

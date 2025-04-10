@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { get_capmarks, get_observer_id, send_command } from '../network/connections';
-import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
+import { get_capmarks, get_observer_id, send_command } from '../network/connections';
 
 export class CapMarksControlWidget extends React.Component {
 	constructor(props) {

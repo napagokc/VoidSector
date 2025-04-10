@@ -1,20 +1,20 @@
-import React from 'react';
+import React, { useRef } from 'react';
 
-import { get_system_state, send_command } from '../network/connections';
+import { Canvas, useLoader } from '@react-three/fiber';
 
-import { Canvas } from '@react-three/fiber';
+import { TextureLoader } from 'three/src/loaders/TextureLoader';
+
+import { get_locales } from '../locales/locales';
 
 import { timerscounter } from '../utils/updatetimers';
 
-import { useLoader } from '@react-three/fiber';
-import { useRef } from 'react';
-import { TextureLoader } from 'three/src/loaders/TextureLoader';
-import { get_locales } from '../locales/locales';
-import { RepairTeamWidget } from '../systems/crew_sm.js';
+import { get_system_state, send_command } from '../network/connections';
+
+import { RepairTeamWidget } from '../systems/crew_sm';
+import { CrewControlWidget } from '../systems/crew_sm';
+import { RadarControlWidget } from '../systems/radar_sm';
 import { EnergyControlWidget } from '../systems/energy_sm';
 import { ResourcesControlWidget } from '../systems/resources_sm';
-import { CrewControlWidget } from '../systems/crew_sm.js';
-import { RadarControlWidget } from '../systems/radar_sm';
 
 export class EngineerControllerWidget extends React.Component {
 	render() {

@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { ensureWebsocketIsOpen, get_system_state, send_command } from '../network/connections';
-import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
+import { ensureWebsocketIsOpen, get_system_state, send_command } from '../network/connections';
 
 export class AllianceManager extends React.Component {
 	constructor() {

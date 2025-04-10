@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { send_command, get_system_state } from '../network/connections';
+import { get_locales } from '../locales/locales';
+
 import { timerscounter } from '../utils/updatetimers';
-import { get_locales } from '../locales/locales.js';
+
+import { send_command, get_system_state } from '../network/connections';
 
 export class CrewControlWidget extends React.Component {
 	constructor(props) {

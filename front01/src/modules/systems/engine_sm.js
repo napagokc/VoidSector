@@ -1,9 +1,12 @@
 import React from 'react';
 
-import { send_command, get_system_state } from '../network/connections';
-import { NumericControlWidjet } from '../widgets/NumericControlWidget.js';
-import { timerscounter } from '../utils/updatetimers';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
+import { send_command, get_system_state } from '../network/connections';
+
+import { NumericControlWidjet } from '../widgets/NumericControlWidget';
 
 export class EngineControlWidget extends React.Component {
 	constructor(props) {

@@ -1,15 +1,18 @@
 import React from 'react';
 
-import { get_navdata, send_command } from '../network/connections';
-
 import { Canvas } from '@react-three/fiber';
 
-import { entityRenderer } from '../renderers/EntityRenderer';
-import { entityRendererCursor } from '../renderers/CursorRenderer';
-import { timerscounter } from '../utils/updatetimers';
-import { get_brush_object } from '../renderers/CursorRenderer';
-import { global_observer_pos } from './AdminRadar';
 import { get_locales } from '../locales/locales';
+
+import { timerscounter } from '../utils/updatetimers';
+
+import { get_navdata, send_command } from '../network/connections';
+
+import { entityRendererCursor } from '../renderers/CursorRenderer';
+import { get_brush_object } from '../renderers/CursorRenderer';
+import { entityRenderer } from '../renderers/EntityRenderer';
+
+import { global_observer_pos } from './AdminRadar';
 
 const brushes_map = {
 	creator: 'brush_create',

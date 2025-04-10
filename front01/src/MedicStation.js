@@ -1,16 +1,17 @@
 import React from 'react';
 
-import { take_control } from './modules/network/connections';
 import { get_locales } from './modules/locales/locales';
+
+import { timerscounter } from './modules/utils/updatetimers';
 
 import {
 	ensureWebsocketIsOpen,
 	send_command,
 	get_system_state,
 	get_observer_id,
-	get_http_address
+	get_http_address,
+	take_control
 } from './modules/network/connections';
-import { timerscounter } from './modules/utils/updatetimers';
 
 import './styles/MedicStation.css';
 

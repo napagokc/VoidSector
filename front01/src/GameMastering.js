@@ -1,12 +1,12 @@
 import React from 'react';
 
-import { take_control } from './modules/network/connections.js';
-import { AdminRadarWidget } from './modules/widgets/AdminRadar.js';
+import { take_control } from './modules/network/connections';
 
-import { CommandEditorWidget } from './modules/widgets/CommandEditor.js';
-import { QuestPointsController } from './modules/widgets/QuestPointsController.js';
-import { ShipsDisplay, StationsDisplay } from './modules/widgets/ShipsDisplay.js';
-import { FlaresController } from './modules/widgets/FlaresController.js';
+import { AdminRadarWidget } from './modules/widgets/AdminRadar';
+import { CommandEditorWidget } from './modules/widgets/CommandEditor';
+import { QuestPointsController } from './modules/widgets/QuestPointsController';
+import { ShipsDisplay, StationsDisplay } from './modules/widgets/ShipsDisplay';
+import { FlaresController } from './modules/widgets/FlaresController';
 
 import './styles/Administration.css';
 

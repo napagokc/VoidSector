@@ -1,11 +1,10 @@
 import React from 'react';
 
-import { send_command } from './modules/network/connections.js';
-import { AdminRadarWidget } from './modules/widgets/AdminRadar.js';
-import { PerformanceViewer } from './modules/widgets/PerformanceWidget.js';
+import { send_command } from './modules/network/connections';
+import { AdminRadarWidget } from './modules/widgets/AdminRadar';
+import { PerformanceViewer } from './modules/widgets/PerformanceWidget';
 
-import { timerscounter } from './modules/utils/updatetimers.js';
-import { QuestPointsController } from './modules/widgets/QuestPointsController.js';
+import { QuestPointsController } from './modules/widgets/QuestPointsController';
 
 import './styles/Administration.css';
 

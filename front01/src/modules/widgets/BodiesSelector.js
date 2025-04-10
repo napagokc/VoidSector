@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { send_command, get_navdata, get_http_address } from '../network/connections';
 import { timerscounter } from '../utils/updatetimers';
+
+import { send_command, get_navdata, get_http_address } from '../network/connections';
 
 export class HBodiesSelector extends React.Component {
 	constructor(props) {

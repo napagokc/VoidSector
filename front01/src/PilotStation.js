@@ -1,14 +1,25 @@
 import React from 'react';
 
-import { PlayersRadarWidget } from './modules/widgets/PlayerRadar.js';
-import { DamageControlWidget } from './modules/systems/damage_sm.js';
-import { EnergyControlWidget } from './modules/systems/energy_sm.js';
-import { ResourcesControlWidget } from './modules/systems/resources_sm.js';
-import { InteractionControlWidget } from './modules/systems/interact_sm.js';
-import { RnDControlWidget } from './modules/systems/RnD_sm.js';
-import { EngineControlWidget } from './modules/systems/engine_sm.js';
-import { ShaftsControlWidget } from './modules/systems/launcher_sm.js';
-import { ProjectileBuilderWidget } from './modules/systems/projectile_builder.js';
+import { timerscounter } from './modules/utils/updatetimers';
+
+import { RnDControlWidget } from './modules/systems/RnD_sm';
+import { CrewControlWidget } from './modules/systems/crew_sm';
+import { RadarControlWidget } from './modules/systems/radar_sm';
+import { DamageControlWidget } from './modules/systems/damage_sm';
+import { EnergyControlWidget } from './modules/systems/energy_sm';
+import { EngineControlWidget } from './modules/systems/engine_sm';
+import { ShaftsControlWidget } from './modules/systems/launcher_sm';
+import { ResourcesControlWidget } from './modules/systems/resources_sm';
+import { InteractionControlWidget } from './modules/systems/interact_sm';
+import { ProjectileBuilderWidget } from './modules/systems/projectile_builder';
+
+import { EngineerControllerWidget, ShipOvervieweWidgetLayer } from './modules/widgets/ShipOverview';
+import { ShipsDisplay } from './modules/widgets/ShipsDisplay';
+import { CapMarksControlWidget } from './modules/widgets/CapMarksControlWidget';
+import { RoleManagerWidget } from './modules/widgets/RolesManager';
+import { AllianceManager } from './modules/widgets/AllianceManager';
+import { PlayersRadarWidget } from './modules/widgets/PlayerRadar';
+
 import {
 	addEventListener,
 	removeEventListener,
@@ -17,16 +28,7 @@ import {
 	take_control,
 	get_system_state,
 	get_medicine_state
-} from './modules/network/connections.js';
-import { timerscounter } from './modules/utils/updatetimers';
-import { CrewControlWidget } from './modules/systems/crew_sm.js';
-import { EngineerControllerWidget } from './modules/widgets/ShipOverview.js';
-import { ShipsDisplay } from './modules/widgets/ShipsDisplay.js';
-import { RadarControlWidget } from './modules/systems/radar_sm.js';
-import { CapMarksControlWidget } from './modules/widgets/CapMarksControlWidget.js';
-import { ShipOvervieweWidgetLayer } from './modules/widgets/ShipOverview.js';
-import { RoleManagerWidget } from './modules/widgets/RolesManager.js';
-import { AllianceManager } from './modules/widgets/AllianceManager.js';
+} from './modules/network/connections';
 
 import './styles/PilotStation.css';
 

@@ -1,8 +1,8 @@
 import React from 'react';
 
-import { get_ships_state, get_stations_state, send_command } from '../network/connections';
-
 import { timerscounter } from '../utils/updatetimers';
+
+import { get_ships_state, get_stations_state, send_command } from '../network/connections';
 
 import { set_global_observer_pos } from './AdminRadar';
 

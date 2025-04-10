@@ -1,7 +1,8 @@
 import React from 'react';
 
-import { get_ships_state, send_command } from '../network/connections';
 import { timerscounter } from '../utils/updatetimers';
+
+import { get_ships_state, send_command } from '../network/connections';
 
 export class ShipsStateWidget extends React.Component {
 	constructor(props) {

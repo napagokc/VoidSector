@@ -1,8 +1,10 @@
 import React from 'react';
 
-import '../../styles/CommandEditorWidget.css';
-import { send_command, get_ships_state } from '../network/connections';
 import { timerscounter } from '../utils/updatetimers';
+
+import { send_command, get_ships_state } from '../network/connections';
+
+import '../../styles/CommandEditorWidget.css';
 
 const command_descriptions = {
 	takes_damage: {

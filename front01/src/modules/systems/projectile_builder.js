@@ -1,8 +1,10 @@
 import React from 'react';
 
-import { send_command, get_http_address, current_mark_id } from '../network/connections';
 import { get_locales } from '../locales/locales';
+
 import { timerscounter } from '../utils/updatetimers';
+
+import { send_command, get_http_address, current_mark_id } from '../network/connections';
 
 export class ProjectileBuilderWidget extends React.Component {
 	constructor(props) {

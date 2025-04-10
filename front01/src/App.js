@@ -1,19 +1,17 @@
 import './styles/App.css';
 
-// import the socket
 import React from 'react';
 import SecureLS from 'secure-ls';
 
 import { Administration } from './Administration';
 import { PilotStation } from './PilotStation';
 import { MapEditor } from './MapEditor';
-import { is_local } from './modules/configs/configs';
 import { ConfigEditor } from './ConfigEditor';
 import { MedicStation } from './MedicStation';
 import { CommonRadarStation } from './CommonRadarStation';
 
-import { send_command } from './modules/network/connections';
-import { get_http_address } from './modules/network/connections';
+import { is_local } from './modules/configs/configs';
+import { get_http_address, send_command } from './modules/network/connections';
 import { timerscounter } from './modules/utils/updatetimers';
 import { get_locales } from './modules/locales/locales';
 import { GameMastering } from './GameMastering';

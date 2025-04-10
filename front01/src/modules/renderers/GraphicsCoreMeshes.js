@@ -1,5 +1,7 @@
-import { useLoader } from '@react-three/fiber';
 import React, { useRef } from 'react';
+
+import { useLoader } from '@react-three/fiber';
+
 import { TextureLoader } from 'three/src/loaders/TextureLoader';
 
 //Гравитационные колодцы, радиусы досягаемости, etc
