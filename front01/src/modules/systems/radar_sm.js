@@ -6,7 +6,7 @@ import { timerscounter } from '../utils/updatetimers';
 
 import { send_command, get_system_state, get_observer_id } from '../network/connections';
 
-import { NumericStepControlWidjet } from '../widgets/NumericControlWidget';
+import { NumericControlWidjet } from '../widgets/NumericControlWidget';
 
 import '../../styles/RadarControlWidget.css';
 
@@ -23,7 +23,7 @@ export class RadarControlWidget extends React.Component {
 		return (
 			<div className="SystemControlWidget">
 				<b>{get_locales('Radar control')}</b>
-				<NumericStepControlWidjet
+				<NumericControlWidjet
 					label="distant_arc"
 					init_value={10}
 					min={5}
@@ -31,7 +31,7 @@ export class RadarControlWidget extends React.Component {
 					step={1}
 					onChange={this.on_set_radar_arc}
 				/>
-				<NumericStepControlWidjet
+				<NumericControlWidjet
 					label="distant_dir"
 					init_value={0}
 					min={-360}

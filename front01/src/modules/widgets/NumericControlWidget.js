@@ -2,8 +2,6 @@ import React from 'react';
 
 import { get_locales } from '../locales/locales';
 
-import { timerscounter } from '../utils/updatetimers';
-
 import '../../styles/NumericControlWidget.css';
 
 export class NumericControlWidjet extends React.Component {
@@ -36,78 +34,6 @@ export class NumericControlWidjet extends React.Component {
 				/>
 				{parseFloat(this.state.value).toFixed(2)}
 			</label>
-		);
-	}
-}
-
-export class NumericStepControlWidjet extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			value: this.props.init_value,
-			step: 0
-		};
-	}
-
-	componentDidMount() {
-		clearInterval(timerscounter.get(this.constructor.name));
-		timerscounter.add(this.constructor.name, setInterval(this.step, 30));
-	}
-
-	componentWillUnmount() {
-		clearInterval(timerscounter.get(this.constructor.name));
-	}
-
-	step = () => {
-		let value = this.state.value + this.state.step;
-		if (value > this.props.max) value = value % this.props.max;
-		if (value < this.props.min) value = value % this.props.max;
-		if (value !== this.state.value) {
-			this.setState({ value: value }, this.props.onChange(value));
-		}
-	};
-
-	onChange = (e) => {
-		this.setState({ value: e.target.value });
-	};
-
-	onChangeStep = (value) => {
-		this.setState({ step: value });
-	};
-
-	render() {
-		return (
-			<div className="NumericStepControlWidjet">
-				<label>{get_locales(this.props.label)}</label>
-				<button
-					onMouseDown={(e) => {
-						this.onChangeStep(-this.props.step);
-					}}
-					onMouseUp={(e) => {
-						this.onChangeStep(0);
-					}}
-					onMouseLeave={(e) => {
-						this.onChangeStep(0);
-					}}
-				>
-					{'<<'}
-				</button>
-
-				<button
-					onMouseDown={(e) => {
-						this.onChangeStep(this.props.step);
-					}}
-					onMouseUp={(e) => {
-						this.onChangeStep(0);
-					}}
-					onMouseLeave={(e) => {
-						this.onChangeStep(0);
-					}}
-				>
-					{'>>'}
-				</button>
-				<label className="value_label">{parseFloat(this.state.value).toFixed(2)}</label>
-			</div>
 		);
 	}
 }

@@ -3,16 +3,3 @@
 	flex-direction: row;
 	align-items: center;
 }
-
-.NumericStepControlWidjet > button {
-	width: 35px;
-	height: 35px;
-}
-
-.NumericStepControlWidjet > input {
-	width: 80px;
-}
-
-.NumericStepControlWidjet > .value_label {
-	width: 60px;
-}
