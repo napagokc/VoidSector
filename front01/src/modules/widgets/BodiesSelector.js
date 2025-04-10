@@ -4,6 +4,8 @@ import { timerscounter } from '../utils/updatetimers';
 
 import { send_command, get_navdata, get_http_address } from '../network/connections';
 
+import { set_global_observer_pos } from './AdminRadar';
+
 export class HBodiesSelector extends React.Component {
 	constructor(props) {
 		super(props);
@@ -75,6 +77,13 @@ export class HBodiesSelector extends React.Component {
 				<label>{data.type}</label>
 				<label>{key}</label>
 
+				<button
+					onClick={(e) => {
+						set_global_observer_pos(data.pos);
+					}}
+				>
+					move view
+				</button>
 				<button
 					onClick={(e) => {
 						this.take_control(key);
