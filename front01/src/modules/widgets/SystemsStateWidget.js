@@ -10,7 +10,7 @@ export class SystemStateViewer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			hided: false,
+			hidden: false,
 			system_state: {}
 		};
 	}
@@ -30,19 +30,21 @@ export class SystemStateViewer extends React.Component {
 
 	render() {
 		let states = [];
-		for (let k in this.state.system_state) {
-			states.push(
-				<label>
-					{k}: {this.state.system_state[k]}
-				</label>
-			);
+		if (!this.state.hidden) {
+			for (let k in this.state.system_state) {
+				states.push(
+					<label>
+						{k}: {this.state.system_state[k]}
+					</label>
+				);
+			}
 		}
 
 		return (
 			<div className="AdminSystemViewer">
 				<label
 					onClick={() => {
-						this.setState({ hided: !this.state.hided });
+						this.setState({ hidden: !this.state.hidden });
 					}}
 				>
 					<b>{get_locales('SYSTEM STATE')}</b>

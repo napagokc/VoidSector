@@ -8,7 +8,7 @@ export class ShipsStateWidget extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			hided: false,
+			hidden: false,
 			ships_state: {}
 		};
 	}
@@ -67,12 +67,12 @@ export class ShipsStateWidget extends React.Component {
 			<div className="ShipStateViewer">
 				<label
 					onClick={() => {
-						this.setState({ hided: !this.state.hided });
+						this.setState({ hidden: !this.state.hidden });
 					}}
 				>
 					<b>SHIPS STATE</b>
 				</label>
-				{this.get_ship_widgets_list()}
+				{!this.state.hidden && this.get_ship_widgets_list()}
 			</div>
 		);
 	}

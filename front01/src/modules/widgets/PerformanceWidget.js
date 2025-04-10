@@ -64,7 +64,7 @@ export class PerformanceViewer extends React.Component {
 	constructor(props) {
 		super(props);
 
-		this.state = { hided: false };
+		this.state = { hidden: false };
 	}
 
 	componentDidMount() {
@@ -86,7 +86,7 @@ export class PerformanceViewer extends React.Component {
 
 	render() {
 		let stats = [];
-		if (!this.state.hided) {
+		if (!this.state.hidden) {
 			let last_vals = smoother.get_last_values();
 			//let avg_stats = smoother.get_avg_stats()
 			//let persec_stats = smoother.get_persec_stats()
@@ -106,7 +106,7 @@ export class PerformanceViewer extends React.Component {
 			<div className="AdminSystemViewer">
 				<label
 					onClick={() => {
-						this.setState({ hided: !this.state.hided });
+						this.setState({ hidden: !this.state.hidden });
 					}}
 				>
 					<b>PERFORMANCE</b>
