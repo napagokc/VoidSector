@@ -335,7 +335,7 @@ class QuantumShadow(lBody):
         EntityIDGroupsController().add(
             self.mark_id, ["radar_detectable", "id_labels_detectable"])
 
-        self.wormhole_position = self.hBodies["WormHole"].get_position_np()
+        self.wormhole_position = self.hBodies["WormHole"].get_position_np() if "WormHole" in self.hBodies else [0, 0]
         self.potential_start_points = self.get_potential_start_points()
         self.mode = 'phase1'
         self.hp = 100
