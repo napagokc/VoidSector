@@ -403,7 +403,7 @@ class DamageSystem(BasicShipSystem):
                 self.takes_damage(command.get_params()[
                                   "damage_value"], command.get_params()["damage_type"])
             case 'repair_system_admin':
-                system_name = command.get_params()["system_name"]
+                system_name = command.get_params()["system"]
                 self.systems_hp[system_name]['current_hp'] = self.systems_hp[system_name]['max_hp']
 
     def takes_damage(self, damage_value, damage_type='explosion', damage_source=None):
