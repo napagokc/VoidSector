@@ -1,3 +1,4 @@
+import math
 
 import numpy as np
 from modules.physEngine.world_constants import WorldPhysConstants
@@ -84,7 +85,7 @@ class staticBody():
 
             current_phi_rad = CalculationUtilites.get_radangle_between(
                 current_vector, self.stable_distance_vector)
-            self.stable_phi = current_phi_rad*180/3.14
+            self.stable_phi = current_phi_rad*180/math.pi
             self.stable_dphi = 360/T_ticks
             self.clockwise = self.get_clockwise()
             if self.clockwise:
@@ -98,7 +99,7 @@ class staticBody():
             self.velocities[1], vector2hbody)
         angle2 = CalculationUtilites.get_radangle_between(
             self.velocities[1]*-1, vector2hbody)
-        if 0 <= angle <= 3.14:
+        if 0 <= angle <= math.pi:
             return True
         return False
 

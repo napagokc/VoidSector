@@ -25,7 +25,6 @@ import multiprocessing as mp
 import time
 import asyncio
 from random import randrange
-from math import *
 
 from enum import Enum
 from modules.physEngine.plague2 import PlagueMatrix

@@ -1,7 +1,5 @@
 import math
-import math as m
 import copy
-from math import isnan
 
 from modules.utils import Command, PerformanceCollector
 import sys
@@ -942,7 +940,7 @@ class CalculationUtilites:
         radius = pos-hbody.position
         radius_scalar = max(1, np.linalg.norm(radius))
         tangent = CalculationUtilites.rotate_vector(radius, 90)
-        V_scalar = m.sqrt(WorldPhysConstants().get_Gconst()*mass/radius_scalar)
+        V_scalar = math.sqrt(WorldPhysConstants().get_Gconst()*mass/radius_scalar)
         V_vector = CalculationUtilites.get_projections(V_scalar, tangent)
         if np.linalg.norm(vec) != 0:
             cos_alpha = CalculationUtilites.get_cosangle_between(V_vector, vec)
@@ -953,16 +951,16 @@ class CalculationUtilites:
     def rotate_vecto_rad(vector, angler):
         x = vector[0]
         y = vector[1]
-        newx = x*m.cos(angler) - y*m.sin(angler)
-        newy = x*m.sin(angler) + y*m.cos(angler)
+        newx = x*math.cos(angler) - y*math.sin(angler)
+        newy = x*math.sin(angler) + y*math.cos(angler)
         return np.array([newx, newy])
 
     def rotate_vector(vector, angle):
         x = vector[0]
         y = vector[1]
-        angler = angle*m.pi/180
-        newx = x*m.cos(angler) - y*m.sin(angler)
-        newy = x*m.sin(angler) + y*m.cos(angler)
+        angler = angle*math.pi/180
+        newx = x*math.cos(angler) - y*math.sin(angler)
+        newy = x*math.sin(angler) + y*math.cos(angler)
         return np.array([newx, newy])
 
     def get_cosangle_between(vector1, vector2):
@@ -988,12 +986,12 @@ class CalculationUtilites:
         cos_alpha_ort = CalculationUtilites.get_cosangle_between(
             vector1, vector3_ort)
         if cos_alpha_ort < 0:
-            alpha_rad = 3.14*2-alpha_rad
+            alpha_rad = math.pi*2-alpha_rad
 
-        return alpha_rad*180/3.14
+        return alpha_rad*180/math.pi
 
     def degress2rads(value):
-        return value*3.14/180
+        return value*math.pi/180
 
     def is_in_sector(value, arc1, arc2):
         arc1 = (arc1+360*2) % 360
@@ -1048,20 +1046,19 @@ class hBodyStatsCalculator:
         results["delV:Rcr-Rmx"] = hBodyStatsCalculator.get_delV(mass, Rcr, Rgr)
         return results
 
-    def get_V(m, r):
+    def get_V(mass, r):
         G = ConfigLoader().get("world.gravity_constant", float)
-        V = math.sqrt((m*G)/r)
+        V = math.sqrt((mass * G) / r)
         return V
 
-    def get_T(m, r):
-        v = hBodyStatsCalculator.get_V(
-            m, r)*WorldPhysConstants().get_real2sim_timescale()
-        T = 2*3.1415*r/v
+    def get_T(mass, r):
+        v = hBodyStatsCalculator.get_V(mass, r) * WorldPhysConstants().get_real2sim_timescale()
+        T = 2*math.pi*r/v
         return T
 
-    def get_delV(m, r1, r2):
+    def get_delV(mass, r1, r2):
         r = r2/r1
-        v = hBodyStatsCalculator.get_V(m, r1)
+        v = hBodyStatsCalculator.get_V(mass, r1)
         delV1 = round(v*(math.sqrt(2*r/(r+1))-1), 2)
         delV2 = round((v/math.sqrt(r))*(1-math.sqrt(2/(r+1))), 2)
         return f"{delV1}, {delV2}, {round(delV1+delV2,2)}"

@@ -56,7 +56,7 @@ class RadarSystem(BasicShipSystem):
 
     def get_actual_distant_scanrange(self, arc=None):
         distance = self.get_maximal_distant_scanrange()
-        sectorArea = 3.1415*distance*distance
+        sectorArea = math.pi*distance*distance
         radar_arc_rad = CalculationUtilites.degress2rads(
             self.lBodies.bodies[self.mark_id].distant_scanrange_arc)
         if arc:

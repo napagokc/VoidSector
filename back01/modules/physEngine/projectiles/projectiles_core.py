@@ -1,4 +1,4 @@
-from math import sqrt, pow
+from math import pow
 from modules.physEngine.basic_objects import predictableBody
 from modules.physEngine.active_objects import destructableObject
 from modules.physEngine.core import CalculationUtilites
