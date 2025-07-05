@@ -269,6 +269,8 @@ class TrajectoryPredictor(TrajectoryCalculator):
                             self.hBodies.import_descr(descr)
 
                 # self.generate_prediction()
+        except KeyboardInterrupt:
+            pass
         except Exception as e:
             pass
 

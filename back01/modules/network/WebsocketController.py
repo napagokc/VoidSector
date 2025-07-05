@@ -62,9 +62,12 @@ class ConnectionController:
     async def main():
         ip = ConfigLoader().get("system.ip")
         port = ConfigLoader().get("system.ws_port", int)
-        async with websockets.serve(ConnectionController.handler, ip, port):
-            while 1:
-                await asyncio.sleep(0.04)
+        try:
+            async with websockets.serve(ConnectionController.handler, ip, port):
+                while True:
+                    await asyncio.sleep(0.04)
+        except asyncio.CancelledError:
+            pass
 
     @staticmethod
     def clear_connection(token):
@@ -86,7 +89,7 @@ class ConnectionController:
 
     @staticmethod
     async def broadcast():
-        while 1:
+        while True:
             token = None
             # noinspection PyBroadException
             try:
@@ -107,10 +110,13 @@ class ConnectionController:
                 for token in tokens2delete:
                     del ConnectionController.connections[token]
                     del ConnectionController.connection_ips[token]
+
+                await asyncio.sleep(0.02)
+            except asyncio.CancelledError:
+                break
             except Exception as e:
-                pass  # print(repr(e))
+                # print(repr(e))
                 if token:
                     del ConnectionController.connections[token]
                     del ConnectionController.connection_ips[token]
-
-            await asyncio.sleep(0.02)
+                pass

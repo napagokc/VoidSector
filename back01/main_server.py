@@ -1,40 +1,56 @@
+import asyncio
+import multiprocessing as mp
+import time
 
-if __name__ == '__main__':
-    import asyncio
-    import multiprocessing as mp
-    from multiprocessing import Process, Manager, freeze_support
-    from threading import Thread
-    import time
-    import asyncio
-    import websockets
-    import json
-    import time
-    import secrets
+from contextlib import suppress
+from multiprocessing import Manager, freeze_support
+from threading import Thread
 
+from modules.sectorServer import EngineSector_interactor
+from modules.flaskApp import ServerInteractorFlaskApp
+from modules.network.WebsocketController import ConnectionController
+
+
+server = EngineSector_interactor()
+loop = asyncio.get_event_loop()
+loop_thread = Thread(target=loop.run_forever)
+flask_app = ServerInteractorFlaskApp()
+
+
+async def teardown():
+    for task in asyncio.all_tasks():
+        task.cancel()
+        with suppress(asyncio.CancelledError):
+            await task
+
+
+def main():
     mp.set_start_method('spawn')
     freeze_support()
 
-    from modules.sectorServer import EngineSector_interactor
-    from modules.flaskApp import ServerInteractorFlaskApp
-    from modules.network.WebsocketController import ConnectionController
+    try:
+        server.init_server(Manager())
 
-    ctx_manager = Manager()
-    server = EngineSector_interactor()
-    server.init_server(ctx_manager)
-    server.start()
-    # ConnectionController.server = server
-    loop = asyncio.new_event_loop()
+        loop.create_task(ConnectionController.main())
+        loop.create_task(ConnectionController.broadcast())
 
-    thread_async = Thread(target=loop.run_forever)
-    asyncio.set_event_loop(loop)
+        server.start()
+        loop_thread.start()
+        flask_app.run_forever()
+    except KeyboardInterrupt:
+        pass
+    finally:
+        flask_app.stop()
 
-    loop.create_task(ConnectionController.main())
-    loop.create_task(ConnectionController.broadcast())
-    # loop.create_task(ConnectionController.clear_broken_connections())
-    thread_async = Thread(target=loop.run_forever)
-    thread_async.start()
+        loop.stop()
+        while loop.is_running():
+            time.sleep(0.04)
 
-    flask_app = ServerInteractorFlaskApp()
-    flask_app.run_forever()
+        loop.run_until_complete(teardown())
+        while loop.is_running():
+            time.sleep(0.04)
 
-    pass
+        server.stop()
+
+if __name__ == '__main__':
+    main()

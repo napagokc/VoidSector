@@ -1,33 +1,29 @@
-from modules.utils import Command, catch_exception, get_dt_ms, PerformanceCollector
+import asyncio
+import time
 import sys
 import numpy as np
+import traceback
+import multiprocessing as mp
+
+from enum import Enum
+from datetime import datetime
+from contextlib import suppress
+from modules.physEngine.plague2 import PlagueMatrix
+from modules.utils import Command, catch_exception, get_dt_ms, PerformanceCollector
 from modules.physEngine.quests.quest_controller import QuestPointsController
 from modules.physEngine.entity_id_groups_controller import EntityIDGroupsController
 from modules.physEngine.solar_flare.solar_flar_activator import SolarFlareActivator
 from modules.ship.projectile_blueprints import ProjectileConstructorController
-from random import randint
-from sys import getsizeof
-import traceback
-from datetime import datetime
 from modules.utils import ConfigLoader
 from modules.map_controllers.editor import MapEditor
 from modules.map_controllers.loader import MapLoader
 from modules.ship.ship import ShipPool_Singleton
 from modules.physEngine.world_constants import WorldPhysConstants
 from modules.physEngine.triggers.handler import TriggerHandler
-from modules.physEngine.triggers.collector import TriggerQueue
-from modules.physEngine.active_objects import ae_Ship
 from modules.physEngine.predictor import launch_new_TrajectoryPredictor_controller, TrajectoryPredictor_controller
 from modules.physEngine.core import CrossDistancePool
 from modules.physEngine.core import lBodyPool_Singleton
 from modules.physEngine.core import hBodyPool_Singleton
-import multiprocessing as mp
-import time
-import asyncio
-from random import randrange
-
-from enum import Enum
-from modules.physEngine.plague2 import PlagueMatrix
 
 class SectorCommandType(Enum):
     MOVE = "spawn"
@@ -41,6 +37,15 @@ class SectorCommandType(Enum):
 # обертка для процесса, в котором работает сервер.
 # in_queue - очередь для команд: спавн, передвижение
 # контекст менеджер передается из базового процесса и создается в __main__
+
+def run_instance(in_queue, out_sector_data):
+    instance = EngineSector(in_queue, out_sector_data)
+    try:
+        instance.start()
+    except KeyboardInterrupt:
+        instance.stop()
+        pass
+
 
 class EngineSector_interactor:
 
@@ -66,12 +71,19 @@ class EngineSector_interactor:
 
     def __new__(cls):
         if cls._instance is None:
-            cls._instance = super(EngineSector_interactor, cls).__new__(cls)
+            inst = super(EngineSector_interactor, cls).__new__(cls)
+            inst.instance = None
+            inst.in_queue = None
+            inst.out_sector_data = None
+            inst.server = None
+            inst.p = None
+
+            cls._instance = inst
+
         return cls._instance
 
     def init_server(self, mp_ctx_manager):
         if mp_ctx_manager:
-            self.server = None
             self.in_queue = mp.Queue()
             self.out_sector_data = mp_ctx_manager.dict()
             self.out_sector_data["server_is_alive"] = False
@@ -150,15 +162,13 @@ class EngineSector_interactor:
         return {}
 
     # =============================================================================================
+
     def start(self):
-        self.p = mp.Process(target=self.run_instance, args=(
-            self.in_queue, self.out_sector_data,))
+        self.p = mp.Process(target=run_instance, args=(self.in_queue, self.out_sector_data))
         self.p.start()
 
-    def run_instance(self, in_queue, out_sector_data):
-        instance = EngineSector(in_queue, out_sector_data)
-        instance.start()
-
+    def stop(self):
+        self.p.join()
 
 class EngineSector:
     @catch_exception
@@ -192,7 +202,7 @@ class EngineSector:
         self.event_loop = asyncio.new_event_loop()
         self.event_loop.create_task(self.read_input_data())
         self.event_loop.create_task(self.update_bodies())
-        self.event_loop.create_task(self.update_quest_poits_state())
+        self.event_loop.create_task(self.update_quest_points_state())
         self.event_loop.create_task(self.update_ships_state())
         self.event_loop.create_task(self.update_station_state())
         self.event_loop.create_task(self.update_plague_matrix())
@@ -215,8 +225,19 @@ class EngineSector:
         self.out_sector_data["global_field_view"] = self.global_field_view
         self.simulation_is_runned = True
 
+    async def teardown(self):
+        for task in asyncio.all_tasks(self.event_loop):
+            task.cancel()
+            with suppress(asyncio.CancelledError):
+                await task
+
     def start(self):
         self.event_loop.run_forever()
+
+    def stop(self):
+        self.event_loop.run_until_complete(self.teardown())
+        while self.event_loop.is_running():
+            time.sleep(0.04)
 
     # ===========================РАЗДЕЛ ДЛЯ КОРУТИН В ЦИКЛЕ ДВИЖКА СЕКТОРА============================================
 
@@ -231,10 +252,15 @@ class EngineSector:
 
     async def read_input_data(self):
         while True:
-            await asyncio.sleep(0.02)
-            while not self.in_queue.empty():
-                command = Command(self.in_queue.get())
-                self.proceed_command(command)
+            try:
+                await asyncio.sleep(0.02)
+                while not self.in_queue.empty():
+                    command = Command(self.in_queue.get())
+                    self.proceed_command(command)
+            except KeyboardInterrupt:
+                break
+            except asyncio.CancelledError:
+                break
 
     def proceed_command(self, command: Command):
         try:
@@ -399,10 +425,14 @@ class EngineSector:
                 WorldPhysConstants().next_step()
 
                 await asyncio.sleep(delay_time)
+            except asyncio.CancelledError:
+                break
+            except KeyboardInterrupt:
+                break
             except Exception as e:
                 #print(e)
+                # print(traceback.format_exc())
                 pass
-                print(traceback.format_exc())
 
     def map_border_check_trigger(self):
         for ship_id in self.cShips.ships:
@@ -416,12 +446,17 @@ class EngineSector:
 
     async def update_ships_state(self):
         while True:
-            await asyncio.sleep(1)
-            ships_stats = {}
-            for ae_ship_id in self.cShips.ships:
-                ships_stats[ae_ship_id] = self.cShips.ships[ae_ship_id].get_short_description(
-                )
-            self.out_sector_data["ships_state"] = ships_stats
+            try:
+                await asyncio.sleep(1)
+                ships_stats = {}
+                for ae_ship_id in self.cShips.ships:
+                    ships_stats[ae_ship_id] = self.cShips.ships[ae_ship_id].get_short_description(
+                    )
+                self.out_sector_data["ships_state"] = ships_stats
+            except KeyboardInterrupt:
+                break
+            except asyncio.CancelledError:
+                break
 
     async def update_station_state(self):
         while True:
@@ -432,33 +467,52 @@ class EngineSector:
                     stations_stats[station_idx] = self.lBodies[station_idx].get_short_description(
                     )
                 self.out_sector_data["stations_state"] = stations_stats
+            except KeyboardInterrupt:
+                break
+            except asyncio.CancelledError:
+                break
             except Exception as e:
                 pass#print("update_station_state", repr(e))
 
-    async def update_quest_poits_state(self):
+    async def update_quest_points_state(self):
         while True:
-            await asyncio.sleep(1)
-            self.out_sector_data["quest_points_controller"] = self.quest_points_controller.get_state(
-            )
+            try:
+                await asyncio.sleep(1)
+                self.out_sector_data["quest_points_controller"] = self.quest_points_controller.get_state()
+            except KeyboardInterrupt:
+                break
+            except asyncio.CancelledError:
+                break
+
 
     async def map_autosaver(self):
         cnter = 0
         while True:
-            await asyncio.sleep(60*1)
-            self.map_editor.save_main_ship(f"auto_save_#{cnter}")
-            self.map_editor.save_main_ship(f"auto_save_latest")
-            cnter = cnter+1
-            if cnter > 9:
-                cnter = 0
+            try:
+                await asyncio.sleep(60*1)
+                self.map_editor.save_main_ship(f"auto_save_#{cnter}")
+                self.map_editor.save_main_ship(f"auto_save_latest")
+                cnter = cnter+1
+                if cnter > 9:
+                    cnter = 0
+            except KeyboardInterrupt:
+                break
+            except asyncio.CancelledError:
+                break
 
 
     #=================================================================================================================
                 
     async def update_plague_matrix(self):
         while True:
-            actual_matrix = PlagueMatrix().get()
-            self.out_sector_data["plague_matrix"] = actual_matrix
-            await asyncio.sleep(1)
+            try:
+                actual_matrix = PlagueMatrix().get()
+                self.out_sector_data["plague_matrix"] = actual_matrix
+                await asyncio.sleep(1)
+            except KeyboardInterrupt:
+                break
+            except asyncio.CancelledError:
+                break
 
 def get_size(obj, seen=None):
     """Recursively finds size of objects"""

@@ -177,17 +177,15 @@ import math
 
 
 class ServerInteractorFlaskApp:
-                def __init__(self):
-                                pass
+    def __init__(self):
+        self.http_server = WSGIServer(("0.0.0.0", 1924), app)
 
-                def run_forever(self):
-                                http_server = WSGIServer(("0.0.0.0", 1924), app)
-                                http_server.serve_forever()
+    def run_forever(self):
+        try:
+            self.http_server.serve_forever()
+        except KeyboardInterrupt:
+            pass
 
-
-
-                                
-
-
-
-                                
+    def stop(self):
+        self.http_server.stop()
+        self.http_server.close()
