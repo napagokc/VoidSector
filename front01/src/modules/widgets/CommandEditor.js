@@ -66,20 +66,6 @@ const command_descriptions = {
 		}
 	},
 
-	disable_user: {
-		target: 'ship.med_sm',
-		params: {
-			role: ['captain', 'navigator', 'cannoneer', 'engineer']
-		}
-	},
-
-	restore_user: {
-		target: 'ship.med_sm',
-		params: {
-			role: ['captain', 'navigator', 'cannoneer', 'engineer']
-		}
-	},
-
 	terminate_predictor_process: {
 		target: 'predictor',
 		params: {}
