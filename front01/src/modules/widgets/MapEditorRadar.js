@@ -33,6 +33,7 @@ export class MapEditorRadarWidget extends React.Component {
 		this.state = {
 			radar_width: 600,
 			scale_factor: 1,
+			radar_hover: false,
 			controlled_observer_pos: [0, 0],
 			cursor_position_old: [0, 0],
 			data: {
@@ -81,6 +82,14 @@ export class MapEditorRadarWidget extends React.Component {
 
 	move_observer_step = (params) => {
 		this.setState({ key_pressed: params });
+	};
+
+	onMouseEnter = () => {
+		this.setState({ radar_hover: true });
+	};
+
+	onMouseLeave = () => {
+		this.setState({ radar_hover: false });
 	};
 
 	onMouseMove = (mouse) => {
@@ -198,14 +207,21 @@ export class MapEditorRadarWidget extends React.Component {
 			this.state.scale_factor,
 			this.props.highlighted_body_idx
 		);
-		let aim_markers = entityRendererCursor.get_objects_from_data(this.onMouseMove, this.onMouseClick);
+		let aim_markers = this.state.radar_hover
+			? entityRendererCursor.get_objects_from_data(this.onMouseMove, this.onMouseClick)
+			: [];
 		let brush_objects = get_brush_object(this.get_brush_params(true), this.state.scale_factor);
 
 		let cursor_position = this.get_cursor_position();
 
 		return (
 			<div className="AdminRadarSection">
-				<Canvas orthographic={true} style={{ width: this.state.radar_width, height: this.state.radar_width }}>
+				<Canvas
+					orthographic={true}
+					onMouseEnter={this.onMouseEnter}
+					onMouseLeave={this.onMouseLeave}
+					style={{ width: this.state.radar_width, height: this.state.radar_width }}
+				>
 					<ambientLight />
 					{objects}
 					{aim_markers}

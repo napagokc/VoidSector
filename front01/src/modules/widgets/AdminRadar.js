@@ -27,6 +27,7 @@ export class AdminRadarWidget extends React.Component {
 		this.state = {
 			radar_width: 600,
 			scale_factor: 1,
+			radar_hover: false,
 			controlled_observer_pos: [0, 0],
 			data: {
 				observer_pos: [0, 0],
@@ -81,6 +82,14 @@ export class AdminRadarWidget extends React.Component {
 
 	move_observer_step = (params) => {
 		this.setState({ key_pressed: params });
+	};
+
+	onMouseEnter = () => {
+		this.setState({ radar_hover: true });
+	};
+
+	onMouseLeave = () => {
+		this.setState({ radar_hover: false });
 	};
 
 	onMouseMove = (mouse) => {
@@ -148,7 +157,9 @@ export class AdminRadarWidget extends React.Component {
 			show_id_labels: this.state.show_id_labels,
 			map_border: get_map_border()
 		});
-		let aim_markers = entityRendererCursor.get_objects_from_data(this.onMouseMove, (e) => {});
+		let aim_markers = this.state.radar_hover
+			? entityRendererCursor.get_objects_from_data(this.onMouseMove, this.onMouseClick)
+			: [];
 		let selection_objects = entityRenderer.get_selection_marker(
 			this.state.data,
 			this.state.scale_factor,
@@ -161,6 +172,8 @@ export class AdminRadarWidget extends React.Component {
 				<div className="radarSection">
 					<Canvas
 						orthographic={true}
+						onMouseEnter={this.onMouseEnter}
+						onMouseLeave={this.onMouseLeave}
 						style={{ width: this.state.radar_width, height: this.state.radar_width }}
 					>
 						<ambientLight />

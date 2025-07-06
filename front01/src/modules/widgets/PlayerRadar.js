@@ -29,6 +29,7 @@ export class PlayersRadarWidget extends React.Component {
 		this.state = {
 			scale_factor: 1,
 			radar_width: 600,
+			radar_hover: false,
 			data: {
 				mark_id: '',
 				observer_pos: [0, 0]
@@ -54,6 +55,14 @@ export class PlayersRadarWidget extends React.Component {
 
 	set_entity_hovered = (s) => {
 		this.setState({ entity_hovered: s });
+	};
+
+	onMouseEnter = () => {
+		this.setState({ radar_hover: true });
+	};
+
+	onMouseLeave = () => {
+		this.setState({ radar_hover: false });
 	};
 
 	onMouseMove = (mouse) => {
@@ -133,12 +142,9 @@ export class PlayersRadarWidget extends React.Component {
 	};
 
 	render() {
-		let aim_markers = entityRendererCursor.get_objects_from_data(this.onMouseMove, this.onMouseClick);
-		if (aim_markers.length === 0) {
-			aim_markers = this.props.cap_control
-				? entityRendererCursor.get_objects_from_data(this.onMouseMove, this.onSetMark)
-				: [];
-		}
+		let aim_markers = this.state.radar_hover
+			? entityRendererCursor.get_objects_from_data(this.onMouseMove, this.onMouseClick)
+			: [];
 		let cap_markers = radarRenderer.get_capmarks(this.state.cap_marks, this.state.data, this.state.scale_factor);
 		let scan_markers = radarRenderer.get_objects_from_data(this.state.data, this.state.scale_factor);
 		let objects = entityRenderer.get_objects_from_data(this.state.data, this.state.scale_factor, {
@@ -162,7 +168,8 @@ export class PlayersRadarWidget extends React.Component {
 				<div className="radarSection">
 					<Canvas
 						orthographic={true}
-						onClick={this.state.onMouseMove}
+						onMouseEnter={this.onMouseEnter}
+						onMouseLeave={this.onMouseLeave}
 						style={{ width: this.state.radar_width, height: this.state.radar_width }}
 					>
 						<ambientLight />
