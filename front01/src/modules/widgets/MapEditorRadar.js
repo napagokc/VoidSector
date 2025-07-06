@@ -14,6 +14,7 @@ import { entityRendererCursor } from '../renderers/CursorRenderer';
 import { get_brush_object } from '../renderers/CursorRenderer';
 import { entityRenderer } from '../renderers/EntityRenderer';
 
+import { INITIAL_SCALE_FACTOR, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR, STEP_SCALE_FACTOR } from './PlayerRadar';
 import { global_observer_pos, set_global_observer_pos } from './AdminRadar';
 
 const brushes_map = {
@@ -90,6 +91,12 @@ export class MapEditorRadarWidget extends React.Component {
 
 	onMouseLeave = () => {
 		this.setState({ radar_hover: false });
+	};
+
+	onMouseWheel = (event) => {
+		let new_scale_factor = this.state.scale_factor + STEP_SCALE_FACTOR * (event.deltaY > 0 ? -3 : 3);
+		new_scale_factor = Math.min(Math.max(MIN_SCALE_FACTOR, new_scale_factor), MAX_SCALE_FACTOR);
+		this.setState({ scale_factor: +new_scale_factor.toFixed(2) });
 	};
 
 	onMouseMove = (mouse) => {
@@ -220,6 +227,7 @@ export class MapEditorRadarWidget extends React.Component {
 					orthographic={true}
 					onMouseEnter={this.onMouseEnter}
 					onMouseLeave={this.onMouseLeave}
+					onWheel={this.onMouseWheel}
 					style={{ width: this.state.radar_width, height: this.state.radar_width }}
 				>
 					<ambientLight />
@@ -233,10 +241,11 @@ export class MapEditorRadarWidget extends React.Component {
 				<div className="flex flex_space_between">
 					<NumericControlWidjet
 						label="SCALE"
-						init_value={this.state.scale_factor}
-						min={0.1}
-						max={2}
-						step={0.02}
+						init_value={INITIAL_SCALE_FACTOR}
+						min={MIN_SCALE_FACTOR}
+						max={MAX_SCALE_FACTOR}
+						step={STEP_SCALE_FACTOR}
+						value={this.state.scale_factor}
 						onChange={(value) => this.setState({ scale_factor: value })}
 					/>
 					{this.get_buttons_block()}

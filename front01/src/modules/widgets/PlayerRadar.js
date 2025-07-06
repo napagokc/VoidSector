@@ -23,6 +23,11 @@ import { entityRendererCursor } from '../renderers/CursorRenderer';
 
 import { ShipOvervieweWidget } from './ShipOverview';
 
+export const INITIAL_SCALE_FACTOR = 1;
+export const MIN_SCALE_FACTOR = 0.1;
+export const MAX_SCALE_FACTOR = 2;
+export const STEP_SCALE_FACTOR = 0.02;
+
 export class PlayersRadarWidget extends React.Component {
 	constructor(props) {
 		super(props);
@@ -53,16 +58,18 @@ export class PlayersRadarWidget extends React.Component {
 		this.setState({ data: get_navdata(), cap_marks: get_capmarks() });
 	};
 
-	set_entity_hovered = (s) => {
-		this.setState({ entity_hovered: s });
-	};
-
 	onMouseEnter = () => {
 		this.setState({ radar_hover: true });
 	};
 
 	onMouseLeave = () => {
 		this.setState({ radar_hover: false });
+	};
+
+	onMouseWheel = (event) => {
+		let new_scale_factor = this.state.scale_factor + STEP_SCALE_FACTOR * (event.deltaY > 0 ? -3 : 3);
+		new_scale_factor = Math.min(Math.max(MIN_SCALE_FACTOR, new_scale_factor), MAX_SCALE_FACTOR);
+		this.setState({ scale_factor: +new_scale_factor.toFixed(2) });
 	};
 
 	onMouseMove = (mouse) => {
@@ -170,6 +177,7 @@ export class PlayersRadarWidget extends React.Component {
 						orthographic={true}
 						onMouseEnter={this.onMouseEnter}
 						onMouseLeave={this.onMouseLeave}
+						onWheel={this.onMouseWheel}
 						style={{ width: this.state.radar_width, height: this.state.radar_width }}
 					>
 						<ambientLight />
@@ -186,10 +194,11 @@ export class PlayersRadarWidget extends React.Component {
 						<div className="ShipNavigationInfo">
 							<NumericControlWidjet
 								label="SCALE"
-								init_value={this.state.scale_factor}
-								min={0.1}
-								max={2}
-								step={0.02}
+								init_value={INITIAL_SCALE_FACTOR}
+								min={MIN_SCALE_FACTOR}
+								max={MAX_SCALE_FACTOR}
+								step={STEP_SCALE_FACTOR}
+								value={this.state.scale_factor}
 								onChange={(value) => this.setState({ scale_factor: value })}
 							/>
 							<label>

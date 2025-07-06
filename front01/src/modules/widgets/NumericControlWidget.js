@@ -9,25 +9,29 @@ export class NumericControlWidjet extends React.Component {
 		super(props);
 		this.state = {
 			init_value: this.props.init_value,
-			value: this.props.init_value
+			value: this.props.value ? this.props.value : this.props.init_value
 		};
 	}
+
+	_getValue = () => {
+		return this.props.value ? this.props.value : this.state.value;
+	};
 
 	_onChange = (value) => {
 		if (value > this.props.max) value = this.props.min;
 		if (value < this.props.min) value = this.props.max;
-		if (value !== this.state.value) {
+		if (value !== this._getValue()) {
 			this.setState({ value: value });
 			this.props.onChange(value);
 		}
 	};
 
 	onChange = (e) => {
-		this._onChange(e.target.value);
+		this._onChange(+e.target.value);
 	};
 
 	reset = () => {
-		this._onChange(this.state.init_value);
+		this._onChange(+this.state.init_value);
 	};
 
 	render() {
@@ -35,7 +39,7 @@ export class NumericControlWidjet extends React.Component {
 			<label className="NumericControlWidjet">
 				<div className="flex flex_space_between">
 					{get_locales(this.props.label)}:
-					<input type="number" step={this.props.step} value={this.state.value} onChange={this.onChange} />
+					<input type="number" step={this.props.step} value={this._getValue()} onChange={this.onChange} />
 					<button onClick={this.reset}>{get_locales('reset')}</button>
 				</div>
 				<input
@@ -45,7 +49,7 @@ export class NumericControlWidjet extends React.Component {
 					max={this.props.max}
 					step={this.props.step}
 					className="slider"
-					value={this.state.value}
+					value={this._getValue()}
 					onChange={this.onChange}
 					//value={this.state.progradeAcc}
 				/>
