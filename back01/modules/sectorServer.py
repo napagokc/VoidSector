@@ -284,8 +284,6 @@ class EngineSector:
 
             elif command.contains_level("hBodiesPool"):
                 self.hBodies.proceed_command(command)
-            elif command.contains_level("medicine"):
-                self.medicineController.proceed_command(command)
             elif command.contains_level("qp_controller"):
                 QuestPointsController().proceed_command(command)
 

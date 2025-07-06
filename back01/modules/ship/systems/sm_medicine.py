@@ -546,13 +546,8 @@ class MedicineSystem(BasicShipSystem):
                 self.active = params["value"]
             case 'toogle_activity':
                 self.active = not self.active
-            case "remove_unit_from_hospital": self.remove_unit_from_hospital(params['value'])
-            case "disable_user":
-                self.roles[params['role']].set_disable(params['role'], True)
-
-            case "restore_user":
-                self.roles[params['role']].set_disable(params['role'], False)
-
+            case "remove_unit_from_hospital":
+                self.remove_unit_from_hospital(params['value'])
             case 'apply_light_cure':
                 self.roles[params['role']].apply_light_cure(params['axis'])
             case 'apply_hard_cure':
