@@ -35,8 +35,8 @@ export class MapEditorRadarWidget extends React.Component {
 			radar_width: 600,
 			scale_factor: 1,
 			radar_hover: false,
-			controlled_observer_pos: [0, 0],
 			cursor_position_old: [0, 0],
+			drag_position_old: [0, 0],
 			data: {
 				observer_pos: [0, 0],
 				hBodies: {},
@@ -61,24 +61,11 @@ export class MapEditorRadarWidget extends React.Component {
 		let nav_data = get_navdata();
 		if (!nav_data) return;
 
-		let o = global_observer_pos; //this.state.controlled_observer_pos
-		o[0] = o[0] + this.state.key_pressed[0];
-		o[1] = o[1] + this.state.key_pressed[1];
+		global_observer_pos[0] += this.state.key_pressed[0];
+		global_observer_pos[1] += this.state.key_pressed[1];
 
-		nav_data.observer_pos = o;
-
-		this.setState({
-			data: nav_data,
-			controlled_observer_pos: o
-		});
-	};
-
-	move_observer = (axis, step) => {
-		let o = this.state.controlled_observer_pos;
-		if (axis === 'X') o[0] = o[0] + step;
-		if (axis === 'Y') o[1] = o[1] + step;
-
-		this.setState({ controlled_observer_pos: o });
+		nav_data.observer_pos = global_observer_pos;
+		this.setState({ data: nav_data });
 	};
 
 	move_observer_step = (params) => {
@@ -99,11 +86,46 @@ export class MapEditorRadarWidget extends React.Component {
 		this.setState({ scale_factor: +new_scale_factor.toFixed(2) });
 	};
 
-	onMouseMove = (mouse) => {
+	onDrag = (event) => {
+		let nav_data = get_navdata();
+		if (!nav_data) return;
+
+		global_observer_pos[0] = this.state.drag_position_old[0] - event.pageX / this.state.scale_factor;
+		global_observer_pos[1] = event.pageY / this.state.scale_factor - this.state.drag_position_old[1];
+
+		nav_data.observer_pos = global_observer_pos;
+		this.setState({ data: nav_data });
+	};
+
+	onStopDrag = (event) => {
+		if (event.button === 1) {
+			document.removeEventListener('mousemove', this.onDrag);
+			document.removeEventListener('mouseup', this.onStopDrag);
+		}
+	};
+
+	onStartDrag = (event) => {
+		if (event.button === 1) {
+			this.setState(
+				{
+					drag_position_old: [
+						global_observer_pos[0] + event.pageX / this.state.scale_factor,
+						event.pageY / this.state.scale_factor - global_observer_pos[1]
+					]
+				},
+				() => {
+					document.addEventListener('mouseup', this.onStopDrag);
+					document.addEventListener('mousemove', this.onDrag);
+				}
+			);
+		}
+	};
+
+	onMoveCursor = (mouse) => {
 		let mouse_position_x =
-			(mouse.x * this.state.radar_width) / 2 / this.state.scale_factor + this.state.controlled_observer_pos[0];
+			(mouse.x * this.state.radar_width) / 2 / this.state.scale_factor + global_observer_pos[0];
 		let mouse_position_y =
-			(mouse.y * this.state.radar_width) / 2 / this.state.scale_factor + this.state.controlled_observer_pos[1];
+			(mouse.y * this.state.radar_width) / 2 / this.state.scale_factor + global_observer_pos[1];
 		let cursor_position = [mouse_position_x, mouse_position_y];
 
 		if (
@@ -124,15 +146,15 @@ export class MapEditorRadarWidget extends React.Component {
 		let mouse_position_y = this.state.cursor_position_old[1];
 
 		if (to_draw) {
-			mouse_position_x = mouse_position_x - this.state.controlled_observer_pos[0];
-			mouse_position_y = mouse_position_y - this.state.controlled_observer_pos[1];
+			mouse_position_x -= global_observer_pos[0];
+			mouse_position_y -= global_observer_pos[1];
 		}
 
 		tmp.position = [mouse_position_x, mouse_position_y];
 		return tmp;
 	};
 
-	onMouseClick = (e) => {
+	onClickCursor = (e) => {
 		if (this.props.brush_state.active) {
 			let brush = this.props.brush_state.mode;
 			brush = brush in brushes_map ? brushes_map[brush] : 'brush_delete';
@@ -142,7 +164,6 @@ export class MapEditorRadarWidget extends React.Component {
 	};
 
 	get_buttons_block = () => {
-		let step = 20;
 		return (
 			<div className="AccelerationController_btnblock">
 				<button
@@ -150,7 +171,7 @@ export class MapEditorRadarWidget extends React.Component {
 						this.move_observer_step([0, 0]);
 					}}
 					onMouseDown={(e) => {
-						this.move_observer_step([0, step]);
+						this.move_observer_step([0, 20]);
 					}}
 				>
 					🠉
@@ -161,7 +182,7 @@ export class MapEditorRadarWidget extends React.Component {
 						this.move_observer_step([0, 0]);
 					}}
 					onMouseDown={(e) => {
-						this.move_observer_step([-step, 0]);
+						this.move_observer_step([-20, 0]);
 					}}
 				>
 					🠈
@@ -171,7 +192,7 @@ export class MapEditorRadarWidget extends React.Component {
 						this.move_observer_step([0, 0]);
 					}}
 					onMouseDown={(e) => {
-						this.move_observer_step([0, -step]);
+						this.move_observer_step([0, -20]);
 					}}
 				>
 					🠋
@@ -181,7 +202,7 @@ export class MapEditorRadarWidget extends React.Component {
 						this.move_observer_step([0, 0]);
 					}}
 					onMouseDown={(e) => {
-						this.move_observer_step([step, 0]);
+						this.move_observer_step([20, 0]);
 					}}
 				>
 					🠊
@@ -215,7 +236,7 @@ export class MapEditorRadarWidget extends React.Component {
 			this.props.highlighted_body_idx
 		);
 		let aim_markers = this.state.radar_hover
-			? entityRendererCursor.get_objects_from_data(this.onMouseMove, this.onMouseClick)
+			? entityRendererCursor.get_objects_from_data(this.onMoveCursor, this.onClickCursor)
 			: [];
 		let brush_objects = get_brush_object(this.get_brush_params(true), this.state.scale_factor);
 
@@ -228,6 +249,7 @@ export class MapEditorRadarWidget extends React.Component {
 					onMouseEnter={this.onMouseEnter}
 					onMouseLeave={this.onMouseLeave}
 					onWheel={this.onMouseWheel}
+					onMouseDown={this.onStartDrag}
 					style={{ width: this.state.radar_width, height: this.state.radar_width }}
 				>
 					<ambientLight />

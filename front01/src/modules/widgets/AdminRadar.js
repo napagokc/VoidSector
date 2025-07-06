@@ -30,7 +30,7 @@ export class AdminRadarWidget extends React.Component {
 			radar_width: 600,
 			scale_factor: 1,
 			radar_hover: false,
-			controlled_observer_pos: [0, 0],
+			drag_position_old: [0, 0],
 			data: {
 				observer_pos: [0, 0],
 				hBodies: {},
@@ -61,21 +61,11 @@ export class AdminRadarWidget extends React.Component {
 		let nav_data = get_navdata();
 		if (nav_data == null) return;
 
-		let o = global_observer_pos; //this.state.controlled_observer_pos
-		o[0] = o[0] + this.state.key_pressed[0];
-		o[1] = o[1] + this.state.key_pressed[1];
+		global_observer_pos[0] += this.state.key_pressed[0];
+		global_observer_pos[1] += this.state.key_pressed[1];
 
-		nav_data.observer_pos = o;
-
+		nav_data.observer_pos = global_observer_pos;
 		this.setState({ data: nav_data });
-	};
-
-	move_observer = (axis, step) => {
-		let o = this.state.controlled_observer_pos;
-		if (axis === 'X') o[0] = o[0] + step;
-		if (axis === 'Y') o[1] = o[1] + step;
-
-		this.setState({ controlled_observer_pos: o });
 	};
 
 	move_observer_step = (params) => {
@@ -96,15 +86,39 @@ export class AdminRadarWidget extends React.Component {
 		this.setState({ scale_factor: +new_scale_factor.toFixed(2) });
 	};
 
-	onMouseMove = (mouse) => {
-		/*if ((mouse.x < treshhold_out) && (mouse.x > -treshhold_out)) {
-         if (mouse.x > treshhold_in) this.move_observer("X", step)
-         if (mouse.x < -treshhold_in) this.move_observer("X", -step)
-        }
-        if ((mouse.y < treshhold_out) && (mouse.y > -treshhold_out)) {
-         if (mouse.y > treshhold_in) this.move_observer("Y", step)
-         if (mouse.y < -treshhold_in) this.move_observer("Y", -step)
-        }*/
+	onDrag = (event) => {
+		let nav_data = get_navdata();
+		if (!nav_data) return;
+
+		global_observer_pos[0] = this.state.drag_position_old[0] - event.pageX / this.state.scale_factor;
+		global_observer_pos[1] = event.pageY / this.state.scale_factor - this.state.drag_position_old[1];
+
+		nav_data.observer_pos = global_observer_pos;
+		this.setState({ data: nav_data });
+	};
+
+	onStopDrag = (event) => {
+		if (event.button === 1) {
+			document.removeEventListener('mousemove', this.onDrag);
+			document.removeEventListener('mouseup', this.onStopDrag);
+		}
+	};
+
+	onStartDrag = (event) => {
+		if (event.button === 1) {
+			this.setState(
+				{
+					drag_position_old: [
+						global_observer_pos[0] + event.pageX / this.state.scale_factor,
+						event.pageY / this.state.scale_factor - global_observer_pos[1]
+					]
+				},
+				() => {
+					document.addEventListener('mouseup', this.onStopDrag);
+					document.addEventListener('mousemove', this.onDrag);
+				}
+			);
+		}
 	};
 
 	get_buttons_block = () => {
@@ -162,7 +176,10 @@ export class AdminRadarWidget extends React.Component {
 			map_border: get_map_border()
 		});
 		let aim_markers = this.state.radar_hover
-			? entityRendererCursor.get_objects_from_data(this.onMouseMove, () => {})
+			? entityRendererCursor.get_objects_from_data(
+					() => {},
+					() => {}
+			  )
 			: [];
 		let selection_objects = entityRenderer.get_selection_marker(
 			this.state.data,
@@ -179,6 +196,7 @@ export class AdminRadarWidget extends React.Component {
 						onMouseEnter={this.onMouseEnter}
 						onMouseLeave={this.onMouseLeave}
 						onWheel={this.onMouseWheel}
+						onMouseDown={this.onStartDrag}
 						style={{ width: this.state.radar_width, height: this.state.radar_width }}
 					>
 						<ambientLight />
