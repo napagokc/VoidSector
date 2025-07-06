@@ -1,29 +1,30 @@
-import asyncio
-import time
 import sys
-import numpy as np
+import time
 import traceback
+import asyncio
 import multiprocessing as mp
+import numpy as np
 
-from enum import Enum
-from datetime import datetime
 from contextlib import suppress
-from modules.physEngine.plague2 import PlagueMatrix
-from modules.utils import Command, catch_exception, get_dt_ms, PerformanceCollector
-from modules.physEngine.quests.quest_controller import QuestPointsController
-from modules.physEngine.entity_id_groups_controller import EntityIDGroupsController
-from modules.physEngine.solar_flare.solar_flar_activator import SolarFlareActivator
-from modules.ship.projectile_blueprints import ProjectileConstructorController
-from modules.utils import ConfigLoader
+from datetime import datetime
+from enum import Enum
 from modules.map_controllers.editor import MapEditor
 from modules.map_controllers.loader import MapLoader
-from modules.ship.ship import ShipPool_Singleton
-from modules.physEngine.world_constants import WorldPhysConstants
-from modules.physEngine.triggers.handler import TriggerHandler
-from modules.physEngine.predictor import launch_new_TrajectoryPredictor_controller, TrajectoryPredictor_controller
 from modules.physEngine.core import CrossDistancePool
-from modules.physEngine.core import lBodyPool_Singleton
 from modules.physEngine.core import hBodyPool_Singleton
+from modules.physEngine.core import lBodyPool_Singleton
+from modules.physEngine.entity_id_groups_controller import EntityIDGroupsController
+from modules.physEngine.plague2 import PlagueMatrix
+from modules.physEngine.predictor import launch_new_TrajectoryPredictor_controller, TrajectoryPredictor_controller
+from modules.physEngine.quests.quest_controller import QuestPointsController
+from modules.physEngine.solar_flare.solar_flar_activator import SolarFlareActivator
+from modules.physEngine.triggers.handler import TriggerHandler
+from modules.physEngine.world_constants import WorldPhysConstants
+from modules.ship.projectile_blueprints import ProjectileConstructorController
+from modules.ship.ship import ShipPool_Singleton
+from modules.utils import Command, catch_exception, get_dt_ms, PerformanceCollector
+from modules.utils import ConfigLoader
+
 
 class SectorCommandType(Enum):
     MOVE = "spawn"
@@ -34,10 +35,6 @@ class SectorCommandType(Enum):
     SET_PHYSICS = "set_physics"
 
 
-# обертка для процесса, в котором работает сервер.
-# in_queue - очередь для команд: спавн, передвижение
-# контекст менеджер передается из базового процесса и создается в __main__
-
 def run_instance(in_queue, out_sector_data):
     instance = EngineSector(in_queue, out_sector_data)
     try:
@@ -47,7 +44,32 @@ def run_instance(in_queue, out_sector_data):
         pass
 
 
+def get_size(obj, seen=None):
+    """Recursively finds size of objects"""
+    size = sys.getsizeof(obj)
+    if seen is None:
+        seen = set()
+    obj_id = id(obj)
+    if obj_id in seen:
+        return 0
+    # Important mark as seen *before* entering recursion to gracefully handle
+    # self-referential objects
+    seen.add(obj_id)
+    if isinstance(obj, dict):
+        size += sum([get_size(v, seen) for v in obj.values()])
+        size += sum([get_size(k, seen) for k in obj.keys()])
+    elif hasattr(obj, '__dict__'):
+        size += get_size(obj.__dict__, seen)
+    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
+        size += sum([get_size(i, seen) for i in obj])
+    return size
+
+
+# обертка для процесса, в котором работает сервер.
+# in_queue - очередь для команд: спавн, передвижение
+# контекст менеджер передается из базового процесса и создается в __main__
 class EngineSector_interactor:
+    _instance = None  # Приватное поле для хранения единственного экземпляра
 
     output_template = {
         "observer_id": None,
@@ -56,18 +78,9 @@ class EngineSector_interactor:
             "hBodies": {},
             "lBodies": {},
         },
-
         "state_data": None,
-
-        "performance": {
-
-
-
-
-        }
+        "performance": {}
     }
-
-    _instance = None  # Приватное поле для хранения единственного экземпляра
 
     def __new__(cls):
         if cls._instance is None:
@@ -79,7 +92,6 @@ class EngineSector_interactor:
             inst.p = None
 
             cls._instance = inst
-
         return cls._instance
 
     def init_server(self, mp_ctx_manager):
@@ -94,33 +106,20 @@ class EngineSector_interactor:
             self.out_sector_data["map_border"] = 1000
             self.out_sector_data["plague_matrix"] = PlagueMatrix().get()
 
-    def get_ships_list(self):
-        list_ships = []
-        tmp = self.out_sector_data["lBodies"]
-        for t in tmp:
-            if tmp[t][0] == "ae_ship":
-                list_ships.append({
-                    "id": t,
-                })
-        return list_ships
-
     def get_quest_point_state(self):
         return self.out_sector_data["quest_points_controller"]
 
-    # ============================КОМАНДЫ ДЛЯ CЕРВЕРА=============================================
-
+    # ============================КОМАНДЫ ДЛЯ СЕРВЕРА=============================================
     def proceed_command(self, command):
         self.in_queue.put(command)
 
     # =============ИСХОДЯЩИЙ ПОТОК================================================================
-
     def get_sector_map(self, key=None):
-        data = {}
         try:
-            if self.out_sector_data["server_is_alive"] == False:
+            if not self.out_sector_data["server_is_alive"]:
                 return EngineSector_interactor.output_template
 
-            if key != None:
+            if key is not None:
                 data = self.out_sector_data[f"{key}_field_view"]
 
             else:
@@ -133,8 +132,7 @@ class EngineSector_interactor:
             data["solar_flare"] = self.out_sector_data["solar_flare"]
             data["medicine"] = self.out_sector_data["medicine"]
             data["map_border"] = self.out_sector_data["map_border"]
-
-        except Exception as e:
+        except Exception as _:
             return EngineSector_interactor.output_template
 
         return data
@@ -143,23 +141,17 @@ class EngineSector_interactor:
         key_t = f"{key}_field_view"
         if key_t not in self.out_sector_data:
             return {}
+
         data = self.out_sector_data[key_t]
         med_data = data["state_data"]["med_sm"]
         return med_data
-    
+
     def get_plague_matrix(self):
         return self.out_sector_data['plague_matrix']
 
-    def get_status(self):
-        self.p.join(timeout=0)
-        if self.p.is_alive():
-            return {"EngineSector": "OK"}
-
     def get_blueprints(self, mark_id):
         blueprints = self.out_sector_data["projectile_blueprints"]
-        if mark_id in blueprints:
-            return blueprints[mark_id]
-        return {}
+        return blueprints[mark_id] if mark_id in blueprints else {}
 
     # =============================================================================================
 
@@ -169,6 +161,7 @@ class EngineSector_interactor:
 
     def stop(self):
         self.p.join()
+
 
 class EngineSector:
     @catch_exception
@@ -195,6 +188,7 @@ class EngineSector:
         self.map_loader = MapLoader()
         self.map_editor = MapEditor()
         launch_new_TrajectoryPredictor_controller()
+
         # инициализация
         self.map_loader.load_map()
         # self.map_loader.load_ships()
@@ -214,16 +208,12 @@ class EngineSector:
                 "observer_id": None,
                 "observer_pos": [0, 0],
                 "hBodies": self.hBodies.get_bodies_description(),
-                "lBodies": self.lBodies.get_bodies_description(),
-
-
-
-
-            },
+                "lBodies": self.lBodies.get_bodies_description()
+            }
         }
 
         self.out_sector_data["global_field_view"] = self.global_field_view
-        self.simulation_is_runned = True
+        self.simulation_is_running = True
 
     async def teardown(self):
         for task in asyncio.all_tasks(self.event_loop):
@@ -240,15 +230,12 @@ class EngineSector:
             time.sleep(0.04)
 
     # ===========================РАЗДЕЛ ДЛЯ КОРУТИН В ЦИКЛЕ ДВИЖКА СЕКТОРА============================================
-
-    """command = {
-                                "level":"ship", "server",
-                                "target_id": "id",
-                                "command": "aim"
-                                "params": {
-
-                                }
-                }"""
+    # command = {
+    #     "level":"ship", "server",
+    #     "target_id": "id",
+    #     "command": "aim"
+    #     "params": {}
+    # }
 
     async def read_input_data(self):
         while True:
@@ -267,7 +254,7 @@ class EngineSector:
             if command.contains_level("predictor"):
                 launch_new_TrajectoryPredictor_controller()
                 # self.trajectoryPredictor_controller.proceed_command(command)
-            if command.contains_level("server"):
+            elif command.contains_level("server"):
                 self.proceed_server_command(command)
             elif command.contains_level("ship"):
                 self.cShips.proceed_command(command)
@@ -275,18 +262,15 @@ class EngineSector:
                 self.map_editor.proceed_command(command)
             elif command.contains_level("map_loader"):
                 self.map_loader.proceed_command(command)
-                self.out_sector_data["map_border"] = self.hBodies.get_max_distance(
-                )
+                self.out_sector_data["map_border"] = self.hBodies.get_max_distance()
             elif command.contains_level("solar_flare"):
                 self.solarFlareActivator.proceed_command(command)
             elif command.contains_level("config_loader"):
                 ConfigLoader().proceed_command(command)
-
             elif command.contains_level("hBodiesPool"):
                 self.hBodies.proceed_command(command)
             elif command.contains_level("qp_controller"):
                 QuestPointsController().proceed_command(command)
-
             elif command.contains_level("station_controller"):
                 self.proceed_station_command(command)
 
@@ -299,52 +283,60 @@ class EngineSector:
             action = command.get_action()
             params = command.get_params()
             target = params["target"]
+
             if action == "activate_station_defence":
                 if target in self.lBodies.bodies:
                     self.lBodies[target].activate_station_defence()
-            if action == "destroy_station":
+            elif action == "destroy_station":
                 if target in self.lBodies.bodies:
                     self.lBodies[target].self_destroy()
-            if action == "set_map_border":
+            elif action == "set_map_border":
                 self.out_sector_data["map_border"] = params["value"]
 
-        except Exception as e:
-            pass#print("SectorServer", repr(e))
+        except Exception as _:
+            # print("SectorServer", repr(e))
+            pass
 
     def proceed_server_command(self, command: Command):
         try:
             action = command.get_action()
             params = command.get_params()
             if action == SectorCommandType.SET_PHYSICS:
-                WorldPhysConstants().set_Gconst(command["Gconst"])
-                WorldPhysConstants().set_timestep(command["timestep"])
+                WorldPhysConstants().set_Gconst(params["Gconst"])
+                WorldPhysConstants().set_timestep(params["timestep"])
                 TrajectoryPredictor_controller().set_physics(command)
-            if action == "restart":
+            elif action == "restart":
                 self.map_loader.load_map()
                 self.map_loader.load_ships()
-            if action == "reload_predictors":
+            elif action == "reload_predictors":
                 TrajectoryPredictor_controller().update_hbodies_location()
-            if action == "pause":
-                self.simulation_is_runned = False
-            if action == "run":
-                self.simulation_is_runned = True
+            elif action == "pause":
+                self.simulation_is_running = False
+            elif action == "run":
+                self.simulation_is_running = True
 
-        except Exception as e:
-            pass#print("SectorServer", repr(e))
+        except Exception as _:
+            # print("SectorServer", repr(e))
+            pass
 
     # ==========ФИЗИКА===============================================================================================
 
     async def update_bodies(self):
-        t1 = datetime.now()
         desiredFPS = 30
-        time_interval = 1/desiredFPS
+        time_interval = 1 / desiredFPS
         self.out_sector_data["server_is_alive"] = True
+
         while True:
             try:
-                dt = datetime.now() - t1
+                tmp_t0 = 0
+                tmp_t1 = 0
+                tmp_t2 = 0
+                tmp_t3 = 0
+                tmp_t4 = 0
+                tmp_t5 = 0
                 t1 = datetime.now()
 
-                if self.simulation_is_runned:
+                if self.simulation_is_running:
                     tmp_t0 = datetime.now()
                     self.distancePool.update()
                     tmp_t1 = datetime.now()
@@ -360,15 +352,13 @@ class EngineSector:
                     self.solarFlareActivator.step()
 
                 # обновления админского поля зрения
-                tmp_t6 = datetime.now()
-                self.global_field_view["nav_data"]["hBodies"] = self.hBodies.get_bodies_description(
-                )
-                tmp_t7 = datetime.now()
-                self.global_field_view["nav_data"]["lBodies"] = self.lBodies.get_bodies_description(
-                )
-                self.global_field_view["nav_data"]["visible_ships"] = EntityIDGroupsController(
-                ).get("id_labels_detectable")
-                tmp_t8 = datetime.now()
+                # tmp_t6 = datetime.now()
+                self.global_field_view["nav_data"]["hBodies"] = self.hBodies.get_bodies_description()
+                # tmp_t7 = datetime.now()
+                self.global_field_view["nav_data"]["lBodies"] = self.lBodies.get_bodies_description()
+                self.global_field_view["nav_data"]["visible_ships"] = (EntityIDGroupsController()
+                                                                       .get("id_labels_detectable"))
+                # tmp_t8 = datetime.now()
                 self.out_sector_data["global_field_view"] = self.global_field_view
 
                 # обновления поля зрения для каждого корабля
@@ -381,14 +371,14 @@ class EngineSector:
 
                 # оценка производительности
                 dt = datetime.now() - t1
-                calculation_time = dt.microseconds/1000000
-                delay_time = max(0, time_interval-calculation_time)
+                calculation_time = dt.microseconds / 1000000
+                delay_time = max(0.0, time_interval - calculation_time)
                 # self.out_sector_data["time2processFrame"] = dt.microseconds/1000
 
                 performance_p1 = {
                     "predictors_step_time": TrajectoryPredictor_controller().get_predictor_performance_statistics(),
                     "real_calculation_time": calculation_time,
-                    "free_awaiting_time": time_interval-calculation_time,
+                    "free_awaiting_time": time_interval - calculation_time,
                     "frame_size[bytes]": get_size(self.global_field_view),
                     "distancePool_time": get_dt_ms(tmp_t0, tmp_t1),
                     "lbodies_time": get_dt_ms(tmp_t1, tmp_t2),
@@ -396,28 +386,20 @@ class EngineSector:
                     "trigger_time": get_dt_ms(tmp_t3, tmp_t4),
                     "cships_time": get_dt_ms(tmp_t4, tmp_t5),
                     # "admin_view": get_dt_ms(tmp_t6, tmp_t8),
-                    "ships_view": get_dt_ms(tmp_t9, tmp_t10),
-
-
-
-
+                    "ships_view": get_dt_ms(tmp_t9, tmp_t10)
                 }
 
-                performanse_p2 = PerformanceCollector().get()
-
-                performanse = dict(performance_p1, **performanse_p2)
-
-                self.out_sector_data["performance"] = performanse
+                performance_p2 = PerformanceCollector().get()
+                performance = dict(performance_p1, **performance_p2)
+                self.out_sector_data["performance"] = performance
 
                 PerformanceCollector().clear()
 
                 self.out_sector_data["systems_state"] = {
                     "map_locked": str(not self.hBodies.realtime_update)
                 }
-                self.out_sector_data["solar_flare"] = self.solarFlareActivator.get_status(
-                )
-                self.out_sector_data["projectile_blueprints"] = ProjectileConstructorController(
-                ).blueprints
+                self.out_sector_data["solar_flare"] = self.solarFlareActivator.get_status()
+                self.out_sector_data["projectile_blueprints"] = ProjectileConstructorController().blueprints
 
                 self.map_border_check_trigger()
                 WorldPhysConstants().next_step()
@@ -427,8 +409,8 @@ class EngineSector:
                 break
             except KeyboardInterrupt:
                 break
-            except Exception as e:
-                #print(e)
+            except Exception as _:
+                # print(e)
                 # print(traceback.format_exc())
                 pass
 
@@ -437,7 +419,7 @@ class EngineSector:
             pos = self.lBodies[ship_id].get_position_np()
             distance2ship = np.linalg.norm(pos)
             if distance2ship > self.out_sector_data["map_border"]:
-                new_speed = -pos/distance2ship
+                new_speed = -pos / distance2ship
                 self.lBodies[ship_id].set_velocity(new_speed)
 
     # ===============================================================================================================
@@ -448,8 +430,7 @@ class EngineSector:
                 await asyncio.sleep(1)
                 ships_stats = {}
                 for ae_ship_id in self.cShips.ships:
-                    ships_stats[ae_ship_id] = self.cShips.ships[ae_ship_id].get_short_description(
-                    )
+                    ships_stats[ae_ship_id] = self.cShips.ships[ae_ship_id].get_short_description()
                 self.out_sector_data["ships_state"] = ships_stats
             except KeyboardInterrupt:
                 break
@@ -462,15 +443,15 @@ class EngineSector:
                 await asyncio.sleep(1)
                 stations_stats = {}
                 for station_idx in EntityIDGroupsController().get("is_station"):
-                    stations_stats[station_idx] = self.lBodies[station_idx].get_short_description(
-                    )
+                    stations_stats[station_idx] = self.lBodies[station_idx].get_short_description()
                 self.out_sector_data["stations_state"] = stations_stats
             except KeyboardInterrupt:
                 break
             except asyncio.CancelledError:
                 break
-            except Exception as e:
-                pass#print("update_station_state", repr(e))
+            except Exception as _:
+                # print("update_station_state", repr(e))
+                pass
 
     async def update_quest_points_state(self):
         while True:
@@ -482,15 +463,14 @@ class EngineSector:
             except asyncio.CancelledError:
                 break
 
-
     async def map_autosaver(self):
         cnter = 0
         while True:
             try:
-                await asyncio.sleep(60*1)
+                await asyncio.sleep(60 * 1)
                 self.map_editor.save_main_ship(f"auto_save_#{cnter}")
                 self.map_editor.save_main_ship(f"auto_save_latest")
-                cnter = cnter+1
+                cnter = cnter + 1
                 if cnter > 9:
                     cnter = 0
             except KeyboardInterrupt:
@@ -498,9 +478,7 @@ class EngineSector:
             except asyncio.CancelledError:
                 break
 
-
-    #=================================================================================================================
-                
+    # =================================================================================================================
     async def update_plague_matrix(self):
         while True:
             try:
@@ -511,23 +489,3 @@ class EngineSector:
                 break
             except asyncio.CancelledError:
                 break
-
-def get_size(obj, seen=None):
-    """Recursively finds size of objects"""
-    size = sys.getsizeof(obj)
-    if seen is None:
-        seen = set()
-    obj_id = id(obj)
-    if obj_id in seen:
-        return 0
-    # Important mark as seen *before* entering recursion to gracefully handle
-    # self-referential objects
-    seen.add(obj_id)
-    if isinstance(obj, dict):
-        size += sum([get_size(v, seen) for v in obj.values()])
-        size += sum([get_size(k, seen) for k in obj.keys()])
-    elif hasattr(obj, '__dict__'):
-        size += get_size(obj.__dict__, seen)
-    elif hasattr(obj, '__iter__') and not isinstance(obj, (str, bytes, bytearray)):
-        size += sum([get_size(i, seen) for i in obj])
-    return size
