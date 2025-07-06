@@ -14,16 +14,9 @@ import { entityRendererCursor } from '../renderers/CursorRenderer';
 import { get_brush_object } from '../renderers/CursorRenderer';
 import { entityRenderer } from '../renderers/EntityRenderer';
 
-import { INITIAL_SCALE_FACTOR, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR, STEP_SCALE_FACTOR } from './PlayerRadar';
-import {
-	global_observer_pos,
-	set_global_observer_pos,
-	OBSERVER_MOVE_STEP,
-	DIR_UP,
-	DIR_DOWN,
-	DIR_LEFT,
-	DIR_RIGHT
-} from './AdminRadar';
+import { global_observer_pos, set_global_observer_pos } from './AdminRadar';
+
+import * as Const from '../utils/constants';
 
 const brushes_map = {
 	creator: 'brush_create',
@@ -88,8 +81,8 @@ export class MapEditorRadarWidget extends React.Component {
 	};
 
 	onMouseWheel = (event) => {
-		let new_scale_factor = this.state.scale_factor + STEP_SCALE_FACTOR * (event.deltaY > 0 ? -3 : 3);
-		new_scale_factor = Math.min(Math.max(MIN_SCALE_FACTOR, new_scale_factor), MAX_SCALE_FACTOR);
+		let new_scale_factor = this.state.scale_factor + Const.STEP_SCALE_FACTOR * (event.deltaY > 0 ? -3 : 3);
+		new_scale_factor = Math.min(Math.max(Const.MIN_SCALE_FACTOR, new_scale_factor), Const.MAX_SCALE_FACTOR);
 		this.setState({ scale_factor: +new_scale_factor.toFixed(2) });
 	};
 
@@ -128,17 +121,17 @@ export class MapEditorRadarWidget extends React.Component {
 		let x = 0;
 		let y = 0;
 		switch (event.target.dataset.dir) {
-			case DIR_UP:
-				y += OBSERVER_MOVE_STEP;
+			case Const.DIR_UP:
+				y += Const.OBSERVER_MOVE_STEP;
 				break;
-			case DIR_DOWN:
-				y -= OBSERVER_MOVE_STEP;
+			case Const.DIR_DOWN:
+				y -= Const.OBSERVER_MOVE_STEP;
 				break;
-			case DIR_LEFT:
-				x -= OBSERVER_MOVE_STEP;
+			case Const.DIR_LEFT:
+				x -= Const.OBSERVER_MOVE_STEP;
 				break;
-			case DIR_RIGHT:
-				x += OBSERVER_MOVE_STEP;
+			case Const.DIR_RIGHT:
+				x += Const.OBSERVER_MOVE_STEP;
 				break;
 			default:
 				return;
@@ -202,16 +195,16 @@ export class MapEditorRadarWidget extends React.Component {
 	get_buttons_block = () => {
 		return (
 			<div className="AccelerationController_btnblock">
-				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_UP}>
+				<button onMouseDown={this.onNavBtnDown} data-dir={Const.DIR_UP}>
 					🠉
 				</button>
-				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_LEFT}>
+				<button onMouseDown={this.onNavBtnDown} data-dir={Const.DIR_LEFT}>
 					🠈
 				</button>
-				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_DOWN}>
+				<button onMouseDown={this.onNavBtnDown} data-dir={Const.DIR_DOWN}>
 					🠋
 				</button>
-				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_RIGHT}>
+				<button onMouseDown={this.onNavBtnDown} data-dir={Const.DIR_RIGHT}>
 					🠊
 				</button>
 			</div>
@@ -270,10 +263,10 @@ export class MapEditorRadarWidget extends React.Component {
 				<div className="flex flex_space_between">
 					<NumericControlWidjet
 						label="SCALE"
-						init_value={INITIAL_SCALE_FACTOR}
-						min={MIN_SCALE_FACTOR}
-						max={MAX_SCALE_FACTOR}
-						step={STEP_SCALE_FACTOR}
+						init_value={Const.INITIAL_SCALE_FACTOR}
+						min={Const.MIN_SCALE_FACTOR}
+						max={Const.MAX_SCALE_FACTOR}
+						step={Const.STEP_SCALE_FACTOR}
 						value={this.state.scale_factor}
 						onChange={(value) => this.setState({ scale_factor: value })}
 					/>

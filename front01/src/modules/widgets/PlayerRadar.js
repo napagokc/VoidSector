@@ -23,10 +23,7 @@ import { entityRendererCursor } from '../renderers/CursorRenderer';
 
 import { ShipOvervieweWidget } from './ShipOverview';
 
-export const INITIAL_SCALE_FACTOR = 1;
-export const MIN_SCALE_FACTOR = 0.1;
-export const MAX_SCALE_FACTOR = 2;
-export const STEP_SCALE_FACTOR = 0.02;
+import * as Const from '../utils/constants';
 
 export class PlayersRadarWidget extends React.Component {
 	constructor(props) {
@@ -67,8 +64,8 @@ export class PlayersRadarWidget extends React.Component {
 	};
 
 	onMouseWheel = (event) => {
-		let new_scale_factor = this.state.scale_factor + STEP_SCALE_FACTOR * (event.deltaY > 0 ? -3 : 3);
-		new_scale_factor = Math.min(Math.max(MIN_SCALE_FACTOR, new_scale_factor), MAX_SCALE_FACTOR);
+		let new_scale_factor = this.state.scale_factor + Const.STEP_SCALE_FACTOR * (event.deltaY > 0 ? -3 : 3);
+		new_scale_factor = Math.min(Math.max(Const.MIN_SCALE_FACTOR, new_scale_factor), Const.MAX_SCALE_FACTOR);
 		this.setState({ scale_factor: +new_scale_factor.toFixed(2) });
 	};
 
@@ -194,10 +191,10 @@ export class PlayersRadarWidget extends React.Component {
 						<div className="ShipNavigationInfo">
 							<NumericControlWidjet
 								label="SCALE"
-								init_value={INITIAL_SCALE_FACTOR}
-								min={MIN_SCALE_FACTOR}
-								max={MAX_SCALE_FACTOR}
-								step={STEP_SCALE_FACTOR}
+								init_value={Const.INITIAL_SCALE_FACTOR}
+								min={Const.MIN_SCALE_FACTOR}
+								max={Const.MAX_SCALE_FACTOR}
+								step={Const.STEP_SCALE_FACTOR}
 								value={this.state.scale_factor}
 								onChange={(value) => this.setState({ scale_factor: value })}
 							/>
