@@ -16,6 +16,12 @@ import { radarRenderer } from '../renderers/RadarRenderer';
 
 import { INITIAL_SCALE_FACTOR, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR, STEP_SCALE_FACTOR } from './PlayerRadar';
 
+export const OBSERVER_MOVE_STEP = 20;
+export const DIR_UP = 'up';
+export const DIR_DOWN = 'down';
+export const DIR_LEFT = 'left';
+export const DIR_RIGHT = 'right';
+
 export let global_observer_pos = [0, 0];
 
 export function set_global_observer_pos(value) {
@@ -38,7 +44,6 @@ export class AdminRadarWidget extends React.Component {
 				aZones: {}
 			},
 			entity_hovered: '',
-			key_pressed: [0, 0],
 			show_id_labels: true
 		};
 	}
@@ -57,19 +62,19 @@ export class AdminRadarWidget extends React.Component {
 		clearInterval(timerscounter.get(this.constructor.name));
 	}
 
-	proceed_data_message = () => {
+	_move_observer = (x, y) => {
 		let nav_data = get_navdata();
-		if (nav_data == null) return;
+		if (!nav_data) return;
 
-		global_observer_pos[0] += this.state.key_pressed[0];
-		global_observer_pos[1] += this.state.key_pressed[1];
+		global_observer_pos[0] = x;
+		global_observer_pos[1] = y;
 
 		nav_data.observer_pos = global_observer_pos;
 		this.setState({ data: nav_data });
 	};
 
-	move_observer_step = (params) => {
-		this.setState({ key_pressed: params });
+	proceed_data_message = () => {
+		this._move_observer(global_observer_pos[0], global_observer_pos[1]);
 	};
 
 	onMouseEnter = () => {
@@ -121,49 +126,52 @@ export class AdminRadarWidget extends React.Component {
 		}
 	};
 
+	onNavBtnDown = (event) => {
+		let x = 0;
+		let y = 0;
+		switch (event.target.dataset.dir) {
+			case DIR_UP:
+				y += OBSERVER_MOVE_STEP;
+				break;
+			case DIR_DOWN:
+				y -= OBSERVER_MOVE_STEP;
+				break;
+			case DIR_LEFT:
+				x -= OBSERVER_MOVE_STEP;
+				break;
+			case DIR_RIGHT:
+				x += OBSERVER_MOVE_STEP;
+				break;
+			default:
+				return;
+		}
+
+		let increment = () => this._move_observer(global_observer_pos[0] + x, global_observer_pos[1] + y);
+		increment();
+
+		let interval = setInterval(increment, 30);
+		let clearHandler = () => {
+			clearInterval(interval);
+			document.removeEventListener('mouseup', clearHandler);
+			event.target.removeEventListener('mouseleave', clearHandler);
+		};
+		document.addEventListener('mouseup', clearHandler);
+		event.target.addEventListener('mouseleave', clearHandler);
+	};
+
 	get_buttons_block = () => {
-		let step = 20;
 		return (
 			<div className="AccelerationController_btnblock">
-				<button
-					onMouseUp={(e) => {
-						this.move_observer_step([0, 0]);
-					}}
-					onMouseDown={(e) => {
-						this.move_observer_step([0, step]);
-					}}
-				>
+				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_UP}>
 					🠉
 				</button>
-
-				<button
-					onMouseUp={(e) => {
-						this.move_observer_step([0, 0]);
-					}}
-					onMouseDown={(e) => {
-						this.move_observer_step([-step, 0]);
-					}}
-				>
+				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_LEFT}>
 					🠈
 				</button>
-				<button
-					onMouseUp={(e) => {
-						this.move_observer_step([0, 0]);
-					}}
-					onMouseDown={(e) => {
-						this.move_observer_step([0, -step]);
-					}}
-				>
+				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_DOWN}>
 					🠋
 				</button>
-				<button
-					onMouseUp={(e) => {
-						this.move_observer_step([0, 0]);
-					}}
-					onMouseDown={(e) => {
-						this.move_observer_step([step, 0]);
-					}}
-				>
+				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_RIGHT}>
 					🠊
 				</button>
 			</div>

@@ -15,7 +15,15 @@ import { get_brush_object } from '../renderers/CursorRenderer';
 import { entityRenderer } from '../renderers/EntityRenderer';
 
 import { INITIAL_SCALE_FACTOR, MIN_SCALE_FACTOR, MAX_SCALE_FACTOR, STEP_SCALE_FACTOR } from './PlayerRadar';
-import { global_observer_pos, set_global_observer_pos } from './AdminRadar';
+import {
+	global_observer_pos,
+	set_global_observer_pos,
+	OBSERVER_MOVE_STEP,
+	DIR_UP,
+	DIR_DOWN,
+	DIR_LEFT,
+	DIR_RIGHT
+} from './AdminRadar';
 
 const brushes_map = {
 	creator: 'brush_create',
@@ -43,7 +51,6 @@ export class MapEditorRadarWidget extends React.Component {
 				lBodies: {},
 				aZones: {}
 			},
-			key_pressed: [0, 0],
 			clockwise: false
 		};
 	}
@@ -57,19 +64,19 @@ export class MapEditorRadarWidget extends React.Component {
 		clearInterval(timerscounter.get(this.constructor.name));
 	}
 
-	proceed_data_message = () => {
+	_move_observer = (x, y) => {
 		let nav_data = get_navdata();
 		if (!nav_data) return;
 
-		global_observer_pos[0] += this.state.key_pressed[0];
-		global_observer_pos[1] += this.state.key_pressed[1];
+		global_observer_pos[0] = x;
+		global_observer_pos[1] = y;
 
 		nav_data.observer_pos = global_observer_pos;
 		this.setState({ data: nav_data });
 	};
 
-	move_observer_step = (params) => {
-		this.setState({ key_pressed: params });
+	proceed_data_message = () => {
+		this._move_observer(global_observer_pos[0], global_observer_pos[1]);
 	};
 
 	onMouseEnter = () => {
@@ -87,14 +94,10 @@ export class MapEditorRadarWidget extends React.Component {
 	};
 
 	onDrag = (event) => {
-		let nav_data = get_navdata();
-		if (!nav_data) return;
-
-		global_observer_pos[0] = this.state.drag_position_old[0] - event.pageX / this.state.scale_factor;
-		global_observer_pos[1] = event.pageY / this.state.scale_factor - this.state.drag_position_old[1];
-
-		nav_data.observer_pos = global_observer_pos;
-		this.setState({ data: nav_data });
+		this._move_observer(
+			this.state.drag_position_old[0] - event.pageX / this.state.scale_factor,
+			event.pageY / this.state.scale_factor - this.state.drag_position_old[1]
+		);
 	};
 
 	onStopDrag = (event) => {
@@ -119,6 +122,39 @@ export class MapEditorRadarWidget extends React.Component {
 				}
 			);
 		}
+	};
+
+	onNavBtnDown = (event) => {
+		let x = 0;
+		let y = 0;
+		switch (event.target.dataset.dir) {
+			case DIR_UP:
+				y += OBSERVER_MOVE_STEP;
+				break;
+			case DIR_DOWN:
+				y -= OBSERVER_MOVE_STEP;
+				break;
+			case DIR_LEFT:
+				x -= OBSERVER_MOVE_STEP;
+				break;
+			case DIR_RIGHT:
+				x += OBSERVER_MOVE_STEP;
+				break;
+			default:
+				return;
+		}
+
+		let increment = () => this._move_observer(global_observer_pos[0] + x, global_observer_pos[1] + y);
+		increment();
+
+		let interval = setInterval(increment, 30);
+		let clearHandler = () => {
+			clearInterval(interval);
+			document.removeEventListener('mouseup', clearHandler);
+			event.target.removeEventListener('mouseleave', clearHandler);
+		};
+		document.addEventListener('mouseup', clearHandler);
+		event.target.addEventListener('mouseleave', clearHandler);
 	};
 
 	onMoveCursor = (mouse) => {
@@ -166,45 +202,16 @@ export class MapEditorRadarWidget extends React.Component {
 	get_buttons_block = () => {
 		return (
 			<div className="AccelerationController_btnblock">
-				<button
-					onMouseUp={(e) => {
-						this.move_observer_step([0, 0]);
-					}}
-					onMouseDown={(e) => {
-						this.move_observer_step([0, 20]);
-					}}
-				>
+				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_UP}>
 					🠉
 				</button>
-
-				<button
-					onMouseUp={(e) => {
-						this.move_observer_step([0, 0]);
-					}}
-					onMouseDown={(e) => {
-						this.move_observer_step([-20, 0]);
-					}}
-				>
+				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_LEFT}>
 					🠈
 				</button>
-				<button
-					onMouseUp={(e) => {
-						this.move_observer_step([0, 0]);
-					}}
-					onMouseDown={(e) => {
-						this.move_observer_step([0, -20]);
-					}}
-				>
+				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_DOWN}>
 					🠋
 				</button>
-				<button
-					onMouseUp={(e) => {
-						this.move_observer_step([0, 0]);
-					}}
-					onMouseDown={(e) => {
-						this.move_observer_step([20, 0]);
-					}}
-				>
+				<button onMouseDown={this.onNavBtnDown} data-dir={DIR_RIGHT}>
 					🠊
 				</button>
 			</div>
