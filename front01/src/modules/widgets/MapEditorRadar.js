@@ -38,6 +38,7 @@ export class MapEditorRadarWidget extends React.Component {
 			radar_hover: false,
 			cursor_position_old: [0, 0],
 			drag_position_old: [0, 0],
+			active_directions: [],
 			data: {
 				observer_pos: [0, 0],
 				hBodies: {},
@@ -51,10 +52,13 @@ export class MapEditorRadarWidget extends React.Component {
 	componentDidMount() {
 		clearInterval(timerscounter.get(this.constructor.name));
 		timerscounter.add(this.constructor.name, setInterval(this.proceed_data_message, 30));
+
+		document.addEventListener('keydown', this.onKeyDown);
 	}
 
 	componentWillUnmount() {
 		clearInterval(timerscounter.get(this.constructor.name));
+		document.removeEventListener('keydown', this.onKeyDown);
 	}
 
 	_move_observer = (x, y) => {
@@ -70,6 +74,143 @@ export class MapEditorRadarWidget extends React.Component {
 
 	proceed_data_message = () => {
 		this._move_observer(global_observer_pos[0], global_observer_pos[1]);
+	};
+
+	_applyNavVector = (x, y, dir) => {
+		switch (dir) {
+			case Const.DIR_UP:
+				y += Const.OBSERVER_MOVE_STEP;
+				break;
+			case Const.DIR_DOWN:
+				y -= Const.OBSERVER_MOVE_STEP;
+				break;
+			case Const.DIR_LEFT:
+				x -= Const.OBSERVER_MOVE_STEP;
+				break;
+			case Const.DIR_RIGHT:
+				x += Const.OBSERVER_MOVE_STEP;
+				break;
+			default:
+				return [x, y];
+		}
+
+		return [x, y];
+	};
+
+	_incrementHandler = () => {
+		let x = 0;
+		let y = 0;
+		this.state.active_directions.forEach((dir) => {
+			[x, y] = this._applyNavVector(x, y, dir);
+		});
+		if (x !== 0 || y !== 0) this._move_observer(global_observer_pos[0] + x, global_observer_pos[1] + y);
+	};
+
+	_directionKeyHandler = (keyCode, dir) => {
+		const key_timer_id = this.constructor.name + keyCode;
+		if (timerscounter.get(key_timer_id)) return;
+		let timerHandler = (event) => {
+			if (event.keyCode === keyCode) {
+				clearInterval(timerscounter.get(key_timer_id));
+				timerscounter.add(key_timer_id, false);
+				document.removeEventListener('keyup', timerHandler);
+			}
+		};
+
+		timerscounter.add(
+			key_timer_id,
+			setInterval(() => {
+				let active_directions = this.state.active_directions;
+				if (active_directions.indexOf(dir) >= 0) return;
+
+				const timer_id = this.constructor.name + '_increment';
+				let keyupHandler = (event) => {
+					if (event.keyCode === keyCode) {
+						let new_directions = this.state.active_directions.filter((item) => item !== dir);
+						this.setState({ active_directions: new_directions }, () => {
+							if (!this.state.active_directions.length) clearInterval(timerscounter.get(timer_id));
+						});
+
+						timerscounter.add(key_timer_id, false);
+						document.removeEventListener('keyup', keyupHandler);
+					}
+				};
+
+				clearInterval(timerscounter.get(key_timer_id));
+				active_directions.push(dir);
+				this.setState({ active_directions: active_directions }, () => {
+					this._incrementHandler();
+
+					clearInterval(timerscounter.get(timer_id));
+					timerscounter.add(timer_id, setInterval(this._incrementHandler, 30));
+					document.addEventListener('keyup', keyupHandler);
+				});
+			}, 30)
+		);
+
+		document.addEventListener('keyup', timerHandler);
+	};
+
+	onKeyDown = (event) => {
+		switch (event.keyCode) {
+			case KeyboardEvent.DOM_VK_UP:
+				this._directionKeyHandler(event.keyCode, Const.DIR_UP);
+				break;
+			case KeyboardEvent.DOM_VK_DOWN:
+				this._directionKeyHandler(event.keyCode, Const.DIR_DOWN);
+				break;
+			case KeyboardEvent.DOM_VK_LEFT:
+				this._directionKeyHandler(event.keyCode, Const.DIR_LEFT);
+				break;
+			case KeyboardEvent.DOM_VK_RIGHT:
+				this._directionKeyHandler(event.keyCode, Const.DIR_RIGHT);
+				break;
+			default:
+				return;
+		}
+	};
+
+	onNavBtnDown = (event) => {
+		const btn_timer_id = this.constructor.name + '_navBtn';
+		let dir = event.target.dataset.dir;
+		let timerHandler = () => {
+			clearInterval(timerscounter.get(btn_timer_id));
+			event.target.removeEventListener('mouseup', timerHandler);
+			event.target.removeEventListener('mouseleave', timerHandler);
+		};
+
+		timerscounter.add(
+			btn_timer_id,
+			setInterval(() => {
+				let active_directions = this.state.active_directions;
+				if (active_directions.indexOf(dir) >= 0) return;
+
+				const timer_id = this.constructor.name + '_increment';
+				let clearHandler = () => {
+					let new_directions = this.state.active_directions.filter((item) => item !== dir);
+					this.setState({ active_directions: new_directions }, () => {
+						if (!this.state.active_directions.length) clearInterval(timerscounter.get(timer_id));
+					});
+
+					document.removeEventListener('mouseup', clearHandler);
+					event.target.removeEventListener('mouseleave', clearHandler);
+				};
+
+				timerHandler();
+				active_directions.push(dir);
+				this.setState({ active_directions: active_directions }, () => {
+					this._incrementHandler();
+
+					clearInterval(timerscounter.get(timer_id));
+					timerscounter.add(timer_id, setInterval(this._incrementHandler, 30));
+					document.addEventListener('mouseup', clearHandler);
+					event.target.addEventListener('mouseleave', clearHandler);
+				});
+			}, 30)
+		);
+
+		event.target.addEventListener('mouseup', timerHandler);
+		event.target.addEventListener('mouseleave', timerHandler);
 	};
 
 	onMouseEnter = () => {
@@ -115,39 +256,6 @@ export class MapEditorRadarWidget extends React.Component {
 				}
 			);
 		}
-	};
-
-	onNavBtnDown = (event) => {
-		let x = 0;
-		let y = 0;
-		switch (event.target.dataset.dir) {
-			case Const.DIR_UP:
-				y += Const.OBSERVER_MOVE_STEP;
-				break;
-			case Const.DIR_DOWN:
-				y -= Const.OBSERVER_MOVE_STEP;
-				break;
-			case Const.DIR_LEFT:
-				x -= Const.OBSERVER_MOVE_STEP;
-				break;
-			case Const.DIR_RIGHT:
-				x += Const.OBSERVER_MOVE_STEP;
-				break;
-			default:
-				return;
-		}
-
-		let increment = () => this._move_observer(global_observer_pos[0] + x, global_observer_pos[1] + y);
-		increment();
-
-		let interval = setInterval(increment, 30);
-		let clearHandler = () => {
-			clearInterval(interval);
-			document.removeEventListener('mouseup', clearHandler);
-			event.target.removeEventListener('mouseleave', clearHandler);
-		};
-		document.addEventListener('mouseup', clearHandler);
-		event.target.addEventListener('mouseleave', clearHandler);
 	};
 
 	onMoveCursor = (mouse) => {
