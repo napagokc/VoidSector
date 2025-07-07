@@ -31,55 +31,59 @@ export class FlaresController extends React.Component {
 		if (!('state' in this.state)) return null;
 
 		return (
-			<div className="solarFlare_control">
-				<label>
-					<b>Solar flare state:</b>
-					{this.state.state.toString()}
-				</label>
-				<label>time2nextphase:{this.state.time2nextphase}</label>
-				<label>probability:{this.state.probability}</label>
-				<button
-					onClick={() => {
-						this.toogleSolarFlare(!this.state.state);
-					}}
-				>
-					TOOGLE ACTIVITY
-				</button>
-				<button
-					onClick={() => {
-						this.toogleSolarFlareTimer(!this.state.timer_state);
-					}}
-				>
-					TOOGLE TIMER
-				</button>
-				<input
-					type="number"
-					onChange={(e) => {
-						this.setState({ sf_timer_value: e.target.value });
-					}}
-				></input>
-				<button
-					onClick={() => {
-						this.setSolarFlareTimer();
-					}}
-				>
-					SET TIMER OF CURRENT PHASE
-				</button>
-				<button
-					onClick={() => {
-						this.setHighProbFlare();
-					}}
-				>
-					SET HIGH PROB
-				</button>
-				<button
-					onClick={() => {
-						this.setLowProbFlare();
-					}}
-				>
-					SET LOW PROB
-				</button>
-			</div>
+			<React.Fragment>
+				<div className="solarFlare_control">
+					<label>
+						<b>Solar flare state:</b>
+						{this.state.state.toString()}
+					</label>
+					<label>time2nextphase:{this.state.time2nextphase}</label>
+					<label>probability:{this.state.probability}</label>
+					<button
+						onClick={() => {
+							this.toogleSolarFlare(!this.state.state);
+						}}
+					>
+						TOOGLE ACTIVITY
+					</button>
+					<button
+						onClick={() => {
+							this.toogleSolarFlareTimer(!this.state.timer_state);
+						}}
+					>
+						TOOGLE TIMER
+					</button>
+				</div>
+				<div className="solarFlare_control">
+					<input
+						type="number"
+						onChange={(e) => {
+							this.setState({ sf_timer_value: e.target.value });
+						}}
+					></input>
+					<button
+						onClick={() => {
+							this.setSolarFlareTimer();
+						}}
+					>
+						SET TIMER OF CURRENT PHASE
+					</button>
+					<button
+						onClick={() => {
+							this.setHighProbFlare();
+						}}
+					>
+						SET HIGH PROB
+					</button>
+					<button
+						onClick={() => {
+							this.setLowProbFlare();
+						}}
+					>
+						SET LOW PROB
+					</button>
+				</div>
+			</React.Fragment>
 		);
 	};
 
