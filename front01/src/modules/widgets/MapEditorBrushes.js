@@ -1,5 +1,9 @@
 import React from 'react';
 
+import { get_locales } from '../locales/locales';
+
+import { NumericControlWidjet } from './NumericControlWidget';
+
 export class MapEditorBrushesWidget extends React.Component {
 	constructor(props) {
 		super(props);
@@ -11,6 +15,9 @@ export class MapEditorBrushesWidget extends React.Component {
 			max_size: 150,
 			min_weight: 1,
 			max_weight: 5,
+			obstacles_min_count: 1,
+			obstacles_max_count: 10,
+			obstacles_probability: 100,
 			obstacles_type: 'MeteorsCloud',
 			closer: false
 		};
@@ -37,13 +44,8 @@ export class MapEditorBrushesWidget extends React.Component {
 		];
 		for (let tmp_i in options) {
 			result.push(
-				<button
-					key={tmp_i}
-					onClick={(e) => {
-						this.onChangeParam('mode', options[tmp_i]);
-					}}
-				>
-					{options[tmp_i]}
+				<button key={tmp_i} onClick={(e) => this.onChangeParam('mode', options[tmp_i])}>
+					{get_locales(options[tmp_i])}
 				</button>
 			);
 		}
@@ -56,30 +58,26 @@ export class MapEditorBrushesWidget extends React.Component {
 		let keys = ['radius', 'min_size', 'max_size', 'min_weight', 'max_weight'];
 		for (let key in keys) {
 			let keyname = keys[key];
+			let val = this.state[keyname];
 			inputs.push(
-				<label key={keyname}>
-					{keyname}:{' '}
-					<input
-						onChange={(e) => {
-							this.onChangeParam(keyname, parseFloat(e.target.value));
-						}}
-						value={this.state[keyname]}
-					></input>
-				</label>
+				<NumericControlWidjet
+					inline={true}
+					label={keyname}
+					init_value={val}
+					min={1}
+					max={9999}
+					step={1}
+					value={val}
+					onChange={(value) => this.onChangeParam(keyname, value)}
+				/>
 			);
 		}
 
 		let keyname = 'closer';
 		inputs.push(
 			<label key={keyname}>
-				{keyname}:{' '}
-				<input
-					type="checkbox"
-					onChange={(e) => {
-						this.onChangeParam(keyname, e.target.checked);
-					}}
-					value={this.state[keyname]}
-				></input>
+				{get_locales(keyname)}:{' '}
+				<input type="checkbox" onChange={(e) => this.onChangeParam(keyname, e.target.checked)} value={this.state[keyname]} />
 			</label>
 		);
 
@@ -92,32 +90,29 @@ export class MapEditorBrushesWidget extends React.Component {
 
 	get_obstacles_creator_params = () => {
 		let inputs = [];
-		let keys = ['radius'];
+		let keys = ['radius', 'obstacles_min_count', 'obstacles_max_count', 'obstacles_probability'];
 		for (let tmp_i in keys) {
 			let keyname = keys[tmp_i];
+			let val = this.state[keyname];
 			inputs.push(
-				<label key={keyname}>
-					{keyname}:{' '}
-					<input
-						onChange={(e) => {
-							this.onChangeParam(keyname, parseFloat(e.target.value));
-						}}
-						value={this.state[keyname]}
-					></input>
-				</label>
+				<NumericControlWidjet
+					inline={true}
+					label={keyname}
+					init_value={val}
+					min={1}
+					max={tmp_i === 'obstacles_probability' ? 100 : 9999}
+					step={1}
+					value={val}
+					onChange={(value) => this.onChangeParam(keyname, value)}
+				/>
 			);
 		}
 
 		let keyname = 'obstacles_type';
 		inputs.push(
 			<label key={keyname}>
-				{keyname}:{' '}
-				<select
-					onChange={(e) => {
-						this.onChangeParam(keyname, e.target.value);
-					}}
-					value={this.state[keyname]}
-				>
+				{get_locales(keyname)}:{' '}
+				<select onChange={(e) => this.onChangeParam(keyname, e.target.value)} value={this.state[keyname]}>
 					<option value="MeteorsCloud">MeteorsCloud</option>
 					<option value="Mine_type1">Mine_type1</option>
 					<option value="Mine_type2">Mine_type2</option>
@@ -125,22 +120,6 @@ export class MapEditorBrushesWidget extends React.Component {
 				</select>
 			</label>
 		);
-
-		keys = ['obstacles_min_count', 'obstacles_max_count', 'obstacles_probability'];
-		for (let tmp_i in keys) {
-			let keyname = keys[tmp_i];
-			inputs.push(
-				<label key={keyname}>
-					{keyname}:{' '}
-					<input
-						onChange={(e) => {
-							this.onChangeParam(keyname, parseFloat(e.target.value));
-						}}
-						value={this.state[keyname]}
-					></input>
-				</label>
-			);
-		}
 
 		return (
 			<div key="obstacles_creator_params" className="flex flex_column">
@@ -154,16 +133,18 @@ export class MapEditorBrushesWidget extends React.Component {
 		let keys = ['radius'];
 		for (let tmp_i in keys) {
 			let keyname = keys[tmp_i];
+			let val = this.state[keyname];
 			inputs.push(
-				<label key={keyname}>
-					{keyname}:{' '}
-					<input
-						onChange={(e) => {
-							this.onChangeParam(keyname, parseFloat(e.target.value));
-						}}
-						value={this.state[keyname]}
-					></input>
-				</label>
+				<NumericControlWidjet
+					inline={true}
+					label={keyname}
+					init_value={val}
+					min={1}
+					max={9999}
+					step={1}
+					value={val}
+					onChange={(value) => this.onChangeParam(keyname, value)}
+				/>
 			);
 		}
 
@@ -195,13 +176,9 @@ export class MapEditorBrushesWidget extends React.Component {
 	render() {
 		let inputs = [
 			<label key="inputs">
-				State:
-				<button
-					onClick={(e) => {
-						this.onChangeParam('active', !this.state.active);
-					}}
-				>
-					{this.state.active.toString()}
+				{get_locales('State')}:
+				<button onClick={(e) => this.onChangeParam('active', !this.state.active)}>
+					{get_locales(this.state.active ? 'on' : 'off' )}
 				</button>
 			</label>,
 			this.get_mode_selector()

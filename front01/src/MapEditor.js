@@ -55,8 +55,8 @@ export class MapEditor extends React.Component {
 			<div className="Administration">
 				<b>Administration</b>
 				<div className="flex">
-					<MapLoader></MapLoader>
-					<ShipScreenLoader></ShipScreenLoader>
+					<MapLoader/>
+					<ShipScreenLoader/>
 					<MapEditorRadarWidget
 						selected_body_idx={this.state.selected_body_idx}
 						highlighted_body_idx={this.state.highlighted_body_idx}
@@ -65,7 +65,6 @@ export class MapEditor extends React.Component {
 					/>
 					<div className="BodiesInteractorSection">
 						<HBodiesSelector onBodySelect={this.onBodySelect} onBodyHighlight={this.onBodyHighlight} />
-
 						<BodyEditor selected_body_idx={this.state.selected_body_idx} />
 						<BodySpawner onBodySelect={this.onBodySelect} />
 						<MapEditorBrushesWidget onBrushChange={this.onBrushChange} />

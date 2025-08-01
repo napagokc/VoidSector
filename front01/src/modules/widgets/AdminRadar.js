@@ -333,7 +333,7 @@ export class AdminRadarWidget extends React.Component {
 								this.proceed_data_message();
 							}}
 						>
-							CLEAR OFFSET
+							{get_locales('CLEAR_OFFSET')}
 						</button>
 						<label>
 							{get_locales('toogle_id_labels')}

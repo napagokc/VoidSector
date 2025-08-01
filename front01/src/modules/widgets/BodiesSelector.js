@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { get_locales } from '../locales/locales';
+
 import { timerscounter } from '../utils/updatetimers';
 
 import { send_command, get_navdata, get_http_address } from '../network/connections';
@@ -67,50 +69,26 @@ export class HBodiesSelector extends React.Component {
 			<div
 				key={key}
 				className="bodySelectorWidget"
-				onMouseEnter={(e) => {
-					this.props.onBodyHighlight(key);
-				}}
-				onMouseLeave={(e) => {
-					this.props.onBodyHighlight(null);
-				}}
+				onMouseEnter={(e) => this.props.onBodyHighlight(key)}
+				onMouseLeave={(e) => this.props.onBodyHighlight(null)}
 			>
 				<label>{data.type}</label>
 				<label>{key}</label>
 
-				<button
-					onClick={(e) => {
-						set_global_observer_pos(data.pos);
-					}}
-				>
-					move view
+				<button onClick={(e) => set_global_observer_pos(data.pos)}>
+					{get_locales('move_view')}
 				</button>
-				<button
-					onClick={(e) => {
-						this.take_control(key);
-					}}
-				>
-					select
+				<button onClick={(e) => this.take_control(key)}>
+					{get_locales('select')}
 				</button>
-				<button
-					onClick={(e) => {
-						this.release_control(key);
-					}}
-				>
-					release
+				<button onClick={(e) => this.release_control(key)}>
+					{get_locales('release')}
 				</button>
-				<button
-					onClick={(e) => {
-						this.copy_entity(key);
-					}}
-				>
-					copy
+				<button onClick={(e) => this.copy_entity(key)}>
+					{get_locales('copy')}
 				</button>
-				<button
-					onClick={(e) => {
-						this.delete(key);
-					}}
-				>
-					delete
+				<button onClick={(e) => this.delete(key)}>
+					{get_locales('delete')}
 				</button>
 			</div>
 		);
@@ -157,16 +135,17 @@ export class HBodiesSelector extends React.Component {
 	render() {
 		return (
 			<div className="BodiesSelector flex flex_column">
-				<b>BodiesSelector</b>
-				<input
-					type="number"
-					onChange={(e) => {
-						this.setState({ slots_in_row: e.target.value });
-					}}
-					value={this.state.slots_in_row}
-				></input>
+				<b>
+					BodiesSelector&nbsp;
+					<input
+						type="number"
+						onChange={(e) => {
+							this.setState({ slots_in_row: e.target.value });
+						}}
+						value={this.state.slots_in_row}
+					></input>
+				</b>
 				{this.get_hbodies_list()}
-
 				{this.get_lbodies_list()}
 			</div>
 		);
@@ -260,27 +239,16 @@ export class BodyEditor extends React.Component {
 			if (!['predictions', 'vel'].includes(k))
 				result.push(
 					<label key={k}>
-						{k}:{' '}
-						<input
-							onChange={(e) => {
-								this.change_attribute(k, e.target.value);
-							}}
-							value={this.state.selected_body_edit[k]}
-						></input>
+						{get_locales(k)}:{' '}
+						<input onChange={(e) => this.change_attribute(k, e.target.value)} value={this.state.selected_body_edit[k]} />
 					</label>
 				);
 		}
 
 		result.push(
 			<label key="forced">
-				{'forced'}:{' '}
-				<input
-					type="checkbox"
-					onChange={(e) => {
-						this.setState({ forced: e.target.value });
-					}}
-					value={this.state.forced}
-				></input>
+				{get_locales('forced')}:{' '}
+				<input type="checkbox" onChange={(e) => this.setState({ forced: e.target.value })} value={this.state.forced} />
 			</label>
 		);
 
@@ -331,7 +299,7 @@ export class BodyEditor extends React.Component {
 		for (let field in this.state.selected_body_stats) {
 			result.push(
 				<label key={field}>
-					{field}: {this.state.selected_body_stats[field]}
+					{get_locales(field)}: {this.state.selected_body_stats[field]}
 				</label>
 			);
 		}
@@ -344,12 +312,8 @@ export class BodyEditor extends React.Component {
 				<div className="flex flex_column">
 					<b>BodyEditor</b>
 					{this.get_attributes()}
-					<button
-						onClick={(e) => {
-							this.commit_attribute();
-						}}
-					>
-						Commit
+					<button onClick={(e) => this.commit_attribute()}>
+						{get_locales('Commit')}
 					</button>
 				</div>
 				<div className="flex flex_column">
@@ -412,11 +376,7 @@ export class BodySpawner extends React.Component {
 		}
 
 		return (
-			<select
-				onChange={(e) => {
-					this.setState({ spawned_entity_type: e.target.value });
-				}}
-			>
+			<select onChange={(e) => this.setState({ spawned_entity_type: e.target.value })}>
 				{options}
 			</select>
 		);
@@ -424,26 +384,19 @@ export class BodySpawner extends React.Component {
 
 	render() {
 		return (
-			<div className="flex flex_column">
+			<React.Fragment>
 				<b>BodySpawner</b>
-				{this.get_entitytype_selector()}
-				<label>
-					MarkID:{' '}
-					<input
-						onChange={(e) => {
-							this.setState({ spawned_entity_markId: e.target.value });
-						}}
-						value={this.state.spawned_entity_markId}
-					></input>
-				</label>
-				<button
-					onClick={(e) => {
-						this.commit_spawn();
-					}}
-				>
-					SPAWN
-				</button>
-			</div>
+				<div className="flex flex-gap">
+					{this.get_entitytype_selector()}
+					<label>
+						MarkID:{' '}
+						<input onChange={(e) => this.setState({ spawned_entity_markId: e.target.value })} value={this.state.spawned_entity_markId} />
+					</label>
+					<button onClick={(e) => this.commit_spawn()}>
+						{get_locales('SPAWN')}
+					</button>
+				</div>
+			</React.Fragment>
 		);
 	}
 }

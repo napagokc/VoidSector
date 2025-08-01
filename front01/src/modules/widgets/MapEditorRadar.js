@@ -385,7 +385,7 @@ export class MapEditorRadarWidget extends React.Component {
 							this.proceed_data_message();
 						}}
 					>
-						CLEAR OFFSET
+						{get_locales('CLEAR_OFFSET')}
 					</button>
 				</div>
 				<label>

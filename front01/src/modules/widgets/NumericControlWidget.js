@@ -36,8 +36,8 @@ export class NumericControlWidjet extends React.Component {
 
 	render() {
 		return (
-			<label className="NumericControlWidjet">
-				<div className="flex flex_space_between">
+			<label className={"NumericControlWidjet" + (this.props.inline ? ' flex flex-gap nowrap' : '')}>
+				<div className={(this.props.inline ? 'inline-' : '') + "flex flex-gap"}>
 					{get_locales(this.props.label)}:
 					<input type="number" step={this.props.step} value={this._getValue()} onChange={this.onChange} />
 					<button onClick={this.reset}>{get_locales('reset')}</button>
@@ -51,7 +51,6 @@ export class NumericControlWidjet extends React.Component {
 					className="slider"
 					value={this._getValue()}
 					onChange={this.onChange}
-					//value={this.state.progradeAcc}
 				/>
 			</label>
 		);

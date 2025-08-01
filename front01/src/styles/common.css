@@ -26,8 +26,16 @@
 	color: white;
 }
 
+.nowrap {
+	white-space: nowrap;
+}
+
 .flex {
 	display: flex;
+}
+
+.inline-flex {
+	display: inline-flex;
 }
 
 .flex_column {
@@ -36,6 +44,10 @@
 
 .flex_space_between {
 	justify-content: space-between;
+}
+
+.flex-gap {
+	gap: 0 5px;
 }
 
 .flex > * {
