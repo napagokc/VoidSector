@@ -116,7 +116,7 @@ export class HBodiesSelector extends React.Component {
 		let lbodies = [];
 		for (let k in this.state.lbodies_data) {
 			if (this.state.lbodies_data[k]) {
-				if (!['Mine_type2', 'MeteorsCloud'].includes(this.state.lbodies_data[k].type)) {
+				if (!['MeteorsCloud'].includes(this.state.lbodies_data[k].type)) {
 					lbodies.push(this.get_control_widget(k, this.state.lbodies_data[k]));
 				}
 			}
@@ -357,12 +357,9 @@ export class BodySpawner extends React.Component {
 			'SpaceStationDebris',
 			'hBody',
 			'ResourceAsteroid',
-			'Mine_type1',
-			'Mine_type2',
 			'WormHole',
 			'MeteorsCloud',
 			'QuantumShadow',
-			'pjtl_Mine',
 			'ShipDebris',
 			'intact_Container'
 		];

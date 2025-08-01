@@ -10,29 +10,10 @@ import { timerscounter } from '../utils/updatetimers';
 
 import { get_system_state, send_command } from '../network/connections';
 
-import { RepairTeamWidget } from '../systems/crew_sm';
-import { CrewControlWidget } from '../systems/crew_sm';
 import { RadarControlWidget } from '../systems/radar_sm';
 import { EnergyControlWidget } from '../systems/energy_sm';
-import { ResourcesControlWidget } from '../systems/resources_sm';
 
 export class EngineerControllerWidget extends React.Component {
-	render() {
-		return (
-			<div className="EngineerControllerWidget">
-				<ShipOvervieweWidgetLayer role={this.props.role} />
-				<div className="EngineerSystemsLayer">
-					<CrewControlWidget />
-					<ResourcesControlWidget />
-					<EnergyControlWidget />
-					<RadarControlWidget />
-				</div>
-			</div>
-		);
-	}
-}
-
-export class ShipOvervieweWidgetLayer extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -42,14 +23,18 @@ export class ShipOvervieweWidgetLayer extends React.Component {
 
 	render() {
 		return (
-			<div className="OverviewWidget">
-				<ShipOvervieweWidget
-					onSystemSelection={(sm_name) => {
-						this.setState({ selected_sm: sm_name });
-					}}
-					selected_sm={this.state.selected_sm}
-				/>
-				<SystemOvervieweWidget role={this.props.role} sm_name={this.state.selected_sm} />
+			<div className="EngineerControllerWidget">
+				<div className="OverviewWidget">
+					<ShipOvervieweWidget
+						onSystemSelection={(sm_name) => this.setState({ selected_sm: sm_name })}
+						selected_sm={this.state.selected_sm}
+					/>
+					<SystemOvervieweWidget role={this.props.role} sm_name={this.state.selected_sm} />
+				</div>
+				<div className="EngineerSystemsLayer">
+					<EnergyControlWidget />
+					<RadarControlWidget />
+				</div>
 			</div>
 		);
 	}
@@ -151,18 +136,14 @@ const ship_parts_render_params = {
 		pos: [0, 0, 0],
 		size: [530, 303, 1]
 	},
-
 	cone: {
 		pos: [112, 0, 0],
 		size: [341, 266, 1]
 	},
+
 	radar: {
 		pos: [8, 55, 0],
 		size: [231, 118, 1]
-	},
-	launcher: {
-		pos: [20, -55, 0],
-		size: [322, 114, 1]
 	},
 	engine: {
 		pos: [-65, 0, 0],
@@ -171,10 +152,6 @@ const ship_parts_render_params = {
 	energy: {
 		pos: [5, 0, 0],
 		size: [208, 208, 1]
-	},
-	resources: {
-		pos: [77, 0, 0],
-		size: [250, 171, 1]
 	}
 };
 
@@ -242,7 +219,6 @@ export class SystemOvervieweWidget extends React.Component {
 		if (!damage_sm) return;
 
 		let sm_name = this.props.sm_name;
-		let crew_sm = get_system_state('crew_sm');
 		let upgrade_sm = get_system_state('RnD_sm');
 		let sm_info = get_system_state(sm_name);
 
@@ -251,49 +227,9 @@ export class SystemOvervieweWidget extends React.Component {
 			mark_id: damage_sm.mark_id,
 			current_hp: damage_sm.systems_hp[this.props.sm_name].current_hp.toFixed(1),
 			max_hp: damage_sm.systems_hp[this.props.sm_name].max_hp,
-			current_team: crew_sm.systems[this.props.sm_name],
 			upgrade_level: sm_info.upgrade_level,
 			upgrade_cost: upgrade_sm.systems_upgrades[this.props.sm_name].cost[sm_info.upgrade_level],
-			teams: crew_sm.teams
 		});
-	};
-
-	on_assign_team = (team_name) => {
-		send_command('ship.crew_sm', this.state.mark_id, 'assign_team', {
-			team_name: team_name,
-			sm_name: this.state.sm_name
-		});
-	};
-
-	get_team_assigner = () => {
-		let result = [];
-		if (this.state.current_team) {
-			result = [
-				<button
-					key="Release_team"
-					onClick={(e) => {
-						this.on_assign_team('');
-					}}
-				>
-					{get_locales('Release_team')}
-				</button>
-			];
-		} else {
-			for (let team_name in this.state.teams) {
-				result.push(
-					<button
-						key={team_name}
-						onClick={(e) => {
-							this.on_assign_team(team_name);
-						}}
-					>
-						{get_locales(team_name)}
-					</button>
-				);
-			}
-		}
-
-		return <div className="teamAssignBtnBlock">{result}</div>;
 	};
 
 	on_system_upgrade = (e) => {
@@ -312,32 +248,6 @@ export class SystemOvervieweWidget extends React.Component {
 				<label>
 					{get_locales('upgrade_level')}: {this.state.upgrade_level}
 				</label>
-
-				{['admin', 'captain'].includes(this.props.role) && (
-					<button disabled={!this.state.upgrade_cost} onClick={this.on_system_upgrade}>
-						{get_locales('upgrade')}
-						{this.state.upgrade_cost && `[${this.state.upgrade_cost.toString()}]`}
-					</button>
-				)}
-
-				{['admin', 'engineer'].includes(this.props.role) ? (
-					<div className="teamAssignController">
-						<label>{get_locales('assign_team')}:</label>
-						{this.get_team_assigner()}
-					</div>
-				) : (
-					<span></span>
-				)}
-
-				{this.state.current_team ? (
-					<RepairTeamWidget
-						mode="engineer"
-						mark_id={this.state.mark_id}
-						team_data={this.state.teams[this.state.current_team]}
-					></RepairTeamWidget>
-				) : (
-					<span></span>
-				)}
 			</div>
 		);
 	}

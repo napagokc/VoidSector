@@ -114,9 +114,6 @@ export class MapEditorBrushesWidget extends React.Component {
 				{get_locales(keyname)}:{' '}
 				<select onChange={(e) => this.onChangeParam(keyname, e.target.value)} value={this.state[keyname]}>
 					<option value="MeteorsCloud">MeteorsCloud</option>
-					<option value="Mine_type1">Mine_type1</option>
-					<option value="Mine_type2">Mine_type2</option>
-					<option value="Mine_type1/Mine_type2">Mine_type1/Mine_type2</option>
 				</select>
 			</label>
 		);

@@ -7,7 +7,6 @@ import { Administration } from './Administration';
 import { PilotStation } from './PilotStation';
 import { MapEditor } from './MapEditor';
 import { ConfigEditor } from './ConfigEditor';
-import { MedicStation } from './MedicStation';
 import { CommonRadarStation } from './CommonRadarStation';
 
 import { is_local } from './modules/configs/configs';
@@ -22,12 +21,9 @@ import './styles/Widgets.css';
 import './styles/RndControlWidget.css';
 import './styles/AdminSystemViewer.css';
 import './styles/common.css';
-import './styles/ProjectileBuilderWidget.css';
-import './styles/CrewControlWidget.css';
 import './styles/EngineerControllerWidget.css';
 import './styles/ProductionSM.css';
 import './styles/ShipsDisplay.css';
-import './styles/Plague.css';
 
 const EVENT_AVAILABLE_MODULES_UPDATE = 'available_modules_update';
 const EVENT_LOGIN_STATE_UPDATE = 'login_state_update';
@@ -95,7 +91,6 @@ class LoginController {
 
 					document.dispatchEvent(new Event(EVENT_LOGIN_STATE_UPDATE));
 
-					send_command('ship.med_sm', 'Sirocco', 'log_in', { role: username }, true);
 					send_command('connection', '', 'auth_login', { password: password }, true);
 				}
 			});
@@ -111,8 +106,6 @@ class LoginController {
 		this._set_modules([]);
 
 		document.dispatchEvent(new Event(EVENT_LOGIN_STATE_UPDATE));
-
-		send_command('ship.med_sm', 'Sirocco', 'log_out', { role: loginController.get_username() }, true);
 	};
 
 	get_username = () => {
@@ -248,15 +241,6 @@ class ModuleRenderer extends React.Component {
 			case 'navigator':
 				return <PilotStation username={loginController.get_username()} navigator={true}></PilotStation>;
 
-			case 'engineer':
-				return <PilotStation username={loginController.get_username()} engineer={true}></PilotStation>;
-
-			case 'cannoneer':
-				return <PilotStation username={loginController.get_username()} cannoneer={true}></PilotStation>;
-
-			case 'engineer_old':
-				return <PilotStation username={loginController.get_username()} engineer_old={true}></PilotStation>;
-
 			case 'captain':
 				return <PilotStation username={loginController.get_username()} captain={true}></PilotStation>;
 
@@ -265,9 +249,6 @@ class ModuleRenderer extends React.Component {
 
 			case 'NPC_pilot':
 				return <PilotStation NPC_pilot={true}></PilotStation>;
-
-			case 'medic':
-				return <MedicStation username={loginController.get_username()}></MedicStation>;
 
 			case 'common_radar':
 				return <CommonRadarStation />;

@@ -18,7 +18,7 @@ const command_descriptions = {
 	upgrade_system_admin: {
 		target: 'ship.RnD_sm',
 		params: {
-			system: ['engine_sm', 'launcher_sm', 'energy_sm', 'radar_sm', 'resources_sm']
+			system: ['engine_sm', 'energy_sm', 'radar_sm']
 		}
 	},
 
@@ -32,37 +32,14 @@ const command_descriptions = {
 	downgrade_system: {
 		target: 'ship.RnD_sm',
 		params: {
-			system: ['engine_sm', 'launcher_sm', 'energy_sm', 'radar_sm', 'resources_sm']
-		}
-	},
-
-	change_amount: {
-		target: 'ship.resources_sm',
-		params: {
-			resource_name: [
-				'metal',
-				'pjtl_TimedExplosive',
-				'pjtl_TriggerExplosive',
-				'pjtl_Mine',
-				'pjtl_TimedEMP',
-				'io_Drone',
-				'hp_RepairKit'
-			],
-			resource_amount: 0
+			system: ['engine_sm', 'energy_sm', 'radar_sm']
 		}
 	},
 
 	repair_system_admin: {
 		target: 'ship.damage_sm',
 		params: {
-			system: ['engine_sm', 'launcher_sm', 'energy_sm', 'radar_sm', 'resources_sm']
-		}
-	},
-
-	apply_wound: {
-		target: 'ship.med_sm',
-		params: {
-			role: ['captain', 'navigator', 'cannoneer', 'engineer']
+			system: ['engine_sm', 'energy_sm', 'radar_sm']
 		}
 	},
 
@@ -74,49 +51,6 @@ const command_descriptions = {
 	add_predictor_process: {
 		target: 'predictor',
 		params: {}
-	},
-
-	run_infection: {
-		target: 'ship.med_sm.plague',
-		params: {}
-	},
-
-	pause_infection: {
-		target: 'ship.med_sm.plague',
-		params: {}
-	},
-
-	terminate_infection: {
-		target: 'ship.med_sm.plague',
-		params: {}
-	},
-
-	set_period_duration: {
-		target: 'ship.med_sm.plague',
-		params: {
-			value: 10
-		}
-	},
-
-	add_patient: {
-		target: 'ship.med_sm',
-		params: {
-			name: 'Mr.Wood'
-		}
-	},
-
-	create_new_team: {
-		target: 'ship.crew_sm',
-		params: {
-			team_name: 'Mr.Wood'
-		}
-	},
-
-	add_unit_to_crew: {
-		target: 'ship.crew_sm',
-		params: {
-			value: 1
-		}
 	},
 
 	set_NPC_hp: {

@@ -23,19 +23,6 @@ function receive_message({ data }) {
 websocket.onopen = () => document.dispatchEvent(new Event(EVENT_WEBSOCKET_IS_OPEN));
 websocket.addEventListener('message', receive_message);
 
-/*function check_connection_and_update() {
-	//console.log("check_connection_and_update", websocket);
-	send_command('connection', 'admin', 'ping', {});
-	if (new Date() - input_message_last_timestamp > 300) {
-		websocket.removeEventListener('message', receive_message);
-		try {
-			websocket = new WebSocket(path2server_ws);
-			websocket.addEventListener('message', receive_message);
-		} catch (error) {}
-	}
-}*/
-//setInterval(check_connection_and_update, 1000)
-
 export function addEventListener(f) {
 	if (websocket) websocket.addEventListener('message', f);
 }
@@ -127,11 +114,6 @@ export function get_capmarks() {
 export function get_solarflare() {
 	let message_data_json = input_message_last_json;
 	return message_data_json?.solar_flare ? message_data_json.solar_flare : null;
-}
-
-export function get_medicine_state(username) {
-	let message_data_json = get_system_state('med_sm');
-	return !message_data_json || !('roles' in message_data_json) ? true : !message_data_json.roles[username].disabled;
 }
 
 export function take_control(key) {

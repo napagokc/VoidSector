@@ -252,7 +252,6 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 	else if (observer_id === id) alias = 'self';
 	else {
 		switch (descr.marker_type) {
-			case 'projectile':
 			case 'io_Drone':
 				alias = 'enemy';
 				if (descr.master_id === observer_id) alias = 'friend';
@@ -394,17 +393,6 @@ let get_Rendered_lBody = (observer_id, id, descr, visible_ships, scale_params, s
 					scale_offset={scale_params.scale_offset}
 					level={0}
 				></MarkerShip>
-			);
-			break;
-		case 'projectile':
-			objects.push(
-				<MarkerProjectile
-					key={id}
-					color={color}
-					position={descr.pos}
-					scale_factor={scale_params.scale_factor}
-					scale_offset={scale_params.scale_offset}
-				></MarkerProjectile>
 			);
 			break;
 		case 'ae_BasicZone':
@@ -625,24 +613,6 @@ export class MarkerMeteorsCloud extends React.Component {
 				texture={texture}
 				position={[this.props.position[0], this.props.position[1], 0]}
 				size={this.props.radius * 2}
-				scale_factor={this.props.scale_factor}
-				scale_offset={this.props.scale_offset}
-			/>
-		);
-	}
-}
-
-//снаряды
-export class MarkerProjectile extends React.Component {
-	render() {
-		const texture = 'markers/projectile.png';
-		return (
-			<MeshObject
-				texture={texture}
-				position={[this.props.position[0], this.props.position[1], 0]}
-				size={15}
-				level={-1}
-				color={this.props.color}
 				scale_factor={this.props.scale_factor}
 				scale_offset={this.props.scale_offset}
 			/>

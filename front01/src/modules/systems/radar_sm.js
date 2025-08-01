@@ -27,7 +27,7 @@ export class RadarControlWidget extends React.Component {
 					label="distant_arc"
 					init_value={10}
 					min={5}
-					max={360}
+					max={359}
 					step={1}
 					onChange={this.on_set_radar_arc}
 				/>

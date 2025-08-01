@@ -36,10 +36,6 @@
 	border: 1px solid black;
 }
 
-.AllianceManager input {
-	width: 100px;
-}
-
 .SystemControlWidget > .flex {
 	padding-bottom: 5px;
 }

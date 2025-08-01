@@ -77,23 +77,15 @@ export class PlayersRadarWidget extends React.Component {
 
 			if (!this.props.can_aim) return;
 
-			let vel_angle = (mouse.angle() * 180) / 3.14;
-			let vel_salar = Math.min(mouse.length(), 1);
-
 			send_command('ship.launcher_sm', this.state.data.mark_id, 'aim', {
-				vel_angle: vel_angle,
-				vel_scalar: vel_salar
+				vel_angle: mouse.angle() * 180 / Math.PI,
+				vel_scalar: Math.min(mouse.length(), 1)
 			});
 		}
 	};
 
 	onMouseClick = () => {
 		if (this.props.cap_control) this.onSetMark();
-		else this.onLaunch();
-	};
-
-	onLaunch = () => {
-		if (this.props.can_aim) send_command('ship.launcher_sm', this.state.data.mark_id, 'launch', {});
 	};
 
 	onSetMark = () => {
@@ -204,16 +196,6 @@ export class PlayersRadarWidget extends React.Component {
 							<label>
 								{get_locales('CURSOR_POS')}: {cursor_position[0].toFixed(0)},
 								{cursor_position[1].toFixed(0)}
-							</label>
-							<label>
-								{get_locales('toogle_id_labels')}{' '}
-								<input
-									type="checkbox"
-									checked={this.state.show_id_labels}
-									onChange={(e) => {
-										this.setState({ show_id_labels: e.target.checked });
-									}}
-								></input>
 							</label>
 							{this.get_solar_flare_timer()}
 						</div>
