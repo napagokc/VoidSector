@@ -155,30 +155,46 @@ let get_Rendered_hBody = (id, descr, scale_params, show_gravity) => {
 
 	let marker_type = descr.marker_type;
 
-	if (['hBody', 'ResourceAsteroid'].includes(marker_type)) {
-		objects.push(
-			<MarkerAsteroid
-				key={id + '_MarkerAsteroid'}
-				position={descr.pos}
-				size={descr.critical_r}
-				scale_factor={scale_params.scale_factor}
-				scale_offset={scale_params.scale_offset}
-				level={level}
-			></MarkerAsteroid>
-		);
-	}
-
-	if (marker_type === 'WormHole') {
-		objects.push(
-			<WormHole
-				key={id + '_WormHole'}
-				position={descr.pos}
-				size={descr.critical_r}
-				scale_factor={scale_params.scale_factor}
-				scale_offset={scale_params.scale_offset}
-				level={level}
-			></WormHole>
-		);
+	switch(marker_type) {
+		case 'hBody':
+		case 'ResourceAsteroid':
+			objects.push(
+				<MarkerAsteroid
+					type={descr.type}
+					position={descr.pos}
+					size={descr.critical_r}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
+					level={level}
+				></MarkerAsteroid>
+			);
+			break;
+		case 'WormHole':
+			objects.push(
+				<WormHole
+					key={id + '_WormHole'}
+					position={descr.pos}
+					size={descr.critical_r}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
+					level={level}
+				></WormHole>
+			);
+			break;
+		default:
+			objects.push(
+				<MarkerAsteroid
+					key={id + '_MarkerAsteroid'}
+					marker_type={marker_type}
+					type={descr.type}
+					position={descr.pos}
+					size={descr.critical_r}
+					scale_factor={scale_params.scale_factor}
+					scale_offset={scale_params.scale_offset}
+					level={level}
+				></MarkerAsteroid>
+			);
+			break;
 	}
 
 	if (show_gravity) {
@@ -757,16 +773,17 @@ export class MarkerDirection extends React.Component {
 //Гравитационные колодцы, радиусы досягаемости, etc
 export class MarkerAsteroid extends React.Component {
 	render() {
-		const texture = 'asteroids/1.png';
-		let size = this.props.size ? this.props.size : 15;
+		const p = this.props;
+		const texture = 'asteroids/' + (p.type && p.marker_type && p.type !== p.marker_type ? p.marker_type : '4') + '.png';
+		let size = p.size ? p.size : 15;
 		return (
 			<MeshObject
-				level={this.props.level}
+				level={p.level}
 				texture={texture}
-				position={[this.props.position[0], this.props.position[1], 0]}
+				position={[p.position[0], p.position[1], 0]}
 				size={size * 2}
-				scale_factor={this.props.scale_factor}
-				scale_offset={this.props.scale_offset}
+				scale_factor={p.scale_factor}
+				scale_offset={p.scale_offset}
 			/>
 		);
 	}
