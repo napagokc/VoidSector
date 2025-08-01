@@ -3,12 +3,8 @@ from datetime import datetime, timedelta
 passwords = {
     "captain": "pjkjn",
     "navigator": "vtxnf",
-    "cannoneer": "vcnbn",
-    "engineer": "fdfyn",
-    "medic": "ljrnj",
     "admin": "cfvjt",
     "pilot": "rfvbr",
-    "master_medic": "jkbnd"
 }
 
 
@@ -74,7 +70,7 @@ class UserData:
         if username in passwords:
             self.password = passwords[username]
         self.roles = {"map_editor": False, "admin": False, "game_master": False, "pilot": False, "captain": False,
-                      "navigator": False, "cannoneer": False, "engineer": False, "NPC_pilot": False, "medic": False, "common_radar": False}
+                      "navigator": False, "NPC_pilot": False, "common_radar": False}
 
     def get_roles(self):
         return self.roles
@@ -86,7 +82,7 @@ class UserData:
 
     def auth(self, password):
         if password == self.password: return True
-        if not self.username in ["admin", "pilot", "master_medic"]:
+        if not self.username in ["admin", "pilot"]:
             return UniversalPasswlrdController().auth(password)
         return False
     
@@ -102,27 +98,26 @@ class UsersControler:
             cls._instance = super(UsersControler, cls).__new__(cls)
             cls._instance.users = {}
             cls._temporary_access_tokens = {}
-            for username in ["captain", "navigator", "cannoneer", "engineer", "medic"]:
-                cls._instance.users[username] = UserData(username)
-                for role in ["map_editor", "admin", "game_master", "pilot", "captain", "navigator", "cannoneer", "engineer", "medic", "NPC_pilot"]:
-                    cls._instance.users[username].set_role(
-                        role, role == username)
-                    cls._instance.users[username].set_role(
-                        "common_radar", True)
 
-            for username in ["admin", "master_medic", "NPC_pilot"]:
+            for username in ["captain", "navigator"]:
                 cls._instance.users[username] = UserData(username)
-                for role in ["map_editor", "admin", "game_master", "pilot", "captain", "navigator", "cannoneer", "engineer", "medic", "NPC_pilot", "common_radar"]:
+                cls._instance.users[username].set_role(username, True)
+                cls._instance.users[username].set_role("common_radar", True)
+
+            for username in ["admin", "NPC_pilot"]:
+                userdata = UserData(username)
+                cls._instance.users[username] = userdata
+                for role in userdata.get_roles():
                     cls._instance.users[username].set_role(role, True)
 
-            for username in ['common_radar']:
-                cls._instance.users[username] = UserData(username)
-                for role in ["common_radar"]:
-                    cls._instance.users[username].set_role(role, True)
-            for username in ["pilot"]:
-                cls._instance.users[username] = UserData(username)
-                for role in ["game_master", "captain", "navigator", "cannoneer", "engineer",  "NPC_pilot", "common_radar"]:
-                    cls._instance.users[username].set_role(role, True)
+            username = 'common_radar'
+            cls._instance.users[username] = UserData(username)
+            cls._instance.users[username].set_role(username, True)
+
+            username = 'pilot'
+            cls._instance.users[username] = UserData(username)
+            for role in ["game_master", "captain", "navigator", "cannoneer", "engineer",  "NPC_pilot", "common_radar"]:
+                cls._instance.users[username].set_role(role, True)
 
         return cls._instance
 

@@ -49,8 +49,6 @@ class ConnectionController:
                 if command.contains_level("connection"):
                     ConnectionController.proceed_command(token, command)
 
-                # if command.contains_level("predictor"):
-                # launch_new_TrajectoryPredictor_controller()
                 else:
                     ConnectionController.server.proceed_command(message_data)
         except Exception as e:

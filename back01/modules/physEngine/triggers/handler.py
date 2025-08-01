@@ -57,10 +57,6 @@ class TriggerHandler:
         if hasattr(target, "takes_damage"):
             target.takes_damage(damage_value, damage_type, initiator)
 
-    def proceed_triggerAddResource(self, initiator, params):
-        self.EventSystem.add_resource(
-            params['target'], params["resource_name"], params["resource_amount"])
-
     def hBodyCollision(self, initiator, params):
         self.EventSystem.hBodyCollision(params['target'])
 
@@ -149,10 +145,6 @@ class TriggerHandler:
 
                 case "damage2target":
                     self.proceed_triggerDamage2Target(
-                        trigger["initiator"], trigger["params"])
-
-                case 'addresource':
-                    self.proceed_triggerAddResource(
                         trigger["initiator"], trigger["params"])
 
                 case 'hBodyCollision':

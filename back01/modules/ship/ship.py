@@ -4,15 +4,12 @@ from modules.physEngine.core import lBodyPool_Singleton
 from modules.utils import Command, CommandQueue, ConfigLoader, get_dt_ms, PerformanceCollector
 from modules.ship.systems.sm_core import BasicShipSystem
 from modules.ship.systems.sm_core import GlobalShipSystemController
-from modules.ship.systems.sm_launcher import LauncherSystem
 from modules.ship.systems.sm_engine import EngineSystem, NPC_Kraken_EngineSystem
 from modules.ship.systems.sm_energy import EnergySystem
 from modules.ship.systems.sm_radar import RadarSystem
-from modules.ship.systems.sm_resources import ResourcesSystem
-from modules.ship.systems.sm_damage import DamageSystem, CrewSystem, NPC_DamageSystem
+from modules.ship.systems.sm_damage import DamageSystem, NPC_DamageSystem
 from modules.ship.systems.sm_RnD import ResearchAndDevSystem
 from modules.ship.systems.sm_interact import InteractionSystem
-from modules.ship.systems.sm_medicine import MedicineSystem
 from datetime import datetime
 
 
@@ -66,25 +63,15 @@ class Ship:
     def __init__(self, pos_x, pos_y, mark_id=None):
         self.mark_id = mark_id if mark_id else str(id(self))
 
-        GlobalShipSystemController().add(self.mark_id, "engine_sm",
-                                         EngineSystem(pos_x, pos_y, mark_id))
-        GlobalShipSystemController().add(
-            self.mark_id, "launcher_sm", LauncherSystem(mark_id))
-        GlobalShipSystemController().add(
-            self.mark_id, "resources_sm", ResourcesSystem(mark_id))
-        GlobalShipSystemController().add(self.mark_id, "crew_sm", CrewSystem(mark_id))
+        GlobalShipSystemController().add(self.mark_id, "engine_sm", EngineSystem(pos_x, pos_y, mark_id))
         GlobalShipSystemController().add(self.mark_id, "damage_sm", DamageSystem(mark_id))
-        GlobalShipSystemController().add(
-            self.mark_id, "interact_sm", InteractionSystem(mark_id))
+        GlobalShipSystemController().add(self.mark_id, "interact_sm", InteractionSystem(mark_id))
         GlobalShipSystemController().add(self.mark_id, "radar_sm", RadarSystem(mark_id))
         GlobalShipSystemController().add(self.mark_id, "energy_sm", EnergySystem(mark_id))
-        GlobalShipSystemController().add(self.mark_id, "RnD_sm",
-                                         ResearchAndDevSystem(mark_id))
-        GlobalShipSystemController().add(self.mark_id, "med_sm", MedicineSystem(mark_id))
+        GlobalShipSystemController().add(self.mark_id, "RnD_sm", ResearchAndDevSystem(mark_id))
 
         self.systems_state = GlobalShipSystemController().get_status(self.mark_id)
         self.get_system("RnD_sm").upgrade_to_config_state()
-        self.get_system("launcher_sm").update_available_projectile()
         self.get_system("energy_sm").set_max_power()
         self.get_system("radar_sm").update_scanrange()
         self.cap_marks = CapMarksController()
@@ -108,10 +95,6 @@ class Ship:
         }
         return data
 
-    def gain_resource(self, resource_name, resource_amount):
-        self.get_system("resources_sm").add_resource(
-            resource_name, resource_amount)
-
     def proceed_command(self, command: Command):
         if command.contains_level("cap_marks"):
             self.cap_marks.proceed_command(command)
@@ -130,8 +113,6 @@ class Ship:
         pass
 
     def delete(self):
-        launcher = self.get_system("launcher_sm")
-        if launcher: launcher.unload()
         GlobalShipSystemController().delete(self.mark_id)
 
     def set_level(self, ship_level):
@@ -189,21 +170,12 @@ class NPC_Ship(Ship):
     def __init__(self, pos_x, pos_y, mark_id=None):
         
         self.mark_id = mark_id if mark_id else str(id(self))
-        GlobalShipSystemController().add(self.mark_id, "engine_sm", EngineSystem(
-            pos_x, pos_y, mark_id, ship_subtype="NPC_Ship"))
-        GlobalShipSystemController().add(
-            self.mark_id, "launcher_sm", LauncherSystem(mark_id))
-        GlobalShipSystemController().add(self.mark_id, "resources_sm",
-                                         ResourcesSystem(mark_id, True))
-        GlobalShipSystemController().add(
-            self.mark_id, "damage_sm", NPC_DamageSystem(mark_id))
+        GlobalShipSystemController().add(self.mark_id, "engine_sm", EngineSystem(pos_x, pos_y, mark_id, ship_subtype="NPC_Ship"))
+        GlobalShipSystemController().add(self.mark_id, "damage_sm", NPC_DamageSystem(mark_id))
         GlobalShipSystemController().add(self.mark_id, "radar_sm", RadarSystem(mark_id))
-        GlobalShipSystemController().add(self.mark_id, "energy_sm",
-                                         EnergySystem(mark_id, NPC=True))
-        GlobalShipSystemController().add(self.mark_id, "RnD_sm",
-                                         ResearchAndDevSystem(mark_id, True))
+        GlobalShipSystemController().add(self.mark_id, "energy_sm", EnergySystem(mark_id, NPC=True))
+        GlobalShipSystemController().add(self.mark_id, "RnD_sm", ResearchAndDevSystem(mark_id, True))
         self.systems_state = GlobalShipSystemController().get_status(self.mark_id)
-        self.get_system("launcher_sm").update_available_projectile()
         self.get_system("radar_sm").update_scanrange()
         self.get_system("RnD_sm").upgrade_to_config_state()
         self.get_system("energy_sm").set_NpcEnergy()
@@ -224,15 +196,11 @@ class NPC_Ship(Ship):
 class NPC_Kraken(Ship):
     def __init__(self, pos_x, pos_y, mark_id=None):
         self.mark_id = mark_id if mark_id else str(id(self))
-        GlobalShipSystemController().add(self.mark_id, "engine_sm",
-                                         NPC_Kraken_EngineSystem(pos_x, pos_y, mark_id, ship_subtype="Kraken"))
-        GlobalShipSystemController().add(
-            self.mark_id, "damage_sm", NPC_DamageSystem(mark_id))
+        GlobalShipSystemController().add(self.mark_id, "engine_sm", NPC_Kraken_EngineSystem(pos_x, pos_y, mark_id, ship_subtype="Kraken"))
+        GlobalShipSystemController().add(self.mark_id, "damage_sm", NPC_DamageSystem(mark_id))
         GlobalShipSystemController().add(self.mark_id, "radar_sm", RadarSystem(mark_id))
-        GlobalShipSystemController().add(self.mark_id, "energy_sm",
-                                         EnergySystem(mark_id, NPC=True))
-        GlobalShipSystemController().add(self.mark_id, "RnD_sm",
-                                         ResearchAndDevSystem(mark_id))
+        GlobalShipSystemController().add(self.mark_id, "energy_sm", EnergySystem(mark_id, NPC=True))
+        GlobalShipSystemController().add(self.mark_id, "RnD_sm", ResearchAndDevSystem(mark_id))
         self.systems_state = GlobalShipSystemController().get_status(self.mark_id)
         self.get_system("radar_sm").update_scanrange()
         # self.get_system("RnD_sm").upgrade_to_config_state()

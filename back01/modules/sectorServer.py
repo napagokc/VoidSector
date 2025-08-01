@@ -14,13 +14,11 @@ from modules.physEngine.core import CrossDistancePool
 from modules.physEngine.core import hBodyPool_Singleton
 from modules.physEngine.core import lBodyPool_Singleton
 from modules.physEngine.entity_id_groups_controller import EntityIDGroupsController
-from modules.physEngine.plague2 import PlagueMatrix
 from modules.physEngine.predictor import launch_new_TrajectoryPredictor_controller, TrajectoryPredictor_controller
 from modules.physEngine.quests.quest_controller import QuestPointsController
 from modules.physEngine.solar_flare.solar_flar_activator import SolarFlareActivator
 from modules.physEngine.triggers.handler import TriggerHandler
 from modules.physEngine.world_constants import WorldPhysConstants
-from modules.ship.projectile_blueprints import ProjectileConstructorController
 from modules.ship.ship import ShipPool_Singleton
 from modules.utils import Command, catch_exception, get_dt_ms, PerformanceCollector
 from modules.utils import ConfigLoader
@@ -99,12 +97,9 @@ class EngineSector_interactor:
             self.in_queue = mp.Queue()
             self.out_sector_data = mp_ctx_manager.dict()
             self.out_sector_data["server_is_alive"] = False
-            self.out_sector_data["projectile_blueprints"] = {}
             self.out_sector_data["solar_flare"] = {}
-            self.out_sector_data["medicine"] = {}
             self.out_sector_data["quest_points_controller"] = {}
             self.out_sector_data["map_border"] = 1000
-            self.out_sector_data["plague_matrix"] = PlagueMatrix().get()
 
     def get_quest_point_state(self):
         return self.out_sector_data["quest_points_controller"]
@@ -130,28 +125,11 @@ class EngineSector_interactor:
             data["performance"] = self.out_sector_data["performance"]
             data["systems_state"] = self.out_sector_data["systems_state"]
             data["solar_flare"] = self.out_sector_data["solar_flare"]
-            data["medicine"] = self.out_sector_data["medicine"]
             data["map_border"] = self.out_sector_data["map_border"]
         except Exception as _:
             return EngineSector_interactor.output_template
 
         return data
-
-    def get_med_states(self, key):
-        key_t = f"{key}_field_view"
-        if key_t not in self.out_sector_data:
-            return {}
-
-        data = self.out_sector_data[key_t]
-        med_data = data["state_data"]["med_sm"]
-        return med_data
-
-    def get_plague_matrix(self):
-        return self.out_sector_data['plague_matrix']
-
-    def get_blueprints(self, mark_id):
-        blueprints = self.out_sector_data["projectile_blueprints"]
-        return blueprints[mark_id] if mark_id in blueprints else {}
 
     # =============================================================================================
 
@@ -199,7 +177,6 @@ class EngineSector:
         self.event_loop.create_task(self.update_quest_points_state())
         self.event_loop.create_task(self.update_ships_state())
         self.event_loop.create_task(self.update_station_state())
-        self.event_loop.create_task(self.update_plague_matrix())
 
         self.event_loop.create_task(self.map_autosaver())
         self.global_field_view = {
@@ -399,7 +376,6 @@ class EngineSector:
                     "map_locked": str(not self.hBodies.realtime_update)
                 }
                 self.out_sector_data["solar_flare"] = self.solarFlareActivator.get_status()
-                self.out_sector_data["projectile_blueprints"] = ProjectileConstructorController().blueprints
 
                 self.map_border_check_trigger()
                 WorldPhysConstants().next_step()
@@ -473,18 +449,6 @@ class EngineSector:
                 cnter = cnter + 1
                 if cnter > 9:
                     cnter = 0
-            except KeyboardInterrupt:
-                break
-            except asyncio.CancelledError:
-                break
-
-    # =================================================================================================================
-    async def update_plague_matrix(self):
-        while True:
-            try:
-                actual_matrix = PlagueMatrix().get()
-                self.out_sector_data["plague_matrix"] = actual_matrix
-                await asyncio.sleep(1)
             except KeyboardInterrupt:
                 break
             except asyncio.CancelledError:

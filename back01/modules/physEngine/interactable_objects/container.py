@@ -63,16 +63,6 @@ class intact_Container(intact_Basic):
 
 
                 def interact(self, interactor_id):
-                                for item in self.storage:
-                                                TriggerQueue().add("addresource", self.mark_id, {
-                                                                                                "target":interactor_id,
-                                                                                                "resource_name":item,
-                                                                                                "resource_amount":self.storage[item],
-                                                                                                })
-
-
-
-                                                                
                                 self.self_destruct()
 
 
@@ -93,16 +83,7 @@ class ShipDebris(intact_Container):
                                 EntityIDGroupsController().remove(self.mark_id)
 
                 def interact(self, interactor_id):
-                                for item in self.storage:
-                                                TriggerQueue().add("addresource", self.mark_id, {
-                                                                                                "target":interactor_id,
-                                                                                                "resource_name":item,
-                                                                                                "resource_amount":self.storage[item],
-                                                                                                })
-
-
-                                if self.mark_id != "Nuestra Bien[debris]":
-                                                self.self_destruct()
+                                self.self_destruct()
 
 
 class SpaceStationDebris(intact_Container):

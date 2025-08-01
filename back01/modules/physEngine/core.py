@@ -561,7 +561,6 @@ class CrossDistancePool:
             req_hbodies_idx = self.lBodies.get(
                 lbody_idx).get_surrounding_hbodies_ids()
             avg_hbody_count.append(len(req_hbodies_idx))
-            # ChunkController().get_active_hbodies(): #self.hBodies.bodies:
             for hbody_idx in req_hbodies_idx:
                 if hbody_idx:
                     distance = self.lBodies[lbody_idx].get_distance2entity_hard(

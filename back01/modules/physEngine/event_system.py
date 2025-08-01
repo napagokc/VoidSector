@@ -35,13 +35,6 @@ class GlobalEventSystem:
 
 
                                                                 
-                def add_resource(self, target_id,resource_name, resource_amount):
-                                target = get_entity_from_Pools(target_id, [self.cShips, self.lBodies])
-                                if not target: return
-                                if hasattr(target, "gain_resource"):
-                                                target.gain_resource(resource_name,resource_amount)
-
-
                 def hBodyCollision(self, target_id):
                                 phys_target = get_entity_from_Pools(target_id, [self.lBodies])
                                 if not phys_target: return

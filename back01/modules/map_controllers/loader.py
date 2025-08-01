@@ -17,7 +17,6 @@ from modules.physEngine.entity_id_groups_controller import EntityIDGroupsControl
 import traceback
 from modules.physEngine.zones.meteors_zone import MeteorsCloud
 from modules.physEngine.triggers.handler import TriggerHandler
-from modules.physEngine.projectiles.mine_master import Mine_type1, Mine_type2
 from modules.physEngine.solar_flare.solar_flar_activator import SolarFlareActivator
 
 
@@ -157,12 +156,6 @@ class MapLoader:
             case 'SpaceStationDebris':
                 result = SpaceStationDebris(pos_x, pos_y, mark_id)
 
-            case 'Mine_type1':
-                result = Mine_type1(pos_x, pos_y)
-
-            case 'Mine_type2':
-                result = Mine_type2(pos_x, pos_y)
-
         if result:
             result.put_description(descr, True)
 
@@ -196,7 +189,6 @@ class MapLoader:
                                                                                                                                                 (self.grid_step, 0.866*2*self.grid_step,self.grid_step),
                                                                                                                                                 ]:
                                                 self.hBodies.add(hBody(pos_x, pos_y,gr))"""
-        # TrajectoryPredictor_controller().update_hbodies_location()
 
     def load_ships(self):
         ConfigLoader().update()

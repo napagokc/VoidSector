@@ -3,11 +3,8 @@ from modules.ship.systems.sm_core import BasicShipSystem
 from modules.physEngine.core import lBodyPool_Singleton
 from modules.physEngine.active_objects import ae_Ship
 from modules.physEngine.world_constants import WorldPhysConstants
-from modules.utils import Command, ConfigLoader, PerformanceCollector, get_dt_ms
-from datetime import datetime
-import numpy as np
+from modules.utils import Command, ConfigLoader
 
-from modules.ship.systems.sm_damage import CrewSystem
 from modules.ship.systems.sm_core import GlobalShipSystemController
 
 class EngineSystem(BasicShipSystem):
@@ -54,17 +51,10 @@ class EngineSystem(BasicShipSystem):
 
                                 self.acceleration = 0
                                 self.rotation = 0
-                                self._crew_sm = None
 
 
 
                                                 
-                @property
-                def crew_sm(self):
-                                if not self._crew_sm:
-                                                self.crew_sm = GlobalShipSystemController().get(self.mark_id, "crew_sm")
-                                return self._crew_sm
-
                 def get_position(self):
                                 result = [0,0]
                                 try:
@@ -74,12 +64,6 @@ class EngineSystem(BasicShipSystem):
 
 
                                 
-                @crew_sm.setter
-                def crew_sm(self, value):
-                                self._crew_sm = value
-
-
-                
                 def get_description(self):
                                 result = super().get_description()
                                 result["lbody"] = self.lBodies[self.mark_id].get_description()
@@ -124,8 +108,7 @@ class EngineSystem(BasicShipSystem):
                                 
 
                 def get_cooling_speed(self):
-                                crew_acc= self.crew_sm.get_crew_acceleration_in_system("engine_sm") if self.crew_sm else 0
-                                return self.cooling_normal_speed*(1+crew_acc)*self.power
+                                return self.cooling_normal_speed*self.power
 
 
 

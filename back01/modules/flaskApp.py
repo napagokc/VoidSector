@@ -5,14 +5,13 @@ import time
 import configparser
 
 from pathlib import Path
-from flask import Flask, jsonify, make_response, request, render_template
+from flask import Flask, jsonify, make_response, request
 from flask_cors import CORS
 from gevent.pywsgi import WSGIServer
 
 from modules.network.WebsocketController import ConnectionController
 from modules.physEngine.core import hBodyStatsCalculator
 from modules.sectorServer import EngineSector_interactor
-from modules.ship.projectile_blueprints import ProjectileConstructorController
 from modules.users_controller import UsersControler, UniversalPasswlrdController
 from modules.utils import CommandLogger
 
@@ -26,11 +25,6 @@ def check_token():
     sleep_time = random.uniform(0, 1)
     time.sleep(sleep_time)
     return make_response(jsonify("helloworld, commander"), 200)
-
-
-@app.route('/test_html', methods=["GET"])
-def test_html():
-    return render_template("index.html")
 
 
 @app.route('/admin/maps', methods=["GET"])
@@ -140,40 +134,11 @@ def users_set_role():
     return make_response(jsonify(None), 200)
 
 
-# ==================================PROJECTILES========================================================================
-@app.route("/projectile_constructor/<ship_id>/blueprints", methods=["GET"])
-def ships_blueprints(ship_id):
-    blueprints = EngineSector_interactor().get_blueprints(ship_id)
-    return make_response(jsonify(blueprints), 200)
-
-
-@app.route("/projectile_constructor/stats", methods=["GET"])
-def get_blueprint_stats():
-    blueprint = json.loads(request.headers["blueprint"])
-    stats = ProjectileConstructorController().get_stats(blueprint)
-    return make_response(jsonify(stats), 200)
-
-
 # ==================================QUEST CONTROLLER========================================================================
 @app.route("/quest_controller/get_state", methods=["GET"])
 def quest_controller_get_state():
     quest_points_state = EngineSector_interactor().get_quest_point_state()
     return make_response(jsonify(quest_points_state), 200)
-
-
-# ==============================MEDICINE=============================================================
-@app.route('/med_states/<shipname>', methods=["GET"])
-def get_med_states(shipname):
-    med_data = EngineSector_interactor().get_med_states(shipname)
-    if not med_data:
-        return make_response("no data", 200)
-    return render_template("medic.html", hospital=med_data["hospital"], roles=med_data["roles"])
-
-
-@app.route('/medicine/plague_matrix', methods=["GET"])
-def get_plague_matrix():
-    matrix = EngineSector_interactor().get_plague_matrix()
-    return make_response(jsonify({"plague_matrix": matrix}), 200)
 
 
 class ServerInteractorFlaskApp:

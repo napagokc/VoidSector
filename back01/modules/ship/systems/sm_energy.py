@@ -10,19 +10,14 @@ class EnergySystem(BasicShipSystem):
         self.max_power_supply = 4
         self.systems_energy = {
             "engine_sm": 1,
-            "launcher_sm": 1,
             "radar_sm": 1,
-            "resources_sm": 1,
         }
         self.energy_level_upgrade = 3
         self.NPC_energy_proxy = 7
         self.energy_limit = self.get_energy_limit()
         self.debuffs = []
         
-
     def set_NpcEnergy(self):
-        self.shift_energy_level("launcher_sm", self.NPC_energy_proxy)
-        self.shift_energy_level("resources_sm", self.NPC_energy_proxy)
         self.shift_energy_level("engine_sm", self.NPC_energy_proxy)
         self.shift_energy_level("radar_sm", self.NPC_energy_proxy)
 

@@ -1,6 +1,5 @@
 from modules.physEngine.core import lBodyPool_Singleton
 from modules.physEngine.world_constants import WorldPhysConstants
-from modules.physEngine.projectiles.projectile_selector import ProjectileSelector
 from modules.utils import Command
 from modules.physEngine.triggers.collector import TriggerQueue
 from modules.ship.systems.sm_core import BasicShipSystem

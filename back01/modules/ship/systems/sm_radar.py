@@ -11,15 +11,11 @@ class RadarSystem(BasicShipSystem):
         super().__init__(mark_id, "radar_sm")
         self.lBodies = lBodyPool_Singleton()
         self.basic_close = ConfigLoader().get("sm_radar.basic_close_range", float)
-        self.add_close = ConfigLoader().get(
-            "sm_radar.add_close_range_per_upgrade_level", float)
-        self.basic2distant_coef = ConfigLoader().get(
-            "sm_radar.basic2distant_coef", float)
+        self.add_close = ConfigLoader().get("sm_radar.add_close_range_per_upgrade_level", float)
+        self.basic2distant_coef = ConfigLoader().get("sm_radar.basic2distant_coef", float)
 
-        self.radar_ping = timedelta(
-            seconds=ConfigLoader().get("sm_radar.ping_time", float))
+        self.radar_ping = timedelta(seconds=ConfigLoader().get("sm_radar.ping_time", float))
         self.energy_magnitude = 0
-        self.launcher_shafts_amount = 0
 
     def get_status(self):
         res = super().get_status()
@@ -69,7 +65,6 @@ class RadarSystem(BasicShipSystem):
             self.get_actual_close_scanrange())
         self.lBodies.bodies[self.mark_id].set_distant_scanrange(
             self.get_actual_distant_scanrange())
-        self.update_visibility()
 
     def set_power(self, value):
         super().set_power(value)
@@ -92,18 +87,6 @@ class RadarSystem(BasicShipSystem):
     # вызывается из реактора на каждое изменение уровня энергии в любой системе
     def change_energy_magnitude(self, step):
         self.energy_magnitude = self.energy_magnitude+step
-        self.update_visibility()
-
-    # вызывается из лаунчера на каждое добавление/удаление пусковой шахты
-    def set_launcher_shafts_amount(self, amount):
-        self.launcher_shafts_amount = amount
-        self.update_visibility()
-
-    def update_visibility(self):
-        pass
-        # visibility = (self.launcher_shafts_amount + self.energy_magnitude)*2/19
-        # self.lBodies.bodies[self.mark_id].set_visibility(visibility)
-
 
 class NPC_RadarSystem(BasicShipSystem):
     pass

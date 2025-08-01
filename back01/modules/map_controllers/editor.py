@@ -3,8 +3,6 @@ from modules.physEngine.core import hBody, CalculationUtilites
 from modules.physEngine.active_objects import QuantumShadow, SpaceStation
 from modules.physEngine.hb_entities import ResourceAsteroid, WormHole
 from modules.physEngine.interactable_objects.container import intact_Container, ShipDebris, SpaceStationDebris
-from modules.physEngine.projectiles.mine import pjtl_Mine
-from modules.physEngine.projectiles.mine_master import Mine_type1, Mine_type2
 from modules.ship.ship import Ship, NPC_Ship, NPC_Kraken
 from modules.ship.shipPool import ShipPool_Singleton
 from modules.utils import ConfigLoader, Command
@@ -247,15 +245,6 @@ class MapEditor:
             if obstacles_type == "MeteorsCloud":
                 obstacle_body = MeteorsCloud(position[0], position[1])
 
-            if obstacles_type == "Mine_type1":
-                obstacle_body = Mine_type1(position[0], position[1])
-                obstacle_body.set_position_np_manual(
-                    position, random.choice([True, False]))
-
-            if obstacles_type == "Mine_type2":
-                obstacle_body = Mine_type2(position[0], position[1])
-                obstacle_body.set_position_np_manual(
-                    position, random.choice([True, False]))
             self.lBodies.add(obstacle_body)
 
     def brush_delete_obstacles(self, brush_params):
@@ -394,10 +383,6 @@ class EntitySpawner:
                     spawn_position, spawn_position, ConfigLoader().get("world.map_step", float))
                 body.mark_id = mark_id
                 self.hBodies.add(body)
-            case "pjtl_Mine":
-                body = pjtl_Mine("admin")
-                mark_id = body.mark_id
-                self.lBodies.add(body)
             case 'intact_Container':
                 body = intact_Container(-9000, 9000)
                 mark_id = body.mark_id
@@ -430,16 +415,6 @@ class EntitySpawner:
             case 'SpaceStationDebris':
                 body = SpaceStationDebris(
                     spawn_position, spawn_position, mark_id)
-                mark_id = body.mark_id
-                self.lBodies.add(body)
-
-            case 'Mine_type1':
-                body = Mine_type1(spawn_position, spawn_position)
-                mark_id = body.mark_id
-                self.lBodies.add(body)
-
-            case 'Mine_type2':
-                body = Mine_type2(spawn_position, spawn_position)
                 mark_id = body.mark_id
                 self.lBodies.add(body)
 

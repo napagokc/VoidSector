@@ -1,13 +1,11 @@
-import traceback
-from datetime import datetime, timedelta
+from datetime import datetime
 import numpy as np
 import multiprocessing as mp
 from modules.physEngine.core import hBodyPool_Singleton
 from modules.physEngine.core import TrajectoryCalculator, hBody
 from modules.physEngine.world_constants import WorldPhysConstants
-from modules.utils import ConfigLoader, Command
+from modules.utils import Command
 import time
-import os
 
 
 class TrajectoryPredictor_controller:
@@ -104,13 +102,6 @@ class TrajectoryPredictor_controller:
                 run_predictor_process()
 
     def update_hbodies_location(self):
-        # launch_new_TrajectoryPredictor_controller()
-        # self.stop_all_predictors()
-        # self.launch_new_predictor()
-        # time.sleep(1)
-        # self.launch_new_predictor()
-        # self.launch_new_predictor()
-        # self.update_physics()
         bodies_descr = self.hBodies.export_descr()
         predictors_keys = list(self.predictors.keys())
         for key in predictors_keys:
@@ -176,12 +167,6 @@ def launch_new_TrajectoryPredictor_controller():
     predictor_controller.stop_all_predictors()
     pass
     run_predictor_process()
-    # run_predictor_process()
-    # run_predictor_process()
-    # run_predictor_process()
-    # predictor_controller.launch_new_predictor()
-    # predictor_controller.launch_new_predictor()
-    # predictor_controller.launch_new_predictor()
 
 
 # получает на вход обновление скорости в моменте,
