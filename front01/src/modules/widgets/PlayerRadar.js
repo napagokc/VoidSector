@@ -37,7 +37,7 @@ export class PlayersRadarWidget extends React.Component {
 				observer_pos: [0, 0]
 			},
 			entity_hovered: '',
-			mouse_pos: 0,
+			mouse_pos: [0, 0],
 			show_id_labels: true
 		};
 	}
@@ -108,7 +108,7 @@ export class PlayersRadarWidget extends React.Component {
 	};
 
 	get_cursor_position = () => {
-		if (!this.state.data) return [0.0, 0.0];
+		if (!this.state.data) return [0, 0];
 
 		let offset = this.state.data.observer_pos;
 		let mouse_position_x =
