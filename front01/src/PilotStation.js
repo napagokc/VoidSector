@@ -32,7 +32,7 @@ export class PilotStation extends React.Component {
 	}
 
 	componentDidMount() {
-		if (!this.props.NPC_pilot && get_observer_id() == null) ensureWebsocketIsOpen(() => take_control('Sirocco'));
+		if (!this.props.NPC_pilot && get_observer_id() == null) ensureWebsocketIsOpen(() => take_control('Пионер'));
 	}
 
 	set_MP_stamina_level = (mental_stamina_level) => {

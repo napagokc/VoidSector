@@ -7,7 +7,7 @@ import './styles/PilotStation.css';
 
 export class CommonRadarStation extends React.Component {
 	componentDidMount() {
-		ensureWebsocketIsOpen(() => take_control('Sirocco'));
+		ensureWebsocketIsOpen(() => take_control('Пионер'));
 	}
 
 	render() {

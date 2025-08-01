@@ -83,7 +83,7 @@ class ConfigLoader:
         self.config.read(self.filename)
         
     def get_main_ship_id(self):
-        return "Sirocco"
+        return "Пионер"
 
     def get(self, param_string, type=str):
         tmp = self.config
