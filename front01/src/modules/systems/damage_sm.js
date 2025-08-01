@@ -1,5 +1,7 @@
 import React from 'react';
 
+import { get_locales } from '../locales/locales';
+
 import { timerscounter } from '../utils/updatetimers';
 
 import { get_system_state } from '../network/connections';
@@ -25,7 +27,7 @@ export class DamageControlWidget extends React.Component {
 				let current_hp = this.state.systems_hp[system_name].current_hp.toFixed(2);
 				result.push(
 					<label key={system_name}>
-						{system_name}:{current_hp}/{this.state.systems_hp[system_name].max_hp}
+						{get_locales(system_name)}: {current_hp}/{this.state.systems_hp[system_name].max_hp}
 					</label>
 				);
 			}
