@@ -448,9 +448,12 @@ export class MapLoader extends React.Component {
 	};
 
 	get_map_list = () => {
+		let list = this.state.map_list;
+		list.sort();
+
 		let result = [];
-		for (let i in this.state.map_list) {
-			let map = this.state.map_list[i];
+		for (let i in list) {
+			let map = list[i];
 			result.push(
 				<label
 					key={i}
