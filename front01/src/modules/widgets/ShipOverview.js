@@ -137,13 +137,13 @@ const ship_parts_render_params = {
 		size: [530, 303, 1]
 	},
 	cone: {
-		pos: [112, 0, 0],
+		pos: [111, 0, 0],
 		size: [341, 266, 1]
 	},
 
 	radar: {
-		pos: [8, 55, 0],
-		size: [231, 118, 1]
+		pos: [77, 0, 0],
+		size: [250, 171, 1]
 	},
 	engine: {
 		pos: [-65, 0, 0],
