@@ -38,28 +38,20 @@ export class CapMarksControlWidget extends React.Component {
 	};
 
 	get_capmark_control = (char) => {
+		let mark = this.state.data[char];
+
 		return (
 			<tr key={char}>
 				<td>{char}</td>
+				<td>{mark.active ? mark.position.join(', ') : '-'}</td>
+				<td>{mark.active ? get_locales('is_set') : get_locales('not_set')}</td>
 				<td>
-					{this.state.data[char].position[0]}, {this.state.data[char].position[1]}
-				</td>
-				<td>{this.state.data[char].active ? 'true' : 'false'}</td>
-				<td>
-					<button
-						onClick={(e) => {
-							this.onSelect(char);
-						}}
-					>
-						{get_locales('select')}
+					<button onClick={(e) => this.onSelect(char)}>
+						{get_locales('aсtivate')}
 					</button>
 				</td>
 				<td>
-					<button
-						onClick={(e) => {
-							this.onDeactivate(char);
-						}}
-					>
+					<button onClick={(e) => this.onDeactivate(char)}>
 						{get_locales('deaсtivate')}
 					</button>
 				</td>
@@ -80,6 +72,8 @@ export class CapMarksControlWidget extends React.Component {
 						<th>{get_locales('MarkLetter')}</th>
 						<th>{get_locales('Position')}</th>
 						<th>{get_locales('Status')}</th>
+						<th width={100}></th>
+						<th width={100}></th>
 					</tr>
 				</thead>
 				<tbody>{result}</tbody>

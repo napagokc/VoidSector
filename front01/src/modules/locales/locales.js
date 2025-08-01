@@ -159,8 +159,10 @@ const locales = {
     "MarkLetter": "Метка",
     "Position": "Координаты",
     "Status": "Статус",
-    "select": "Поставить",
+    "aсtivate": "Поставить",
     "deaсtivate": "Сбросить",
+    "is_set": "Установлена",
+    "not_set": "Отсутствует",
 
     //solar_flares
     "time_to_flare": "До начала Вспышки[c]",
