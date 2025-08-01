@@ -1,0 +1,1 @@
+{"hBodies": {"3924231": {"mark_id": "3924231", "type": "hBody", "pos": [0.0, 0.0], "mass": 15, "gr": 1000, "critical_r": 300, "marker_type": "precursor"}}, "lBodies": {}, "cShips": {}, "SolarFlareActivator": {"timer_active": false, "current_tick": 0, "active": false, "probability": "low"}}
